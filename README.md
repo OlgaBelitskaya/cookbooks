@@ -1,6 +1,6 @@
 #   Cookbooks
 
-[![Awesome](https://olgabelitskaya.github.io/badge_awesome.svg)](https://olgabelitskaya.github.io/README.html) [![](https://olgabelitskaya.github.io/badge_in_progress.svg)](olgabelitskaya.github.io/keras_cookbook.html)
+[![Awesome](https://olgabelitskaya.github.io/badge_awesome.svg)](https://olgabelitskaya.github.io/README.html) [![](https://olgabelitskaya.github.io/badge_in_progress.svg)](https://github.com/OlgaBelitskaya/cookbooks/blob/master/keras_cookbook.ipynb)
 
 ## Keras Python 
 
