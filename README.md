@@ -21,3 +21,8 @@
 
 * https://olgabelitskaya.github.io/opencv_cookbook.html
 * https://github.com/OlgaBelitskaya/cookbooks/blob/master/opencv_cookbook.ipynb
+
+## TensorFlow Python 
+
+* https://olgabelitskaya.github.io/tensorflow_cookbook.html
+* https://github.com/OlgaBelitskaya/cookbooks/blob/master/tensorflow_cookbook.ipynb
