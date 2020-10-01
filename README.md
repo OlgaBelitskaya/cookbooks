@@ -4,9 +4,10 @@
 
 <br/><details><summary>Interactive Pages Based on SageMathCell</summary>
 
-#### [🌀 sklearn python](https://olgabelitskaya.github.io/sklearn_cookbook_sagecells.html)
-#### [🌀 sql python](https://olgabelitskaya.github.io/sql_cookbook.html)
-#### [🌀 sql python](https://olgabelitskaya.github.io/sql_cookbook2.html)
+#### [🌀 sklearn (python)](https://olgabelitskaya.github.io/sklearn_cookbook_sagecells.html)
+#### [🌀 sql (python)](https://olgabelitskaya.github.io/sql_cookbook.html)
+#### [🌀 sql2 (python)](https://olgabelitskaya.github.io/sql_cookbook2.html)
+#### [🌀 opencv (python)](https://olgabelitskaya.github.io/opencv_cookbook_SMC.html)
 
 <br/></details>
 
