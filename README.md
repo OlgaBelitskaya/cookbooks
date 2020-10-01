@@ -1,30 +1,37 @@
 # 🏙 Cookbooks
 
-[![Awesome](https://olgabelitskaya.github.io/badge_awesome.svg)](https://olgabelitskaya.github.io/README.html) [![](https://olgabelitskaya.github.io/badge_in_progress.svg)](https://olgabelitskaya.github.io/README_PRACTICE.html)
+[![Awesome](https://olgabelitskaya.github.io/badge_awesome.svg)](https://olgabelitskaya.github.io/README.html) [![In Progress](https://olgabelitskaya.github.io/badge_in_progress.svg)](https://olgabelitskaya.github.io/README_ColabKaggle.html)
 
-## Interactive Pages Based on [`SageMathCell`](https://sagecell.sagemath.org)
+<br/><details><summary>Interactive Pages Based on SageMathCell</summary>
 
-### [🌀 Sklearn Py](https://olgabelitskaya.github.io/sklearn_cookbook_sagecells.html)
-### [🌀 SQL Py](https://olgabelitskaya.github.io/sql_cookbook.html)
+#### [🌀 sklearn python](https://olgabelitskaya.github.io/sklearn_cookbook_sagecells.html)
+#### [🌀 sql python](https://olgabelitskaya.github.io/sql_cookbook.html)
+#### [🌀 sql python](https://olgabelitskaya.github.io/sql_cookbook2.html)
 
-## Google Colaboratory Online
+<br/></details>
 
-### [📓 Sklearn Py](https://drive.google.com/open?id=1SzhiPlKpabufNxHuknvktwxPW06utBGC)
-### [📓 Keras Py](https://drive.google.com/open?id=16Xh8T4fPuk0AIBjnCo7e9WTrF1PgukoF)
-### [📓 SQL Py](https://drive.google.com/open?id=1eBNz-GA6w0AhdsKHqtxkrIm1bIYk_X9d)
-### [📓 Digits Py](https://colab.research.google.com/drive/1eqk81yU_y7t6Rridkgli_C7LwPLUFvH2)
+[`SageMathCell`](https://sagecell.sagemath.org)
 
-## Google Colaboratory Notebooks 2020
+---
 
-### [📓 Sklearn Py](https://github.com/OlgaBelitskaya/cookbooks/blob/master/sklearnGC.ipynb)
-### [📓 Keras Py](https://github.com/OlgaBelitskaya/cookbooks/blob/master/kerasGC.ipynb)
-### [📓 SQL Py](https://github.com/OlgaBelitskaya/cookbooks/blob/master/sqlGC.ipynb)
-### [📓 Digits Py](https://github.com/OlgaBelitskaya/cookbooks/blob/master/digitsGC.ipynb)
+<br/><details><summary>Google Colaboratory Online</summary>
 
-## Jupyter Notebooks 2017-2019
+#### [📓 tensorflow_cookbook.ipynb](https://colab.research.google.com/drive/1UPT3vUBNdrfHPl33H6FVKRu8Mf-Lc8px)
+#### [📓 tensorflow_cookbook2.ipynb](https://colab.research.google.com/drive/1RoHGrTJz4KOiHN1W-UCGzzY5abV3pXLg)
+#### [📓 tensorflow_cookbook3.ipynb](https://colab.research.google.com/drive/1UXD9nxTS9s2EGkiRst59NREqX9Eiw3Zp)
+#### [📓 keras_cookbook.ipynb](https://colab.research.google.com/drive/16Xh8T4fPuk0AIBjnCo7e9WTrF1PgukoF) 
+#### [📓 sklearn_cookbook.ipynb](https://colab.research.google.com/drive/1SzhiPlKpabufNxHuknvktwxPW06utBGC)
+#### [📓 sklearn_clusters.ipynb](https://colab.research.google.com/drive/15L-HE9ZZ4SYEluXpyP10zaIVPCYxSmLw)
+#### [📓 sql_cookbook.ipynb](https://colab.research.google.com/drive/1eBNz-GA6w0AhdsKHqtxkrIm1bIYk_X9d) 
+#### [📓 sql_cookbook2.ipynb](https://colab.research.google.com/drive/1_--QDZPF0mE7Pw4W2Oxm8XPp7VaPXq-M) 
+#### [📓 opencv_cookbook.ipynb](https://colab.research.google.com/drive/1GD7Oi1LtFaEi8VOjiBM5cj5ayWpaejaf)
 
-### [📓 Keras Py](https://github.com/OlgaBelitskaya/cookbooks/blob/master/keras_cookbook.ipynb)
-### [📓 Keras R](https://github.com/OlgaBelitskaya/cookbooks/blob/master/keras_cookbook_r.ipynb)
-### [📓 Sklearn Py](https://github.com/OlgaBelitskaya/cookbooks/blob/master/sklearn_cookbook.ipynb)
-### [📓 OpenCV Py](https://github.com/OlgaBelitskaya/cookbooks/blob/master/opencv_cookbook.ipynb)
-### [📓 TensorFlow Py](https://github.com/OlgaBelitskaya/cookbooks/blob/master/tensorflow_cookbook.ipynb)
+<br/></details>
+
+---
+
+<br/><details><summary> Kaggle Practice</summary>
+
+
+
+<br/></details>
