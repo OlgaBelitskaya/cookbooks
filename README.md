@@ -32,6 +32,14 @@
 
 <br/><details><summary> Kaggle Practice</summary>
 
-
+#### [📓 Sklearn PyR](https://www.kaggle.com/olgabelitskaya/sklearn-pyr)
+#### [📓 Sklearn Clusters](https://www.kaggle.com/olgabelitskaya/sklearn-clusters)
+#### [📓 Sklearn Practice](https://www.kaggle.com/olgabelitskaya/sklearn-practice)
+#### [📓 SQL Cookbook R](https://www.kaggle.com/olgabelitskaya/sql-cookbook-r)
+#### [📓 SQL Cookbook](https://www.kaggle.com/olgabelitskaya/sql-cookbook)
+#### [📓 SQL Cookbook 2](https://www.kaggle.com/olgabelitskaya/sql-cookbook2)
+#### [📓 Sklearn Cookbook](https://www.kaggle.com/olgabelitskaya/sklearn-cookbook)
+#### [📓 Keras Cookbook](https://www.kaggle.com/olgabelitskaya/keras-cookbook)
+#### [📓 OpenCV Cookbook](https://www.kaggle.com/olgabelitskaya/opencv-cookbook)
 
 <br/></details>
