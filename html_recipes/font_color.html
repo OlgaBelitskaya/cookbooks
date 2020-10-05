@@ -1,0 +1,21 @@
+<style>
+@import url('https://fonts.googleapis.com/css?family=Ewert|Akronim&effect=3d');
+body { background:ghostwhite; }
+div { background:silver; width:70%; text-align: center; }
+p { font-size: 150%; font-family:Akronim;}
+.centered { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); }
+</style>
+<body><div id='div1' class="centered">
+<p id="changefont" class="font-effect-3d" onclick="setFont()">
+Click to change the font</p>
+<p id="changecolor" class="font-effect-3d" onclick="setColor(this,'#66ff66')">
+Click to change the color</p>
+<script>
+function setFont()
+    { doc=document.getElementById("changefont");
+      doc.style="font-family:Ewert; font-size:200%"; }
+function setColor(element,c)
+    { doc=document.getElementById("changecolor")
+      doc.style="font-size:300%"; doc.style.color=c; }
+</script>
+</div></body>
