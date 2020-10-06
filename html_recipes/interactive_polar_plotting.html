@@ -4,15 +4,27 @@
     <meta name='viewport' content='width=device-width'>
     <script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'></script>
     <script>$(function(){ 
-      sagecell.makeSagecell({inputLocation:'div.compute',evalButtonText:'run'}); });
+      sagecell.makeSagecell({
+        inputLocation:'#cell1',template:sagecell.templates.minimal,
+        evalButtonText:'run'}); });
     </script>
   </head>
   <body>
   <style>.sagecell .CodeMirror-scroll { min-height:3em; max-height:30em; }</style>  
   <body>   
-  <h1>Interactive Polar Plotting</h1>
-    <p>Click the $\mathscr{run}$ button to display an example.</p>      
-<div class='compute'><script type='text/x-sage'>
+$\large{\mathbb{Interactive \; Polar \; Plotting}}$
+<p>Click the $\large{\mathbb{run}}$ button to display an example.</p>
+<pre style='border:1px double #aaa;'><code>
+ c=list(colors.keys()); f(x,t)=sin(5*x)^2+0.02*t 
+ @interact
+ def _(number=[20,28,..,len(c)]):
+     p=sum([polar_plot(f(x,i),(x,0,2*pi),plot_points=30,
+                       thickness=1,color=c[i-1]) 
+            for i in [1..number]])
+    p.show(figsize=(5,5),gridlines=True)
+
+</pre></code><br/>     
+<div id='cell1'><script type='text/x-sage'>
 c=list(colors.keys())
 f(x,t)=sin(5*x)^2+0.02*t
 @interact
