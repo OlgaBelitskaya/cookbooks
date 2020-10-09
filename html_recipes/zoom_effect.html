@@ -6,9 +6,14 @@ circle {fill:#3636ff; stroke-width:5;
 circle:hover {-ms-transform: scale(1.5); 
               -webkit-transform: scale(1.5); 
               transform: scale(1.5);}
+.centered {position:fixed; top:50%; left:50%; 
+	       transform:translate(-50%,-50%);}
 </style>
-<h3 style="color:#3636ff; font-family:Monoton; 
-        font-size:200%; text-shadow:5px 5px 5px silver;">
-Zoom  on  Hover</h3>
-<svg><g transform="translate(200,200)">
-<circle cx="0" cy="0" r="100"></circle></g></svg>
+<center><h3 style='color:#3636ff; 
+                   font-family:Monoton; font-size:200%; 
+                   text-shadow:5px 5px 5px silver;'>
+Zoom &nbsp;&nbsp; on &nbsp;&nbsp; Hover</h3></center>
+<svg class='centered'>
+  <g transform="translate(200,200)">
+    <circle cx="0" cy="0" r="100"></circle></g>
+</svg>
