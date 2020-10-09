@@ -16,7 +16,7 @@ def base_cnn_model(base_conv2d,last_pool,num_classes):
         model.add(tkl.GlobalMaxPooling2D())
     if last_pool=='avg':
         model.add(tkl.GlobalAveragePooling2D())
-    model.add(tkl.Dense(base_conv2d**2))
+    model.add(tkl.Dense(2*base_conv2d**2))
     model.add(tkl.Activation('relu'))
     model.add(tkl.Dropout(.5))         
     model.add(tkl.Dense(num_classes))
