@@ -5,7 +5,7 @@
     <meta name='viewport' content='width=device-width'>
     <script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'></script>
     <script>$(function () {
-    sagecell.makeSagecell({inputLocation:'div.sage',
+    sagecell.makeSagecell({inputLocation:'div.evaluated',autoeval:true,
                            template:sagecell.templates.minimal,
                            evalButtonText:'run'}); });
     </script>
@@ -37,7 +37,7 @@ g.show(title='NYC School Districts',
        figsize=(7,8),gridlines=True)
 
 </pre></code><br/> 
-<div id='cell1' class='sage'><script type='text/x-sage'>
+<div id='cell1' class='evaluated'><script type='text/x-sage'>
 import pandas,numpy; g=Graphics() 
 filepath='https://data.cityofnewyork.us/resource/'
 sd=pandas.read_json(filepath+'cuae-wd7h.json')
