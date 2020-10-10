@@ -32,9 +32,9 @@ for i in range(sd.shape[0]):
              legend_label='D '+str(i+1),legend_color=c1)
     p.set_legend_options(bbox_to_anchor=(1.25,1.05))
     g+=p+text(str(i+1),mean,color=c2[i%2],
-              fontsize=12,fontweight='bold') 
+              fontsize=10,fontweight='bold') 
 g.show(title='NYC School Districts',
-       figsize=8,gridlines=True)
+       figsize=(7,8),gridlines=True)
 
 </pre></code><br/> 
 <div id='cell1' class='sage'><script type='text/x-sage'>
