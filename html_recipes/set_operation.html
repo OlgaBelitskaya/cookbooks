@@ -5,7 +5,7 @@
     <meta name='viewport' content='width=device-width'>
     <script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'></script>
     <script>$(function () {
-    sagecell.makeSagecell({inputLocation:'div.evaluated',autoeval:true,
+    sagecell.makeSagecell({inputLocation:'div.interactive',
                            template:sagecell.templates.minimal,
                            evalButtonText:'run'}); });
     </script>
@@ -16,7 +16,7 @@
   body {margin:5px 5px 5px 15px;}
   </style>  
   <body>
-    <h3>$$\mathbb{  }$$</h3>
+    <h3>$$\mathbb{ Set \; Operations }$$</h3>
 <pre style='border:2px double #aaa;'><code>
 @interact
 def _(A='a,3,2,c,1,ф,⎈,D',
@@ -40,7 +40,7 @@ def _(A='a,3,2,c,1,ф,⎈,D',
     pretty_print(html(st+s4%('{'+','.join(ABC)+'}')))
 
 </pre></code><br/> 
-<div id='cell1' class='evaluated'><script type='text/x-sage'>
+<div id='cell1' class='interactive'><script type='text/x-sage'>
 @interact
 def _(A='a,3,2,c,1,ф,⎈,D',
       B='ф,7,a,⎈,2,1,B,θ',
