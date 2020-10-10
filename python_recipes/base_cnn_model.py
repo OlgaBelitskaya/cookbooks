@@ -1,10 +1,10 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras import layers as tkl
 
-def base_cnn_model(base_conv2d,last_pool,num_classes):
+def base_cnn_model(base_conv2d,last_pool,num_classes,img_size):
     model=Sequential()
     model.add(tkl.Conv2D(base_conv2d,(5,5),padding='same',
-                         input_shape=x_train.shape[1:]))
+                         input_shape=(img_size,img_size,3)))
     model.add(tkl.Activation('relu'))
     model.add(tkl.MaxPooling2D(pool_size=(2,2)))
     model.add(tkl.Dropout(.25))
