@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width'>
+    <script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'></script>
+    <script>$(function () {
+    sagecell.makeSagecell({inputLocation:'div.evaluated',autoeval:true,
+                           template:sagecell.templates.minimal,
+                           evalButtonText:'run'}); });
+    </script>
+  </head>
+  <style>
+  h3 {color:#aa33ff; text-shadow:4px 4px 4px #aaa;}
+  .sagecell .CodeMirror-scroll {min-height:3em; max-height:50em;}
+  body {margin:5px 5px 5px 15px;}
+  </style>  
+  <body>
+    <h3>$$\mathbb{  }$$</h3>
+<pre style='border:2px double #aaa;'><code>
+@interact
+def _(A='a,3,2,c,1,ф,⎈,D',
+      B='ф,7,a,⎈,2,1,B,θ',
+      C='8,N,a,θ,4,P,⎈,r'):
+    S=[sorted(list(el.encode('utf-8').split(','))) 
+       for el in [A,B,C]]
+    s='<left style="color:%s; font-size:20px;">'
+    s1='$A \cap B = %s$</left>'
+    s2='$A \cap C = %s$</left>'
+    s3='$B \cap C = %s$</left>'
+    s4='$A \cap B \cap C = %s$</left>'
+    AB=list(set(S[0])&set(S[1]))
+    AC=list(set(S[0])&set(S[2]))
+    BC=list(set(S[1])&set(S[2])) 
+    ABC=list(set(AB)&set(S[2]))
+    pretty_print(html(s%'#ff3636'+s1%('{'+','.join(AB)+'}')))
+    pretty_print(html(s%'#36ff36'+s2%('{'+','.join(AC)+'}')))
+    pretty_print(html(s%'#3636ff'+s3%('{'+','.join(BC)+'}')))
+    pretty_print(html(s%'#ff36ff'+s4%('{'+','.join(ABC)+'}')))
+
+</pre></code><br/> 
+<div id='cell1' class='evaluated'><script type='text/x-sage'>
+
+
+</script></div><br/>
+  </body>
+</html>
