@@ -5,7 +5,7 @@
     <meta name='viewport' content='width=device-width'>
     <script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'></script>
     <script>$(function () {
-    sagecell.makeSagecell({inputLocation:'div.evaluated',autoeval:true,
+    sagecell.makeSagecell({inputLocation:'div.interactive',
                            template:sagecell.templates.minimal,
                            evalButtonText:'run'}); });
     </script>
@@ -28,7 +28,7 @@ def _(a=[3,4,5,6],b=[3,4,5,6]):
     p.show(frame=False)
 
 </pre></code><br/> 
-<div id='cell1' class='evaluated'><script type='text/x-sage'>
+<div id='cell1' class='interactive'><script type='text/x-sage'>
 @interact
 def _(a=[3,4,5,6],b=[3,4,5,6]):
     var('x,y,z'); c=colormaps.jet(8*a*b)[:3]
