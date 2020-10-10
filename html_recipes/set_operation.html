@@ -22,26 +22,45 @@
 def _(A='a,3,2,c,1,ф,⎈,D',
       B='ф,7,a,⎈,2,1,B,θ',
       C='8,N,a,θ,4,P,⎈,r'):
-    S=[sorted(list(el.encode('utf-8').split(','))) 
-       for el in [A,B,C]]
-    s='<left style="color:%s; font-size:20px;">'
-    s1='$A \cap B = %s$</left>'
-    s2='$A \cap C = %s$</left>'
-    s3='$B \cap C = %s$</left>'
-    s4='$A \cap B \cap C = %s$</left>'
+    S=[sorted(list(el.split(','))) 
+       for el in [A,B,C]]     
+    st='&#60;style&#62;h4 {color:#ff3636; font-size:20px}'+\
+       'h5 {color:#3636ff; font-size:20px}&#60;/style&#62;'     
+    s1='&#60;h5&#62;$A \\cap B = %s$&#60;/h5&#62;'
+    s2='&#60;h5&#62;$A \\cap C = %s$&#60;/h5&#62;'
+    s3='&#60;h5&#62;$B \\cap C = %s$&#60;/h5&#62;'
+    s4='&#60;h4&#62;$A \\cap B \\cap C = %s$&#60;/h5&#62;'
     AB=list(set(S[0])&set(S[1]))
     AC=list(set(S[0])&set(S[2]))
     BC=list(set(S[1])&set(S[2])) 
     ABC=list(set(AB)&set(S[2]))
-    pretty_print(html(s%'#ff3636'+s1%('{'+','.join(AB)+'}')))
-    pretty_print(html(s%'#36ff36'+s2%('{'+','.join(AC)+'}')))
-    pretty_print(html(s%'#3636ff'+s3%('{'+','.join(BC)+'}')))
-    pretty_print(html(s%'#ff36ff'+s4%('{'+','.join(ABC)+'}')))
+    pretty_print(html(st+s1%('{'+','.join(AB)+'}')))
+    pretty_print(html(st+s2%('{'+','.join(AC)+'}')))
+    pretty_print(html(st+s3%('{'+','.join(BC)+'}')))
+    pretty_print(html(st+s4%('{'+','.join(ABC)+'}')))
 
 </pre></code><br/> 
 <div id='cell1' class='evaluated'><script type='text/x-sage'>
-
-
+@interact
+def _(A='a,3,2,c,1,ф,⎈,D',
+      B='ф,7,a,⎈,2,1,B,θ',
+      C='8,N,a,θ,4,P,⎈,r'):
+    S=[sorted(list(el.split(','))) 
+       for el in [A,B,C]]
+    st='<style>h4 {color:#ff3636; font-size:20px}'+\
+       'h5 {color:#3636ff; font-size:20px}</style>'
+    s1='<h5>$A \\cap B = %s$</h5>'
+    s2='<h5>$A \\cap C = %s$</h5>'
+    s3='<h5>$B \\cap C = %s$</h5>'
+    s4='<h4>$A \\cap B \\cap C = %s$</h4>'
+    AB=list(set(S[0])&set(S[1]))
+    AC=list(set(S[0])&set(S[2]))
+    BC=list(set(S[1])&set(S[2])) 
+    ABC=list(set(AB)&set(S[2]))
+    pretty_print(html(st+s1%('{'+','.join(AB)+'}')))
+    pretty_print(html(st+s2%('{'+','.join(AC)+'}')))
+    pretty_print(html(st+s3%('{'+','.join(BC)+'}')))
+    pretty_print(html(st+s4%('{'+','.join(ABC)+'}')))
 </script></div><br/>
   </body>
 </html>
