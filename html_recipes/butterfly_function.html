@@ -1,7 +1,7 @@
 <script src='https://d3js.org/d3.v4.min.js'></script>
 <svg id='svg1' style='background-color:silver;'></svg>
 <script>
-var n=640,m=20,d=.01,margin={top:m,right:m,bottom:m,left:m},
+var n=645,m=20,d=.01,margin={top:m,right:m,bottom:m,left:m},
     width=document.documentElement.clientWidth/2.8;
     height=document.documentElement.clientHeight/2.8;
     tr='translate('+margin.left+','+margin.top+')'; 
@@ -21,9 +21,9 @@ var xScale=d3.scaleLinear()
     yScale=d3.scaleLinear()
              .domain([-5*d*m,5*d*m]).range([height+4*m,0]); 
 var svg=d3.select('#svg1')
-          .attr("width",width+margin.left+margin.right)
-          .attr("height",height+margin.top+margin.bottom)
-          .attr("transform",tr);
+          .attr('width',width+margin.left+margin.right)
+          .attr('height',height+margin.top+margin.bottom)
+          .attr('transform',tr);
 var line=d3.line().curve(d3.curveMonotoneX)
            .x(function(d){return xScale(d.x);})
            .y(function(d){return yScale(d.y);});
@@ -31,5 +31,5 @@ for (var i=1; i<m; i++) {var data=make_data(i),col=rcolor(i);
     svg.append('path').datum(data)
        .attr('class','line').attr('d',line)
        .attr('stroke',col).attr('fill','none')
-       .style("stroke-width",2);}
+       .style('stroke-width',1);}
 </script>
