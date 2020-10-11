@@ -7,8 +7,8 @@ text { fill:#3636ff; font-family:Lobster;
 .line2 { fill:none; stroke:#3636ff; stroke-width:4; } 
 .dot { fill:#3636ff; stroke:slategray; stroke-width:2; } 
 </style>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<svg id="svg1"></svg>
+<script src='https://d3js.org/d3.v4.min.js'></script>
+<svg id='svg003'></svg>
 <script>
 var n=20,m=35,
     margin={top:m,right:m,bottom:m,left:m},
@@ -20,7 +20,7 @@ var line=d3.line().curve(d3.curveMonotoneX)
            .x(function(d,i) {return xScale(i);})
            .y(function(d) {return yScale(d.y);});
 var data=d3.range(n).map(function(d) {return {"y":d3.randomUniform(n)()}})
-var svg=d3.select("#svg1").attr("width",width+margin.left+margin.right)
+var svg=d3.select('#svg003').attr("width",width+margin.left+margin.right)
                           .attr("height",height+margin.top+margin.bottom)
           .append("g")
           .attr("transform","translate("+margin.left+","+margin.top+")");
