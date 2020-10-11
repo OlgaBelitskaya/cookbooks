@@ -2,8 +2,8 @@
 <svg id='svg1' style='background-color:silver;'></svg>
 <script>
 var n=645,m=20,d=.01,margin={top:m,right:m,bottom:m,left:m},
-    width=document.documentElement.clientWidth/2.8;
-    height=document.documentElement.clientHeight/2.8;
+    width=document.documentElement.clientWidth-100;
+    height=document.documentElement.clientHeight-100;
     tr='translate('+margin.left+','+margin.top+')'; 
 function f(t){
     return Math.exp(Math.pow(Math.cos(d*t),2)+
