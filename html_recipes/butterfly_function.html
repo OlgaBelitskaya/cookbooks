@@ -1,10 +1,10 @@
 <script src='https://d3js.org/d3.v4.min.js'></script>
 <svg id='svg1' style='background-color:silver;'></svg>
 <script>
-var n=640,m=50,d=.01,margin={top:m,right:m,bottom:m,left:m},
-    width=document.documentElement.clientWidth-200;
-    height=document.documentElement.clientHeight-200;
-    tr="translate("+margin.left+","+margin.top+")"; 
+var n=640,m=20,d=.01,margin={top:m,right:m,bottom:m,left:m},
+    width=document.documentElement.clientWidth/2.8;
+    height=document.documentElement.clientHeight/2.8;
+    tr='translate('+margin.left+','+margin.top+')'; 
 function f(t){
     return Math.exp(Math.pow(Math.cos(d*t),2)+
                     Math.sin(d*t))-3*Math.cos(4*d*t);};
@@ -20,7 +20,7 @@ var xScale=d3.scaleLinear()
              .domain([-10*d*m,10*d*m]).range([0,width+2*m]),
     yScale=d3.scaleLinear()
              .domain([-5*d*m,5*d*m]).range([height+4*m,0]); 
-var svg=d3.select("#svg1")
+var svg=d3.select('#svg1')
           .attr("width",width+margin.left+margin.right)
           .attr("height",height+margin.top+margin.bottom)
           .attr("transform",tr);
