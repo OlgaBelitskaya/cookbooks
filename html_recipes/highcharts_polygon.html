@@ -1,5 +1,5 @@
 <script src='https://code.highcharts.com/highcharts.js'></script>
-<div id='div003' style='height:630px; width:600px; margin:0 auto'></div>
+<div id='div003' style='height:90%; width:90%; margin:0 auto'></div>
 <script>
 function getinteger(min,max) {
     return Math.floor(Math.random()*(max-min+1))+min;};
@@ -30,6 +30,7 @@ for (var k=1; k<2*q+2; k++) {
 Highcharts.chart('div003', {
     chart:{type:'line',backgroundColor:'ghostwhite'},
     xAxis:{title:{text:'x'}},yAxis:{title:{text:'y'}},
-    title:{text:'Random Parametric Polygons'},credits:{enabled:false},
+    title:{text:'Random Parametric Polygons'},
+    credits:{enabled:false},
     legend:{enabled:false},series:series});
  </script>

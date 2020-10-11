@@ -1,6 +1,6 @@
 <script type='text/javascript' 
         src='https://www.gstatic.com/charts/loader.js'></script>
-<div id='gch1' style='width:500px; height:500px;'></div>
+<div id='div004' style='width:500px; height:500px;'></div>
 <script>
 function get_int(xmin,xmax) {
     return Math.floor(Math.random()*(xmax-xmin+1))+xmin;};
@@ -35,6 +35,6 @@ function drawChart() {
                  legend:{position:'bottom'},curveType:'none',
                  lineWidth:1,pointSize:3,colors:[get_color(a)],
                  hAxis:{textColor:'#fff'},vAxis:{textColor:'#fff'}};
-    var chart=new google.visualization.LineChart(document.getElementById('gch1')); 
+    var chart=new google.visualization.LineChart(document.getElementById('div004')); 
     chart.draw(data,options); };
 </script>
