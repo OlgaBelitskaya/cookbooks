@@ -31,5 +31,6 @@ def rotated_polygon(fig_size):
             LT[k],alpha=.1,color=col))
         ax.add_patch(pt.Polygon(
             L[k],fill=False,color=col/2,lw=.3))
-    pl.title(st%(a,b,c,q,n))
+    pl.title(st%(a,b,c,q,n),
+             fontdict={'color':'#9911ff','fontsize':20})
     pl.xlim(-yl,yl); pl.ylim(-yl,yl); pl.show()
