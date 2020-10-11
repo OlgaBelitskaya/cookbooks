@@ -13,7 +13,7 @@ def quivers(num,fig_size):
         q=ax.quiver(8*[0],8*[0],8*[0],
                     xq,yq,3*(k+1)*zq/10,
                     lw=5,alpha=.5,
-                    colors=pylab.cm.hsv(cq))
+                    colors=pl.cm.hsv(cq))
     ax.set_xlabel('$\mathscr{X}$',fontsize=15)
     ax.set_ylabel('$\mathscr{Y}$',fontsize=15) 
     ax.set_zlabel('$\mathscr{Z}$',fontsize=15)
