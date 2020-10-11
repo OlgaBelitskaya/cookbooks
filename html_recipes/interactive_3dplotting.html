@@ -5,7 +5,7 @@
     <script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'></script>
     <script>$(function(){ 
       sagecell.makeSagecell({
-        inputLocation:'#cell01',template:sagecell.templates.minimal,
+        inputLocation:'#cell001',template:sagecell.templates.minimal,
         evalButtonText:'run'}); });
     </script>
   </head>
@@ -35,7 +35,7 @@ def _(gnum=[3,..,6],lnum=[2,..,5]):
     LG.show(frame=False,aspect_ratio=1)
     
 </pre></code><br/>     
-<div id='cell01'><script type='text/x-sage'>
+<div id='cell001'><script type='text/x-sage'>
 @interact
 def _(gnum=[3,..,6],lnum=[2,..,5]):
     LG=Graphics(); g=graphs.CubeGraph(gnum)
