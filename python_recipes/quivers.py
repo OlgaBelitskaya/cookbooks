@@ -20,4 +20,4 @@ def quivers(num,fig_size):
     ax.set_xlim(-t,t)
     ax.set_ylim(-t,t)
     ax.set_zlim(-t,t)
-    pylab.show()
+    pl.show()
