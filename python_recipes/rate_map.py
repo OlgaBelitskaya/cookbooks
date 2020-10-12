@@ -3,7 +3,7 @@ def rate_map(cmap):
     fp='https://data.cityofnewyork.us/resource/'
     se=pd.read_json(fp+'h7rb-945c.json')
     fl=['graduation_rate','attendance_rate',
-       'latitude','longitude']
+        'latitude','longitude']
     se=se[fl].dropna()
     f,ax=pl.subplots(ncols=2,figsize=(10,5),
                      sharey=True)
