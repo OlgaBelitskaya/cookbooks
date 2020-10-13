@@ -27,9 +27,9 @@ def name(**var):
 
 def get_query(url,query,ftype='csv'):
     if ftype=='csv':
-        df=pd.read_csv(url).dropna()
+        df=pd.read_csv(url)
     if ftype=='json':
-        df=pd.read_json(url).dropna()
+        df=pd.read_json(url)
     connection=connect2db('example.db')
     if connection is not None:
         cursor=connection.cursor()
