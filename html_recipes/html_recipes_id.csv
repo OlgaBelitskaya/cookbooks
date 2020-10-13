@@ -7,6 +7,7 @@
 'sklearn_clusters.html','cell007,cel008'
 'interactive_polar_plotting.html','cell009'
 'rotated_graph_path.html','cell010'
+'smc_rotated_polygon.html','cell011'
 'zoom_function.html','svg001'
 'butterfly_function.html','svg002'
 'font_line.html','svg003'
