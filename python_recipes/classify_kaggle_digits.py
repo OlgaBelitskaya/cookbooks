@@ -1,3 +1,4 @@
+%%writefile classify_kaggle_digits.py
 import tensorflow.keras.layers as tkl
 import tensorflow.keras.callbacks as tkc
 from tensorflow.keras.models import Sequential
@@ -42,32 +43,29 @@ def model_callbacks(weights):
         filepath=weights,verbose=2,save_best_only=True)
     lr_reduce=tkc.ReduceLROnPlateau(
         monitor='val_loss',patience=5,verbose=2,
-        factor=.75,min_lr=.1**6)
+        factor=.8,min_lr=.1**6)
     estop=tkc.EarlyStopping(
         monitor='val_loss',patience=20,verbose=2)
     return [checkpoint,lr_reduce,estop]
 
-
-def model_history(cnn_model,weights,epochs,
+def model_history(cnn_model,weights,epochs,gen_epochs,
                   x_train,y_train,x_valid,y_valid):
-    model_history=cnn_model.fit(
+    fit_callbacks=model_callbacks(weights)
+    train_history=cnn_model.fit(
         x_train,y_train,validation_data=(x_valid,y_valid), 
         epochs=epochs,batch_size=128,verbose=2, 
-        callbacks=model_callbacks(weights))    
-    return model_history
-
-def generator_history(cnn_model,weights,steps,epochs,
-                      x_train,y_train,x_valid,y_valid):
+        callbacks=fit_callbacks) 
     data_generator=ImageDataGenerator(
         zoom_range=.2,shear_range=.2,rotation_range=20,
         width_shift_range=.2,height_shift_range=.2)
     data_generator.fit(x_train)
     generator_history=cnn_model.fit_generator(
         data_generator.flow(x_train,y_train,batch_size=128),
-        steps_per_epoch=steps,epochs=epochs,verbose=2,
+        steps_per_epoch=x_train.shape[0]//128,
+        epochs=gen_epochs,verbose=2,
         validation_data=(x_valid,y_valid),
-        callbacks=model_callbacks(weights))    
-    return generator_history
+        callbacks=fit_callbacks)
+    return train_history,generator_history
 
 def plot_history(model_history,start,color):
     keys=list(model_history.history.keys())
