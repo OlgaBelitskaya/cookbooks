@@ -1,6 +1,6 @@
 import numpy as np,pandas as pd,pylab as pl
 from IPython.display import display
-def load_kaggle_digits(k):
+def load_kaggle_digits(k,cmap):
     df_train=pd.read_csv(
         '../input/digit-recognizer/train.csv')
     df_test=pd.read_csv(
@@ -20,15 +20,15 @@ def load_kaggle_digits(k):
     num_classes=len(set(train_labels))
     N=train_labels.shape[0]; n=int(.1*N)
     shuffle_ids=np.arange(N)
-    np.random.RandomState(12).shuffle(shuffle_ids)
+    np.random.RandomState(15).shuffle(shuffle_ids)
     train_images=train_images[shuffle_ids]
     train_labels=train_labels[shuffle_ids]
     fig=pl.figure(figsize=(10,6))
     randch=np.random.choice(N,size=12,replace=False)
     for i,idx in enumerate(randch):
-        ax=fig.add_subplot(3,4,i+1,xticks=[],yticks=[])
+        ax=fig.add_subplot(3,5,i+1,xticks=[],yticks=[])
         ax.imshow(train_images[idx].reshape(28,28),
-                  cmap=pl.cm.bone)
+                  cmap=pl.get_cmap(cmap))
         ax.set_title('%d'%train_labels[idx],
                      fontsize=10)
     pl.show()
