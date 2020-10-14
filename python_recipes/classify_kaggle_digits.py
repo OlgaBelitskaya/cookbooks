@@ -4,6 +4,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.metrics import \
 sparse_top_k_categorical_accuracy,\
 sparse_categorical_accuracy
+from tensorflow.keras.preprocessing.image \
+import ImageDataGenerator
 from sklearn.metrics import \
 classification_report,confusion_matrix
 from IPython.display import display
@@ -54,6 +56,19 @@ def model_history(cnn_model,weights,epochs,
         callbacks=model_callbacks(weights))    
     return model_history
 
+def generator_history(cnn_model,weights,steps,epochs,
+                      x_train,y_train,x_valid,y_valid):
+    data_generator=ImageDataGenerator(
+        zoom_range=.2,shear_range=.2,rotation_range=20,
+        width_shift_range=.2,height_shift_range=.2)
+    data_generator.fit(x_train)
+    generator_history=cnn_model.fit_generator(
+        data_generator.flow(x_train,y_train,batch_size=128),
+        steps_per_epoch=steps,epochs=epochs,verbose=2,
+        validation_data=(x_valid,y_valid),
+        callbacks=model_callbacks(weights))    
+    return generator_history
+
 def plot_history(model_history,start,color):
     keys=list(model_history.history.keys())
     list_history=[model_history.history[keys[i]] 
@@ -74,7 +89,7 @@ def plot_history(model_history,start,color):
     dfkeys.iloc[start:,[2,5]].plot(
         ax=ax3,color=['slategray',color])
     pl.show();
-    display(dfkeys.tail().T)
+    display(dfkeys.tail(4).T)
     
 def model_evaluation(cnn_model,x_test,y_test,
                      weights,color,num_test):
