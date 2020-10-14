@@ -1,3 +1,17 @@
+import tensorflow.keras.layers as tkl
+import tensorflow.keras.callbacks as tkc
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.metrics import \
+sparse_top_k_categorical_accuracy,\
+sparse_categorical_accuracy
+from sklearn.metrics import \
+classification_report,confusion_matrix
+from IPython.display import display
+import pandas as pd,pylab as pl
+
+def sparse_top_3_categorical_accuracy(y_true,y_pred):
+    return sparse_top_k_categorical_accuracy(y_true,y_pred,k=3)
+
 def cnn_model(num_classes):
     model=Sequential()
     model.add(tkl.Input(shape=(28,28,1)))
@@ -11,7 +25,7 @@ def cnn_model(num_classes):
     model.add(tkl.MaxPooling2D(strides=(2,2)))
     model.add(tkl.Dropout(.25)) 
     model.add(tkl.GlobalMaxPooling2D())    
-    model.add(tkl.Dense(512))
+    model.add(tkl.Dense(1024))
     model.add(tkl.LeakyReLU(alpha=.02))
     model.add(tkl.Dropout(.5))    
     model.add(tkl.Dense(num_classes,activation='softmax'))    
@@ -61,3 +75,22 @@ def plot_history(model_history,start,color):
         ax=ax3,color=['slategray',color])
     pl.show();
     display(dfkeys.tail().T)
+    
+def model_evaluation(cnn_model,x_test,y_test,
+                     weights,color,num_test):
+    cnn_model.load_weights(weights)
+    y_test_pred=cnn_model.predict_classes(x_test)
+    pl.figure(figsize=(10,5))
+    pl.scatter(range(100),y_test[:100],
+               s=100,color='slategray')
+    pl.scatter(range(100),y_test_pred[:100],
+               s=25,color=color)
+    pl.show()
+    cnn_scores=cnn_model.evaluate(
+        x_test,y_test,verbose=0)
+    print("cnn scores: \n",(cnn_scores))
+    print("cnn error: %.2f%%"%(100-cnn_scores[1]*100))
+    print('classification report: \n')
+    print(classification_report(y_test,y_test_pred))
+    print('confusion matrix: \n')
+    print(confusion_matrix(y_test,y_test_pred))
