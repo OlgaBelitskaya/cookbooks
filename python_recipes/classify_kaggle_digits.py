@@ -88,8 +88,8 @@ def model_evaluation(cnn_model,x_test,y_test,
     pl.show()
     cnn_scores=cnn_model.evaluate(
         x_test,y_test,verbose=0)
-    print("cnn scores: \n",(cnn_scores))
-    print("cnn error: %.2f%%"%(100-cnn_scores[1]*100))
+    print('cnn scores: \n',(cnn_scores))
+    print('cnn error: %.2f%%'%(100-cnn_scores[1]*100))
     print('classification report: \n')
     print(classification_report(y_test,y_test_pred))
     print('confusion matrix: \n')
