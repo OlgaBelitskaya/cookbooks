@@ -1,4 +1,3 @@
-%%writefile classify_kaggle_digits.py
 import tensorflow.keras.layers as tkl
 import tensorflow.keras.callbacks as tkc
 from tensorflow.keras.models import Sequential
