@@ -81,9 +81,9 @@ def model_evaluation(cnn_model,x_test,y_test,
     cnn_model.load_weights(weights)
     y_test_pred=cnn_model.predict_classes(x_test)
     pl.figure(figsize=(10,5))
-    pl.scatter(range(100),y_test[:100],
+    pl.scatter(range(num_test),y_test[:num_test],
                s=100,color='slategray')
-    pl.scatter(range(100),y_test_pred[:100],
+    pl.scatter(range(num_test),y_test_pred[:num_test],
                s=25,color=color)
     pl.show()
     cnn_scores=cnn_model.evaluate(
