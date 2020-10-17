@@ -27,33 +27,22 @@ def images2array(files_path,img_size,
     return np.array(np.vstack(img_array),
                     dtype='float32')
 
-def labels2array(files_path,num_labels):
+def labels2array(files_path):
     files_list=sorted(os.listdir(files_path))
-    labels1=[int(el[:2]) for el in files_list]
-    label_set1=list(set(labels1))
-    rd1=dict(zip(label_set1,
-                 list(range(len(label_set1)))))
-    labels1=np.array(
-        [rd1.get(x,x) for x in labels1],
-        dtype=np.int32)
-    labels2=[int(el[3:5]) for el in files_list]
-    label_set2=list(set(labels2))
-    rd2=dict(zip(label_set2,
-                 list(range(len(label_set2)))))
-    labels2=np.array(
-        [rd2.get(x,x) for x in labels2],
-        dtype=np.int32)
-    if num_labels==3:
-        labels3=[int(el[6:8]) for el in files_list]
-        label_set3=list(set(labels3))
-        rd3=dict(zip(label_set3,
-                     list(range(len(label_set3)))))
-        labels3=np.array(
-            [rd3.get(x,x) for x in labels3],
-            dtype=np.int32)
-        return [labels1,labels2,labels3]
-    else:
-        return [labels1,labels2]
+    files_split=np.array([el.split('_') 
+                          for el in files_list])
+    num_labels=files_split.shape[1]-1
+    labels=[files_split[:,i] 
+            for i in range(num_labels)]
+    labels=np.array(labels).astype('int32')
+    for i in range(num_labels):
+        label_set=list(set(labels[i]))
+        replace_dict=\
+        dict(zip(label_set,
+                 list(range(len(label_set)))))
+        labels[i]=[replace_dict.get(x,x) 
+                   for x in labels[i]]
+    return labels
     
 def data2h5file(h5file,files_path,img_size,num_labels,
                 names,preprocess='False'):
