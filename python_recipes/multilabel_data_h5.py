@@ -4,15 +4,17 @@ from IPython.display import display
 from tensorflow.keras.preprocessing \
 import image as tkimg
 
-def images2array(files_path,img_size,preprocess):
+def images2array(files_path,img_size,
+                 preprocess=False,grayscale=False):
     files_list=sorted(os.listdir(files_path))
     n,img_array=len(files_list),[]
     for i in range(n):
         if i%round(.1*n)==0:
             print('=>',end='',flush=True)
         img_path=files_path+files_list[i]
-        if preprocess=='True':
-            img=tkimg.load_img(img_path)
+        if preprocess:
+            img=tkimg.load_img(
+                img_path,grayscale=grayscale)
             img=tkimg.img_to_array(img)
             img=tkimg.smart_resize(
                 img,(img_size,img_size))
