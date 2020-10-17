@@ -114,24 +114,17 @@ def h5file2data(h5file,cmap='Pastel1'):
             y_train,y_valid,y_test,
             y_train,y_valid,y_test]
 
-def display_images(images,labels,names,num_labels,n):
-    labels1,labels2=labels[0],labels[1]
-    names1,names2=names[0],names[1]
-    if num_labels==3:
-        labels3=labels[2]; names3=names[2]
+def display_images(images,labels,names,n):
     fig=pl.figure(figsize=(10,n))
     randch=np.random.choice(
-        len(labels1),size=n,replace=False)
+        images.shape[0],size=n,replace=False)
     for i,idx in enumerate(randch):
         ax=fig.add_subplot(
             n//3,3,i+1,xticks=[],yticks=[])
         ax.imshow(images[idx])
-        label=[labels1[idx],labels2[idx]]
-        name=[names1[labels1[idx]],
-                names2[labels2[idx]]]
-        if num_labels==3:
-            label+=[labels3[idx]]
-            name+=[names3[labels3[idx]]]
+        label=[labels[:,idx]]
+        name=[names[i][labels[i][idx]]
+              for i in range(labels.shape[0])]
         ax.set_title('{} \n {}'\
                      .format(str(label),str(name)),
                      fontsize=10)
