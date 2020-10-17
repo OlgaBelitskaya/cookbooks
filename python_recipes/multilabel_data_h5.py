@@ -68,73 +68,51 @@ def data2h5file(h5file,files_path,img_size,names,
         f.close()
     print('\nfile size: %s'%list(os.stat(h5file))[6])
     
-def h5file2data(h5file,num_labels,cmap='Pastel1'):
+def h5file2data(h5file,cmap='Pastel1'):
     with h5py.File(h5file,'r') as f:
         keys=list(f.keys())
         print('file keys: '+', '.join(keys))
         images=np.array(f[keys[0]])
-        labels1=np.array(f[keys[1]])
-        names1=[el.decode('utf-8') for el in f[keys[4]]]
-        labels2=np.array(f[keys[2]])
-        names2=[el.decode('utf-8') for el in f[keys[5]]]
-        if num_labels==3:
-            labels3=np.array(f[keys[3]])
-            names3=[el.decode('utf-8') for el in f[keys[6]]]
+        labels=np.array(f[keys[1]])
+        names=[[el.decode('utf-8') 
+                for el in f[keys[i]]]
+               for i in range(2,len(keys))]
         f.close()
-    del h5file
-    N=labels1.shape[0]; n=int(.1*N)
+    N=images.shape[0]; n=int(.1*N)
     shuffle_ids=np.arange(N)
     np.random.RandomState(12).shuffle(shuffle_ids)
     images=images[shuffle_ids]
-    labels1=labels1[shuffle_ids]
-    labels2=labels2[shuffle_ids]
+    labels=np.array([labels[i][shuffle_ids]
+                     for i in range(labels.shape[0])])
     x_test,x_valid,x_train=\
     images[:n],images[n:2*n],images[2*n:]
-    y_test1,y_valid1,y_train1=\
-    labels1[:n],labels1[n:2*n],labels1[2*n:]
-    y_test2,y_valid2,y_train2=\
-    labels2[:n],labels2[n:2*n],labels2[2*n:]
-    if num_labels==3:
-        labels3=labels3[shuffle_ids]
-        y_test3,y_valid3,y_train3=\
-        labels3[:n],labels3[n:2*n],labels3[2*n:]
+    y_test,y_valid,y_train=\
+    labels[:,:n],labels[:,n:2*n],labels[:,2*n:]
     print('data outputs: ')
     df=pd.DataFrame([[x_train.shape,x_valid.shape,x_test.shape],
                      [x_train.dtype,x_valid.dtype,x_test.dtype],
-                     [y_train1.shape,y_valid1.shape,y_test1.shape],
-                     [y_train1.dtype,y_valid1.dtype,y_test1.dtype],
-                     [y_train2.shape,y_valid2.shape,y_test2.shape],
-                     [y_train2.dtype,y_valid2.dtype,y_test2.dtype]],
+                     [y_train.shape,y_valid.shape,y_test.shape],
+                     [y_train.dtype,y_valid.dtype,y_test.dtype]],
                     columns=['train','valid','test'],
                     index=['image shape','image type',
-                           'label 1 shape','label 1 type',
-                           'label 2 shape','label 2 type'])
-    if num_labels==3:
-        df.loc['label 3 shape']=\
-        [y_train3.shape,y_valid3.shape,y_test3.shape]
-        df.loc['label 3 type']=\
-        [y_train3.dtype,y_valid3.dtype,y_test3.dtype]
+                           'label shape','label type'])
     display(df)
     print('distribution of labels: ')
-    df=pd.DataFrame([labels1,labels2],
-                    index=['label 1','label 2']).T
-    df['name 1']=[names1[l] for l in labels1]
-    df['name 2']=[names2[l] for l in labels2]
-    if num_labels==3:
-        df['label 3']=labels3
-        df['name 3']=[names3[l] for l in labels3]
+    idx=['labels %d'%(i+1) 
+         for i in range(labels.shape[0])]
+    df=pd.DataFrame(labels,index=idx).T
+    for i in range(labels.shape[0]):
+        df['name %d'%(i+1)]=\
+        [names[i][l] for l in labels[i]]
     fig=pl.figure(figsize=(10,10))    
-    for i in range(num_labels):
-        ax=fig.add_subplot(num_labels,1,i+1)
+    for i in range(labels.shape[0]):
+        ax=fig.add_subplot(labels.shape[0],1,i+1)
         sn.countplot(x='name %s'%(i+1),data=df,
                      palette=cmap,alpha=.5,ax=ax)
     pl.show()       
-    result=[x_train,x_valid,x_test,
-            y_train1,y_valid1,y_test1,names1,
-            y_train2,y_valid2,y_test2,names2]
-    if num_labels==3:
-        result+=[y_train3,y_valid3,y_test3,names3]
-    return result
+    return [names,x_train,x_valid,x_test,
+            y_train,y_valid,y_test,
+            y_train,y_valid,y_test]
 
 def display_images(images,labels,names,num_labels,n):
     labels1,labels2=labels[0],labels[1]
