@@ -1,0 +1,20 @@
+<style>
+@import url('https://fonts.googleapis.com/css?family=Ewert|Roboto');
+</style>
+<button type='button' id='button002'
+style='background-color:silver; color:#3636ff; 
+       font-family:Ewert; font-size:230%;' 
+onclick='uri_encode("\\frac{x^2}{p^2}+\\frac{y^2}{q^2}=1")'>
+Click to encode URI components
+</button>
+<p id='p002'
+style='color:#3636ff; font-family:Roboto;'>
+</p>
+<img width='200px' 
+src='https://render.githubusercontent.com/render/math?math=\\
+%5Cfrac%7Bx%5E2%7D%7Bp%5E2%7D%2B%5Cfrac%7By%5E2%7D%7Bq%5E2%7D%3D1'/>
+<script>
+function uri_encode(s){
+    doc=document.getElementById('p002');
+    doc.innerHTML=encodeURIComponent(s);};
+</script>
