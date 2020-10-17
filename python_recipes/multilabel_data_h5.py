@@ -43,43 +43,27 @@ def labels2array(files_path):
         labels[i]=[replace_dict.get(x,x) 
                    for x in labels[i]]
     return labels
-    
-def data2h5file(h5file,files_path,img_size,num_labels,
-                names,preprocess='False'):
-    images=images2array(files_path,img_size,preprocess)
-    names1,names2=names[0],names[1]
-    labels1=labels2array(files_path,num_labels)[0]
-    maxlen1=max([len(n) for n in names1])
-    names1=np.array([np.string_(name) 
-                     for name in names1])
-    labels2=labels2array(files_path,num_labels)[1]
-    maxlen2=max([len(n) for n in names2])
-    names2=np.array([np.string_(name) 
-                     for name in names2])
-    if num_labels==3:
-        names3=names[2]
-        labels3=labels2array(files_path,num_labels)[2]
-        maxlen3=max([len(n) for n in names3])
-        names3=np.array([np.string_(name) 
-                         for name in names3])
+
+def data2h5file(h5file,files_path,img_size,names,
+                preprocess=False,grayscale=False):
+    images=images2array(files_path,img_size,
+                        preprocess,grayscale)
+    labels=labels2array(files_path)
+    maxlen=max([max([len(n) for n in names[i]])
+                for i in range(len(names))])
+    names=[np.array([np.string_(name.encode('utf-8')) 
+                     for name in names[i]],
+                    dtype='S%d'%maxlen)
+           for i in range(len(names))]
     with h5py.File(h5file,'w') as f:
         f.create_dataset('images',data=images,
                          compression="gzip")
-        f.create_dataset('labels1',data=labels1,
+        f.create_dataset('labels',data=labels,
                          compression="gzip")
-        f.create_dataset('names1',data=names1,
-                         dtype='S%d'%maxlen1,
-                         compression="gzip")
-        f.create_dataset('labels2',data=labels2,
-                         compression="gzip")
-        f.create_dataset('names2',data=names2,
-                         dtype='S%d'%maxlen2,
-                         compression="gzip")
-        if num_labels==3:
-            f.create_dataset('labels3',data=labels3,
-                             compression="gzip")
-            f.create_dataset('names3',data=names3,
-                             dtype='S%d'%maxlen3,
+        for i in range(len(names)): 
+            f.create_dataset('names%d'%(i+1),
+                             data=names[i],
+                             dtype='S%d'%maxlen,
                              compression="gzip")
         f.close()
     print('\nfile size: %s'%list(os.stat(h5file))[6])
