@@ -10,8 +10,8 @@
     </script>
   </head>
   <style>
-  pre {width:95%; border-color:slategray;} 
-  .sagecell_output {width:95%; border-color:slategray; padding-right:5px;}
+  pre {width:98%; border-color:slategray;} 
+  .sagecell_output {width:98%; border-color:slategray; padding-right:1px;}
   .sagecell_interactControlLabel:hover {padding-left:5px; color:red; font-size:110%;}
   </style>  
   <body>   
@@ -21,7 +21,8 @@ $\large{\mathbb{Interactive \; Tachyon \; Projections}}$
 @interact
 def _(projection=selector(
           ['perspective','fisheye','perspective_dof']),
-      cmap=['hsv','jet','cool','hot','prism']):
+      cmap=selector(
+          ['hsv','jet','cool','hot','prism','ocean'])):
     k=1; e=[[[k,-k,k],[0,0,0]],[[0,0,0],[k,k,k]],
             [[k,k,k],[-k,k,k]],[[-k,k,k],[-k,-k,k]],
             [[-k,-k,k],[k,-k,k]],[[k,-k,k],[k,k,k]],
@@ -30,11 +31,11 @@ def _(projection=selector(
             [[k,-k,-k],[k,k,-k]],[[k,k,-k],[0,0,0]],
             [[0,0,0],[k,-k,-k]],[[k,-k,-k],[k,-k,k]]]
     if projection=='perspective_dof':
-        t=Tachyon(xres=450,yres=450,projection=projection,
+        t=Tachyon(xres=400,yres=400,projection=projection,
                   camera_center=(-3.5,0.,0.),
                   antialiasing=3,raydepth=5,
                   focallength='2.0',aperture='.003')
-    else: t=Tachyon(xres=450,yres=450,projection=projection,
+    else: t=Tachyon(xres=400,yres=400,projection=projection,
                     camera_center=(-3.5,0.,0.))
     for i in [0..13]:
         t.texture('t%s'%str(i),opacity=.3,
@@ -47,7 +48,8 @@ def _(projection=selector(
 @interact
 def _(projection=selector(
           ['perspective','fisheye','perspective_dof']),
-      cmap=['hsv','jet','cool','hot','prism']):
+      cmap=selector(
+          ['hsv','jet','cool','hot','prism','ocean'])):
     k=1; e=[[[k,-k,k],[0,0,0]],[[0,0,0],[k,k,k]],
             [[k,k,k],[-k,k,k]],[[-k,k,k],[-k,-k,k]],
             [[-k,-k,k],[k,-k,k]],[[k,-k,k],[k,k,k]],
@@ -56,11 +58,11 @@ def _(projection=selector(
             [[k,-k,-k],[k,k,-k]],[[k,k,-k],[0,0,0]],
             [[0,0,0],[k,-k,-k]],[[k,-k,-k],[k,-k,k]]]
     if projection=='perspective_dof':
-        t=Tachyon(xres=450,yres=450,projection=projection,
+        t=Tachyon(xres=400,yres=400,projection=projection,
                   camera_center=(-3.5,0.,0.),
                   antialiasing=3,raydepth=5,
                   focallength='2.0',aperture='.003')
-    else: t=Tachyon(xres=450,yres=450,projection=projection,
+    else: t=Tachyon(xres=400,yres=400,projection=projection,
                     camera_center=(-3.5,0.,0.))
     for i in [0..13]:
         t.texture('t%s'%str(i),opacity=.3,
