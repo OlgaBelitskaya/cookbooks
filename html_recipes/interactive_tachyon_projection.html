@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width'>
+    <script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'></script>
+    <script>$(function(){ 
+      sagecell.makeSagecell({
+        inputLocation:'#cell013',template:sagecell.templates.minimal,
+        evalButtonText:'run'}); });
+    </script>
+  </head>
+  <style>.sagecell .CodeMirror-scroll { min-height:3em; max-height:30em; }</style>  
+  <body>   
+$\large{\mathbb{Interactive \; Tachyon \; Projections}}$
+<p>Click the $\large{\mathbb{run}}$ button to display an example.</p>
+<pre style='border:1px double #aaa;'><code>
+@interact
+def _(proj=['perspective','fisheye','perspective_dof'],
+      cm=['hsv','jet','cool','hot','prism']):
+    k=1; e=[[[k,-k,k],[0,0,0]],[[0,0,0],[k,k,k]],
+            [[k,k,k],[-k,k,k]],[[-k,k,k],[-k,-k,k]],
+            [[-k,-k,k],[k,-k,k]],[[k,-k,k],[k,k,k]],
+            [[k,k,k],[k,k,-k]],[[k,k,-k],[-k,k,-k]],
+            [[-k,k,-k],[-k,-k,-k]],[[-k,-k,-k],[k,-k,-k]],
+            [[k,-k,-k],[k,k,-k]],[[k,k,-k],[0,0,0]],
+            [[0,0,0],[k,-k,-k]],[[k,-k,-k],[k,-k,k]]]
+    if proj=='perspective_dof':
+        t=Tachyon(xres=500,yres=500,projection=proj,
+                  camera_center=(-3.5,0.,0.),
+                  antialiasing=3,raydepth=5,
+                  focallength='2.0',aperture='.003')
+    else: t=Tachyon(xres=500,yres=500,projection=proj,
+                    camera_center=(-3.5,0.,0.))
+    for i in [0..13]:
+        t.texture('t%s'%str(i),opacity=.3,
+                  color=colormaps[cm](.077*i)[:3])
+        t.fcylinder(e[i][0],e[i][1],.06,'t%s'%str(i)) 
+    t.light((-5,-5,5),.1,(1,1,1)); t.show()
+
+</pre></code><br/>     
+<div id='cell013'><script type='text/x-sage'>
+@interact
+def _(proj=['perspective','fisheye','perspective_dof'],
+      cm=['hsv','jet','cool','hot','prism']):
+    k=1; e=[[[k,-k,k],[0,0,0]],[[0,0,0],[k,k,k]],
+            [[k,k,k],[-k,k,k]],[[-k,k,k],[-k,-k,k]],
+            [[-k,-k,k],[k,-k,k]],[[k,-k,k],[k,k,k]],
+            [[k,k,k],[k,k,-k]],[[k,k,-k],[-k,k,-k]],
+            [[-k,k,-k],[-k,-k,-k]],[[-k,-k,-k],[k,-k,-k]],
+            [[k,-k,-k],[k,k,-k]],[[k,k,-k],[0,0,0]],
+            [[0,0,0],[k,-k,-k]],[[k,-k,-k],[k,-k,k]]]
+    if proj=='perspective_dof':
+        t=Tachyon(xres=500,yres=500,projection=proj,
+                  camera_center=(-3.5,0.,0.),
+                  antialiasing=3,raydepth=5,
+                  focallength='2.0',aperture='.003')
+    else: t=Tachyon(xres=500,yres=500,projection=proj,
+                    camera_center=(-3.5,0.,0.))
+    for i in [0..13]:
+        t.texture('t%s'%str(i),opacity=.3,
+                  color=colormaps[cm](.077*i)[:3])
+        t.fcylinder(e[i][0],e[i][1],.06,'t%s'%str(i)) 
+    t.light((-5,-5,5),.1,(1,1,1)); t.show()
+</script></div>
+  </body>
+</html>
