@@ -9,14 +9,17 @@
         evalButtonText:'run'}); });
     </script>
   </head>
-  <style>.sagecell .CodeMirror-scroll { min-height:3em; max-height:30em; }</style>  
+  <style>
+  pre {width:95%; border-color:slategray;} 
+  .sagecell_output {width:95%; border-color:slategray; padding-right:5px;}
+  </style>  
   <body>   
 $\large{\mathbb{Interactive \; Tachyon \; Projections}}$
 <p>Click the $\large{\mathbb{run}}$ button to display an example.</p>
 <pre style='border:1px double #aaa;'><code>
 @interact
-def _(proj=['perspective','fisheye','perspective_dof'],
-      cm=['hsv','jet','cool','hot','prism']):
+def _(projection=['perspective','fisheye','perspective_dof'],
+      cmap=['hsv','jet','cool','hot','prism']):
     k=1; e=[[[k,-k,k],[0,0,0]],[[0,0,0],[k,k,k]],
             [[k,k,k],[-k,k,k]],[[-k,k,k],[-k,-k,k]],
             [[-k,-k,k],[k,-k,k]],[[k,-k,k],[k,k,k]],
@@ -24,24 +27,24 @@ def _(proj=['perspective','fisheye','perspective_dof'],
             [[-k,k,-k],[-k,-k,-k]],[[-k,-k,-k],[k,-k,-k]],
             [[k,-k,-k],[k,k,-k]],[[k,k,-k],[0,0,0]],
             [[0,0,0],[k,-k,-k]],[[k,-k,-k],[k,-k,k]]]
-    if proj=='perspective_dof':
-        t=Tachyon(xres=500,yres=500,projection=proj,
+    if projection=='perspective_dof':
+        t=Tachyon(xres=450,yres=450,projection=projection,
                   camera_center=(-3.5,0.,0.),
                   antialiasing=3,raydepth=5,
                   focallength='2.0',aperture='.003')
-    else: t=Tachyon(xres=500,yres=500,projection=proj,
+    else: t=Tachyon(xres=450,yres=450,projection=projection,
                     camera_center=(-3.5,0.,0.))
     for i in [0..13]:
         t.texture('t%s'%str(i),opacity=.3,
-                  color=colormaps[cm](.077*i)[:3])
+                  color=colormaps[cmap](.077*i)[:3])
         t.fcylinder(e[i][0],e[i][1],.06,'t%s'%str(i)) 
     t.light((-5,-5,5),.1,(1,1,1)); t.show()
 
 </pre></code><br/>     
 <div id='cell013'><script type='text/x-sage'>
 @interact
-def _(proj=['perspective','fisheye','perspective_dof'],
-      cm=['hsv','jet','cool','hot','prism']):
+def _(projection=['perspective','fisheye','perspective_dof'],
+      cmap=['hsv','jet','cool','hot','prism']):
     k=1; e=[[[k,-k,k],[0,0,0]],[[0,0,0],[k,k,k]],
             [[k,k,k],[-k,k,k]],[[-k,k,k],[-k,-k,k]],
             [[-k,-k,k],[k,-k,k]],[[k,-k,k],[k,k,k]],
@@ -49,16 +52,16 @@ def _(proj=['perspective','fisheye','perspective_dof'],
             [[-k,k,-k],[-k,-k,-k]],[[-k,-k,-k],[k,-k,-k]],
             [[k,-k,-k],[k,k,-k]],[[k,k,-k],[0,0,0]],
             [[0,0,0],[k,-k,-k]],[[k,-k,-k],[k,-k,k]]]
-    if proj=='perspective_dof':
-        t=Tachyon(xres=500,yres=500,projection=proj,
+    if projection=='perspective_dof':
+        t=Tachyon(xres=450,yres=450,projection=projection,
                   camera_center=(-3.5,0.,0.),
                   antialiasing=3,raydepth=5,
                   focallength='2.0',aperture='.003')
-    else: t=Tachyon(xres=500,yres=500,projection=proj,
+    else: t=Tachyon(xres=450,yres=450,projection=projection,
                     camera_center=(-3.5,0.,0.))
     for i in [0..13]:
         t.texture('t%s'%str(i),opacity=.3,
-                  color=colormaps[cm](.077*i)[:3])
+                  color=colormaps[cmap](.077*i)[:3])
         t.fcylinder(e[i][0],e[i][1],.06,'t%s'%str(i)) 
     t.light((-5,-5,5),.1,(1,1,1)); t.show()
 </script></div>
