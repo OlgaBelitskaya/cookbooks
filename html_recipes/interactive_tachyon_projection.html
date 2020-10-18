@@ -12,13 +12,15 @@
   <style>
   pre {width:95%; border-color:slategray;} 
   .sagecell_output {width:95%; border-color:slategray; padding-right:5px;}
+  .sagecell_interactControlLabel:hover {padding-left:5px; color:red; font-size:110%;}
   </style>  
   <body>   
 $\large{\mathbb{Interactive \; Tachyon \; Projections}}$
 <p>Click the $\large{\mathbb{run}}$ button to display an example.</p>
 <pre style='border:1px double #aaa;'><code>
 @interact
-def _(projection=['perspective','fisheye','perspective_dof'],
+def _(projection=selector(
+          ['perspective','fisheye','perspective_dof']),
       cmap=['hsv','jet','cool','hot','prism']):
     k=1; e=[[[k,-k,k],[0,0,0]],[[0,0,0],[k,k,k]],
             [[k,k,k],[-k,k,k]],[[-k,k,k],[-k,-k,k]],
@@ -43,7 +45,8 @@ def _(projection=['perspective','fisheye','perspective_dof'],
 </pre></code><br/>     
 <div id='cell013'><script type='text/x-sage'>
 @interact
-def _(projection=['perspective','fisheye','perspective_dof'],
+def _(projection=selector(
+          ['perspective','fisheye','perspective_dof']),
       cmap=['hsv','jet','cool','hot','prism']):
     k=1; e=[[[k,-k,k],[0,0,0]],[[0,0,0],[k,k,k]],
             [[k,k,k],[-k,k,k]],[[-k,k,k],[-k,-k,k]],
