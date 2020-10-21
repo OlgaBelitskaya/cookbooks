@@ -23,7 +23,7 @@ import rpy2.robjects as ro
 from rpy2.robjects.packages import importr
 grdevices=importr('grDevices')
 grdevices.svg(file='Rplots.svg',
-              width=int(9),height=int(6),
+              width=int(5),height=int(3),
               onefile=True,family='times',
               bg='white',pointsize=int(10))
 ro.r('library(MASS); library(nnet); '+\
@@ -48,7 +48,7 @@ import rpy2.robjects as ro
 from rpy2.robjects.packages import importr
 grdevices=importr('grDevices')
 grdevices.svg(file='Rplots.svg',
-              width=int(9),height=int(6),
+              width=int(5),height=int(3),
               onefile=True,family='times',
               bg='white',pointsize=int(10))
 ro.r('library(MASS); library(nnet); '+\
