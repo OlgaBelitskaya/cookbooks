@@ -10,7 +10,7 @@ def get_files(dir_name,files_pre):
 def get_edges(file):
     img=cv2.imread(file)   
     gray_img=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    edges=cv2.Canny(gray_img,10,120) 
+    edges=cv2.Canny(gray_img,10,110) 
     cv2.waitKey(0)
     return img,gray_img,edges
 
@@ -32,11 +32,29 @@ def get_contours(gray_img,closed):
     cv2.waitKey(0) 
     return contours,contours_img
 
+def check_image(img):
+    output=True
+    gray_img=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    edges=cv2.Canny(gray_img,10,150)        
+    kernel=cv2.getStructuringElement(cv2.MORPH_RECT,(7,7)) 
+    closed=cv2.morphologyEx(edges,cv2.MORPH_CLOSE,kernel)
+    (contours, _)=cv2.findContours(
+        closed.copy(),cv2.RETR_EXTERNAL,
+        cv2.CHAIN_APPROX_SIMPLE) 
+    cv2.waitKey(0)
+    cond1=(min(img.shape[0],img.shape[1])<30)
+    cond2=(len(contours)!=1)
+    cond3=(img.mean()<45 or img.mean()>250)
+    if (cond1 or cond2 or cond3):
+        output=False
+    return output
+
 def create_zip(img_list,contours_list,files_pre_list):
     files_list_out=[]
     N=len(files_pre_list)
     for l in range(N):
-        file_name_zip=files_pre_list[l]+'.zip'
+        start=files_pre_list[l].find('0')
+        file_name_zip=files_pre_list[l][start:]+'.zip'
         idx=0
         for i in range(len(img_list[l])):
             contours=contours_list[l][i]
@@ -50,10 +68,8 @@ def create_zip(img_list,contours_list,files_pre_list):
                     x1=int(x*(1-.001*m))
                     x2=int((x+w)*(1+.001*m))
                     new_img=img[y1:y2,x1:x2]
-                    if min(new_img.shape[0],
-                           new_img.shape[1])>30:
+                    if check_image(new_img):
                         new_img=cv2.resize(new_img,(32,32))
-                        start=files_pre_list[l].find('0')
                         file_name=files_pre_list[l][start:]+\
                                   '_%03d'%idx+'.png'
                         cv2.imwrite(file_name,new_img)
