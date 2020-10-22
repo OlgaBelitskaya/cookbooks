@@ -2,8 +2,8 @@ import numpy as np,pylab as pl
 import os,zipfile,cv2
 
 def get_files(dir_name,files_pre):
-    file_list=sorted(os.listdir(dir_name))
-    input_files=[f for f in file_list 
+    files_list=sorted(os.listdir(dir_name))
+    input_files=[f for f in files_list 
                  if (f[-4:]=='.jpg' and files_pre==f[:-7])]
     return input_files
 
@@ -33,8 +33,9 @@ def get_contours(gray_img,closed):
     return contours,contours_img
 
 def create_zip(img_list,contours_list,files_pre_list):
-    file_list_out=[]
-    for l in range(2):
+    files_list_out=[]
+    N=len(files_pre_list)
+    for l in range(N):
         file_name_zip=files_pre_list[l]+'.zip'
         idx=0
         for i in range(len(img_list[l])):
@@ -67,8 +68,8 @@ def create_zip(img_list,contours_list,files_pre_list):
         with zipfile.ZipFile(file_name_zip,'r') as f:
             curr_file_list_out=(f.namelist())
             f.close()
-            file_list_out+=[curr_file_list_out]
-    return file_list_out
+            files_list_out+=[curr_file_list_out]
+    return files_list_out
 
 dir_name='../input/object-detection/'
 files_pre_list=['letters_01_'+'%02d'%l+'_00' 
@@ -113,8 +114,8 @@ def many_objects2images(dir_name=dir_name,
             curr_contours_img_list+=[contours_img]
         contours_list+=[curr_contours_list]
         contours_img_list+=[curr_contours_img_list]
-    file_list_out=create_zip(
+    files_list_out=create_zip(
         img_list,contours_list,files_pre_list)
     print('Numbers of Images in Zip Files:\n',
-          [len(file_list_out[l]) 
+          [len(files_list_out[l]) 
            for l in range(N)])
