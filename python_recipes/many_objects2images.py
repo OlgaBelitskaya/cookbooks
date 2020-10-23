@@ -44,7 +44,7 @@ def check_image(img):
     cv2.waitKey(0)
     cond1=(min(img.shape[0],img.shape[1])<30)
     cond2=(len(contours)!=1)
-    cond3=(img.mean()<45 or img.mean()>250)
+    cond3=(img.mean()<48 or img.mean()>253)
     if (cond1 or cond2 or cond3):
         output=False
     return output
