@@ -1,0 +1,22 @@
+<style>
+.land {fill:#3636ff; stroke:silver;}
+.countries {fill:none; stroke:silver;}
+</style>
+<script src='https://d3js.org/d3.v3.min.js'></script>
+<script src='https://d3js.org/topojson.v0.min.js'></script>
+<svg id='svg006' style='background-color:cornflowerblue;'
+     width=99% height=99%></svg>
+<script type='text/javascript'>
+var projection=d3.geo.equirectangular().translate([560,300]);
+var svg=d3.select('#svg006'),g=svg.append('g');
+var path=d3.geo.path().projection(projection);
+var url='https://raw.githubusercontent.com/n1n9-jp/CSIS_map_140514/master/data/'
+d3.json(url.concat('world-50m.json'),
+        function(world) {
+            g.attr('class','land').selectAll('land')
+             .data([topojson.object(world,world.objects.land)])
+             .enter().append('path').attr('d',path);
+            svg.attr('class','countries').selectAll('countries')
+               .data([topojson.object(world,world.objects.countries)])
+               .enter().append('path').attr('d',path);});
+</script>
