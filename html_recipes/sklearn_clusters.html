@@ -10,15 +10,16 @@
     </script>
   </head>
   <style>
-  h1 {color:#aa33ff; text-shadow:4px 4px 4px #aaa;}
-  h2 {color:slategray; text-shadow:4px 4px 4px #aaa;}
-  .sagecell .CodeMirror-scroll {min-height:3em; max-height:50em;}
+  h2 {color:#aa33ff; text-shadow:4px 4px 4px #aaa;}
+  h3 {color:slategray; text-shadow:4px 4px 4px #aaa;}
+  pre {padding-left:3px; border:2px double slategray;}
+  .sagecell_output {width:99%; border:2px double slategray; padding-right:1px;}
   body {margin:5px 5px 5px 15px;}
   </style>  
   <body>
-    <h1>$\mathbb{Sklearn \; Clusters}$</h1>
-    <h2>$\mathbb{Code \; Modules \; and \; Data}$</h2>
-<pre style='border:1px double #aaa;'><code>
+    <h2>$\mathbb{Sklearn \; Clusters}$</h2>
+    <h3>$\mathbb{Code \; Modules \; and \; Data}$</h3>
+<pre><code>
 import sklearn.datasets as sds
 import sklearn.cluster as scl
 import pylab as pl
@@ -34,7 +35,7 @@ pl.scatter(X[:,0],X[:,1],
            edgecolor='#aa33ff',s=10)
 pl.grid(); pl.title('Artificial Data'); pl.show()
     
-</pre></code><br/> 
+</code></pre><br/> 
 <div id='cell007' class='linked'><script type='text/x-sage'>
 import sklearn.datasets as sds
 import sklearn.cluster as scl
@@ -51,8 +52,8 @@ pl.scatter(X[:,0],X[:,1],
            edgecolor='#aa33ff',s=10)
 pl.grid(); pl.title('Artificial Data'); pl.show()
 </script></div><br/>
-    <h2>$\mathbb{Clustering}$</h2>
-<pre style='border:1px double #aaa;'><code>
+    <h3>$\mathbb{Clustering}$</h3>
+<pre><code>
 km,y_km=[],[]
 @register_line_magic
 def kmeans_clusters(c):
@@ -77,7 +78,7 @@ pl.scatter(km.cluster_centers_[:,0],
            edgecolor='#aa33ff',label='centroids')
 pl.legend(scatterpoints=1); pl.show()
     
-</pre></code><br/> 
+</code></pre><br/> 
 <div id='cell008' class='linked'><script type='text/x-sage'>
 km,y_km=[],[]
 @register_line_magic
