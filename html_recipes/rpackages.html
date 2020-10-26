@@ -10,13 +10,14 @@
   </script>
 </head>
 <style>
-  h3 {color:#aa33ff; text-shadow:4px 4px 4px #aaa;}
+  pre {padding-left:3px; border:2px double slategray;}
+  h3 {color:#aa33ff; text-shadow:3px 3px 3px slategray;}
   .sagecell .CodeMirror-scroll {min-height:3em; max-height:60em;}
   body {margin:5px 5px 5px 15px;}
 </style>  
 <body>
   <h3>$$\mathbb{ R \; Packages \; in \; Python \; Cells }$$</h3>
-<pre style='border:2px double #aaa;'><code>
+<pre><code>
 import warnings; warnings.filterwarnings('ignore')
 from IPython import display
 import rpy2.robjects as ro
@@ -40,7 +41,7 @@ ro.r('plot(as.matrix(Boston[431:n,14]),'+\
      'cex=.9,ylab="Targets & Predictions"); grid();')   
 grdevices.dev_off()
 
-</pre></code><br/> 
+</code></pre><br/> 
 <div id='cell014' class='evaluated'><script type='text/x-sage'>
 import warnings; warnings.filterwarnings('ignore')
 from IPython import display
