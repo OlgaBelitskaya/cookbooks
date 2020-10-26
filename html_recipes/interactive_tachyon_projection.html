@@ -10,7 +10,7 @@
     </script>
   </head>
   <style>
-  pre {width:98%; border-color:slategray;} 
+  pre {width:98%; padding-left:5px; border:2px double slategray;} 
   .sagecell_output {width:99%; border-color:slategray; padding-right:1px;}
   .sagecell_interactControlLabel:hover {padding-left:5px; color:forestgreen; font-size:120%;}
   .sagecell_interactOutput {padding-left:5px;}
@@ -18,7 +18,7 @@
   <body>   
 $\large{\mathbb{Interactive \; Tachyon \; Projections}}$
 <p>Click the $\large{\mathbb{run}}$ button to display an example.</p>
-<pre style='border:1px double #aaa;'><code>
+<pre><code>
 @interact
 def _(projection=selector(
           ['perspective','fisheye','perspective_dof']),
@@ -44,7 +44,7 @@ def _(projection=selector(
         t.fcylinder(e[i][0],e[i][1],.06,'t%s'%str(i)) 
     t.light((-5,-5,5),.1,(1,1,1)); t.show()
 
-</pre></code><br/>     
+</code></pre><br/>     
 <div id='cell013'><script type='text/x-sage'>
 @interact
 def _(projection=selector(
