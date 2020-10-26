@@ -11,13 +11,13 @@
     </script>
   </head>
   <style>
-  h3 {color:#aa33ff; text-shadow:4px 4px 4px #aaa;}
-  .sagecell .CodeMirror-scroll {min-height:3em; max-height:50em;}
-  body {margin:5px 5px 5px 15px;}
+  h3 {color:#aa33ff; text-shadow:4px 4px 4px slategray;}
+  pre {width:99%; padding-left:3px; border:2px double slategray; } 
+  .sagecell_output {width:99%; border:2px double slategray; padding-right:1px;}
   </style>  
   <body>
     <h3>$$\mathbb{ Rotated \; Cubegraphs \; with \; Bezier \; Paths }$$</h3>
-<pre style='border:2px double #aaa;'><code>
+<pre><code>
 def rotate_line(a,l): 
     return [[(cos(a)*x-sin(a)*y).n(),
              (sin(a)*x+cos(a)*y).n()] 
@@ -42,7 +42,7 @@ def rotate_bezier_path_cubegraph(m,k):
 m,k=randint(3,5),randint(3,5)
 rotate_bezier_path_cubegraph(m,k)
 
-</pre></code><br/> 
+</code></pre><br/> 
 <div id='cell010' class='evaluated'><script type='text/x-sage'>
 def rotate_line(a,l): 
     return [[(cos(a)*x-sin(a)*y).n(),
