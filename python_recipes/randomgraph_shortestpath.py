@@ -35,3 +35,21 @@ def random_shortestpath(graph):
     print('start: '+start+'; end: '+end)
     print('the shortest path: ',shortest_path_list)
     return rg,shortest_path,shortest_path_list
+
+def randomgraph_shortestpath(graph):
+    rg,shortest_path,shortest_path_list=\
+    random_shortestpath(graph)
+    lengths=nx.get_edge_attributes(rg,'length')   
+    pos=nx.spring_layout(rg)
+    pl.figure(figsize=(10,10))
+    nx.draw(rg,pos,with_labels=True,
+            node_shape='8',node_size=1000, 
+            node_color='steelblue',
+            edge_color='silver',
+            width=5,alpha=.75)
+    nx.draw_networkx_edge_labels(
+        rg,pos,edge_labels=lengths)
+    nx.draw_networkx_edges(
+        rg,pos=pos,edgelist=shortest_path_list,
+        edge_color='#ccff00',width=10,alpha=.5)
+    pl.show()
