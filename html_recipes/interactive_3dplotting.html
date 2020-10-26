@@ -9,9 +9,15 @@
         evalButtonText:'run'}); });
     </script>
   </head>
-  <style>.sagecell .CodeMirror-scroll { min-height:3em; max-height:30em; }</style>  
+  <style>
+  h3 {color:#aa33ff; text-shadow:3px 3px 3px slategray;}
+  pre {width:99%; padding-left:3px; border:2px double slategray; } 
+  .sagecell_output {width:99%; border:2px double slategray; padding-right:1px;}
+  .sagecell_interactControlLabel:hover {padding-left:3px; color:#aa33ff; font-size:120%;}
+  .sagecell_interactOutput {padding-left:3px;}
+  </style>  
   <body>   
-$\large{\mathbb{Interactive \; 3D \; Plotting}}$
+<h3>$$\large{\mathbb{Interactive \; 3D \; Plotting}}$$</h3>
 <p>Click the $\large{\mathbb{run}}$ button to display an example.</p>
 <pre style='border:1px double #aaa;'><code>
 @interact
@@ -34,7 +40,7 @@ def _(gnum=[3,..,6],lnum=[2,..,5]):
                           random(),random()))
     LG.show(frame=False,aspect_ratio=1)
     
-</pre></code><br/>     
+</code></pre><br/>     
 <div id='cell001'><script type='text/x-sage'>
 @interact
 def _(gnum=[3,..,6],lnum=[2,..,5]):
