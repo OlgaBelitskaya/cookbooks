@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width'>
+    <script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'></script>
+    <script>$(function(){ 
+      sagecell.makeSagecell({inputLocation:'#cell016',evalButtonText:'run',
+                             template:sagecell.templates.minimal}); 
+      sagecell.makeSagecell({inputLocation:'#cell017',evalButtonText:'run'}); });
+    </script>
+  </head>
+  <style>
+  pre {padding-left:3px; border:2px double slategray; 
+       font-size:120%; text-shadow:2px 2px 2px #aaa} 
+  .sagecell_output {border-color:slategray; padding-right:3px;}
+  .sagecell .CodeMirror-scroll {min-height:3em; max-height:9em;
+                                border-color:slategray; 
+                                font-size:120%; 
+                                text-shadow:2px 2px 2px #aaa}
+  </style>  
+  <body>   
+$\large{\mathbb{Code \; Input}}$
+<p>Click the $\large{\mathbb{run}}$ button to display the result of uneditable code.</p>
+<pre><code>
+print('cell 16')
+
+</code></pre><br/>     
+<div id='cell016'><script type='text/x-sage'>
+print('cell 16')
+</script></div>
+<p>Click the $\large{\mathbb{run}}$ button to display the result of editable code.</p>
+<div id='cell017'><script type='text/x-sage'>
+print('cell 17')
+</script></div>
+  </body>
+</html>
