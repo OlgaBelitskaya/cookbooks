@@ -33,4 +33,5 @@ def random_shortestpath(graph):
         shortest_path_list.append(
             (shortest_path[i],shortest_path[i+1]))
     print('start: '+start+'; end: '+end)
+    print('the shortest path: ',shortest_path_list)
     return rg,shortest_path,shortest_path_list
