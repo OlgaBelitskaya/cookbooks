@@ -12,6 +12,7 @@
 'interactive_tachyon_projection.html','cell013'
 'rpackages.html','cell014'
 '3dline_graph.html','cell015'
+'code_input.html','cell016,cell017'
 'zoom_function.html','svg001'
 'butterfly_function.html','svg002'
 'font_line.html','svg003'
