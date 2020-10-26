@@ -11,13 +11,14 @@
     </script>
   </head>
   <style>
+  pre {padding-left:3px; border:2px double slategray;}
   h3 {color:#aa33ff; text-shadow:4px 4px 4px #aaa;}
-  .sagecell .CodeMirror-scroll {min-height:3em; max-height:50em;}
+  .sagecell_output {width:99%; border:2px double slategray; padding-right:1px;}
   body {margin:5px 5px 5px 15px;}
   </style>  
   <body>
     <h3>$$\mathbb{ Rotated \; Random \; Polygons }$$</h3>
-<pre style='border:2px double #aaa;'><code>
+<pre><code>
 var('t,k'); n=randint(16,24)
 a,b,c=randint(8,16),randint(13,19),2*randint(3,6)
 s1=r'&#60;p style=%s&#62;'%'color:#00aaff;'+4*r'&nbsp;'
@@ -33,7 +34,7 @@ sum([polygon2d(L[i],color=(0,random(),random()),
                thickness=.5,alpha=.1,axes=False) 
      for i in range(2*c)]).show(figsize=7)
 
-</pre></code><br/> 
+</code></pre><br/> 
 <div id='cell011' class='evaluated'><script type='text/x-sage'>
 var('t,k'); n=randint(16,24)
 a,b,c=randint(8,16),randint(13,19),2*randint(3,6)
