@@ -10,11 +10,11 @@ var x1=Array(n).fill(d).map((r,t)=>r*(t-40)),
        Math.sin(Math.PI*Math.pow(r*(t-40),3))*Math.exp(-Math.pow(r*(t-40),2)));
 Plotly.plot(TEST1,[{x:x1,y:y1,line:{color:'#3636ff'},
 	                marker:{symbol:317},mode:'markers',
-                    hoverinfo:'y',name:'$f(x) = e^{-x^2}$'}]);
+                    hoverinfo:'y',name:'f(x)=e^(-x^2)'}]);
 Plotly.plot(TEST1,[{x:x1,y:y2,line:{color:'#36ff36'},
 	                marker:{symbol:218},mode:'markers',
-                    hoverinfo:'y',name:'$f(x) = -e^{-x^2}$'}]);
+                    hoverinfo:'y',name:'f(x)=-e^(-x^2)'}]);
 Plotly.plot(TEST1,[{x:x1,y:y3,line:{color:'#ff3636'},
 	                mode:'text',text:'☕',hoverinfo:'y',
-	                name:'$f(x) = sin(πx^3) e^{-x^2}$'}]);
+	                name:'f(x)=sin(πx^3)*e^(-x^2)'}]);
 </script>
