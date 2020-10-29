@@ -27,6 +27,6 @@ def sage_run(code_string):
     end_string="""</script></div></body></html>"""
     display(HTML(start_string+code_string+end_string))
     
-print("Evaluation of SageMath cells is possible "+\
-      "with two additional syntax marks: ")
+print("Evaluation of SageMath cells is possible ")
+print("with two additional syntax marks: ")
 print("the white space and the slash between code lines.")
