@@ -17,13 +17,11 @@ def sage_run(code_string):
     """min-height:3em; max-height:30em;}</style><body>"""+\
     """<div class='sage'><script type='text/x-sage'>"""
     split_code_string=code_string.split('  ')
-    code_string=""""""
+    code_string=""""""; c=0
     for el in split_code_string:
         if el!='':
-            if el[-1]!=',':
-                code_string+=el+"""; """ 
-            else:
-                code_string+=el
+            code_string+=c*'  '+el+'\n'; c=0
+        else: c+=1
     end_string="""</script></div></body></html>"""
     display(HTML(start_string+code_string+end_string))
     
