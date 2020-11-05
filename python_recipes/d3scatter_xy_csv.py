@@ -1,6 +1,6 @@
 from IPython.core.display import display,HTML
 
-def d3scatter_csv(csv_url,background_color,width,height):
+def d3scatter_xy_csv(csv_url,background_color,width,height):
     html_str="""<script src='https://d3js.org/d3.v4.min.js'></script>"""+\
     """<svg id='svg0001' style='background-color:"""+background_color+\
     """'></svg><script>var url='"""+csv_url+"""';"""+\
@@ -36,7 +36,9 @@ def d3scatter_csv(csv_url,background_color,width,height):
     """   .attr('cx',function(d) {return xScale(d.x)})"""+\
     """   .attr('cy',function(d) {return yScale(d.y)}); });"""+\
     """</script>"""
-    file='d3scatter_csv.html'
+    file='d3scatter_xy_csv.html'
+    with open(file,'w') as f:
+        f.write(html_str); f.close()
     string="""<div id='html_string'><iframe src='"""+\
            file+"""' height="""+str(height+20)+\
            """ width="""+str(width+20)+"""></iframe></div>"""
