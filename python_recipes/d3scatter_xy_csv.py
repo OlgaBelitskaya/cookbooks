@@ -1,4 +1,5 @@
 from IPython.core.display import display,HTML
+import random
 
 def d3scatter_xy_csv(csv_url,x='x',y='y',ms=3,
                      background_color='silver',grid_color='black',
@@ -51,7 +52,7 @@ def d3scatter_xy_csv(csv_url,x='x',y='y',ms=3,
     """   .attr('cx',function(d) {return xScale(d."""+x+""")})"""+\
     """   .attr('cy',function(d) {return yScale(d."""+y+""")}); });"""+\
     """</script>"""
-    file='d3scatter_xy_csv.html'
+    file='d3scatter_xy_csv'+str(random.uniform(0,9999999))+'.html'
     with open(file,'w') as f:
         f.write(html_str); f.close()
     string="""<div id='html_string'><iframe src='"""+\
