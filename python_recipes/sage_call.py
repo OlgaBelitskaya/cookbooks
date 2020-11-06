@@ -48,6 +48,30 @@ def sage_run(code_string):
         else: c+=1
     end_string="""</script></div></body></html>"""
     display(HTML(start_string+code_string+end_string))
+
+@register_line_magic
+def sage_coderun(params):
+    [width,height]=[int(el) for el in params.split()]
+    html_str="""<html><head><meta charset='utf-8'>"""+\
+    """<script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'>"""+\
+    """</script><script>$(function(){"""+\
+    """sagecell.makeSagecell({inputLocation:'#cell0001',"""+\
+    """evalButtonText:'run'}); });"""+\
+    """</script></head><style>.sagecell_output pre{"""+\
+    """min-height:3em; max-height:25em;} """+\
+    """.sagecell .CodeMirror-scroll {"""+\
+    """min-height:3em; max-height:25em;}</style>"""+\
+    """<body><div id='cell0001'><script type='text/x-sage'>"""+\
+    """print('These code lines are editable.')"""+\
+    """print('You can change them right here and run.')"""+\
+    """</script></div></body></html>"""
+    file='sage_coderun'+str(random.uniform(0,9999999))+'.html'
+    with open(file,'w') as f:
+        f.write(html_str); f.close()
+    string="""<div id='html_string'><iframe src='"""+\
+           file+"""' height="""+str(height+20)+\
+           """ width="""+str(width+20)+"""></iframe></div>"""
+    display(HTML(string))
     
 print('Evaluation of SageMath cells is possible ')
 print('now with two additional syntax marks: ')
