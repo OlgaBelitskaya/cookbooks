@@ -8,7 +8,7 @@
 <script type='text/javascript'>
 window.onload=function(){
   var pos;
-  var div1=document.getElementById('graph1')
+  var div1=document.getElementById('graph001')
   var graph_as_string=div1.innerHTML
   var graph=eval('('+graph_as_string+')');
   var width=document.documentElement.clientWidth-20;
@@ -118,7 +118,7 @@ window.onload=function(){
   if(graph.pos.length!=0){ force.tick(); force.stop();
                            graph.nodes.forEach(function(d,i) {d.fixed=true;});} }
 </script>
-<body><div id='graph1' style='display:none'>
+<body><div id='graph001' style='display:none'>
 {'link_distance':100,'link_strength':1,'charge':-200,
  'pos':[],'loops':[],'directed':true,'gravity':.02,
  'edge_thickness':3,'edge_labels':false,'vertex_size':7,'vertex_labels':true,   
