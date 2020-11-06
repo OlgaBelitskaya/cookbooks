@@ -1,0 +1,26 @@
+<script src='https://code.highcharts.com/highcharts.js'></script>
+<div id='div007' style='height:99%; width:99%; margin:0 auto'></div>
+<script>
+function randi(min,max){
+    return Math.floor(Math.random()*(max-min+1))+min;};
+function ar(k,a,b){var d=.01,m=640;
+    return Array(m).fill(k).map((k,t)=>
+           [k*(Math.cos(d*t)+Math.cos(a*d*t)/2+
+               Math.sin((a+b)*d*t)/3),
+            k*(Math.sin(d*t)+Math.sin(a*d*t)/2+
+               Math.cos((a+b)*d*t)/3)]);};
+function col(i){
+    var r=randi(i,255),g=randi(i,255),b=randi(i,255);
+    return 'rgb('+r+','+g+','+b+')';}; 
+var series=[],n=12;
+var a=randi(7,15),b=randi(10,24);
+for (var i=1; i<n+1; i++){
+    series.push({name:i.toString(),color:col(i),
+                 lineWidth:1,data:ar(i,a,b)})};
+Highcharts.chart('div007',{
+    chart:{type:'line',backgroundColor:'mintcream'},
+    xAxis:{title:{text:'x'}},yAxis:{title:{text:'y'}},
+    title:{text:'Random Parametric Plot: a,b = '+[a,b]},
+    credits:{enabled:false},
+    legend:{enabled:false},series:series});
+</script>
