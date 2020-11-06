@@ -1,5 +1,6 @@
 from IPython.core.display import display,HTML
 from IPython.core.magic import register_line_magic
+import random
 
 @register_line_magic
 def sage_autorun(code_string):
@@ -56,14 +57,9 @@ def sage_coderun(params):
     """<script src='https://sagecell.sagemath.org/static/embedded_sagecell.js'>"""+\
     """</script><script>$(function(){"""+\
     """sagecell.makeSagecell({inputLocation:'#cell0001',"""+\
-    """evalButtonText:'run'}); });"""+\
-    """</script></head><style>.sagecell_output pre{"""+\
-    """min-height:3em; max-height:25em;} """+\
-    """.sagecell .CodeMirror-scroll {"""+\
-    """min-height:3em; max-height:25em;}</style>"""+\
+    """evalButtonText:'run'}); });</script></head>"""+\
     """<body><div id='cell0001'><script type='text/x-sage'>"""+\
-    """print('These code lines are editable.')"""+\
-    """print('You can change them right here and run.')"""+\
+    """print('You can change code lines right here and run.')"""+\
     """</script></div></body></html>"""
     file='sage_coderun'+str(random.uniform(0,9999999))+'.html'
     with open(file,'w') as f:
