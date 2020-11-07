@@ -1,4 +1,3 @@
-%%writefile pictogram_photo_classify.py
 import pandas as pd,numpy as np,tensorflow as tf
 import os,seaborn as sn,pylab as pl
 from IPython.display import display
@@ -15,6 +14,10 @@ img_size1,img_size2=32,96
 cmap1,cmap2='spring','autumn'
 fw='weights.best.hdf5'
 model,history=[],[]
+
+def vars(n):
+    return [el for el in list(globals().keys()) 
+            if (el[-1]==n) and (el[0] in ['x','y'])]
 
 def images2array(files_path,img_size,
                  preprocess=False,grayscale=False):
@@ -102,9 +105,8 @@ def data2nnarrays(images,labels,names,cmap):
         sn.countplot(x='name %s'%(i+1),data=df,
                      palette=cmap,alpha=.5,ax=ax)
     pl.show()       
-    return [x_train,x_valid,x_test,
-            y_train,y_valid,y_test,
-            y_train,y_valid,y_test]
+    return x_train,x_valid,x_test,\
+           y_train,y_valid,y_test
 
 def display_images(images,labels,names,n):
     fig=pl.figure(figsize=(10,n))
