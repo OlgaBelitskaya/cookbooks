@@ -9,7 +9,8 @@
 const n=640,m=20;
 var margin={top:m,right:m,bottom:m,left:m},
     width=500-margin.left-margin.right,
-    height=500-margin.top-margin.bottom; 
+    height=500-margin.top-margin.bottom,
+    trans='translate('+margin.left+','+margin.top+')';
 function randi(xmin,xmax) {
     return Math.floor(Math.random()*(xmax-xmin+1))+xmin;};
 function randcolRB(i) {
@@ -21,21 +22,29 @@ function randcolGB(i) {
 var a=randi(7,15),b=randi(10,24);           
 function make_data(j) {
     return d3.range(0,n).map(function(i) {
-        return {"x":5*j*(Math.cos(0.01*i)+Math.cos(a*0.01*i)/2+Math.sin((a+b)*0.01*i)/3),
-                "y":5*j*(Math.sin(0.01*i)+Math.sin(a*0.01*i)/2+Math.cos((a+b)*0.01*i)/3)} }); };
+        return {'x':5*j*(Math.cos(0.01*i)+
+                         Math.cos(a*0.01*i)/2+
+                         Math.sin((a+b)*0.01*i)/3),
+                'y':5*j*(Math.sin(0.01*i)+
+                         Math.sin(a*0.01*i)/2+
+                         Math.cos((a+b)*0.01*i)/3)} }); };
 var xScale=d3.scaleLinear().domain([-30,30]).range([0,width+2*m]),
     yScale=d3.scaleLinear().domain([-30,30]).range([height+2*m,0]); 
-var svg=d3.select("#svg008").attr("width",width+margin.left+margin.right)
-                            .attr("height",height+margin.top+margin.bottom)
-                            .attr("transform","translate("+margin.left+","+margin.top+")");
-var line=d3.line().curve(d3.curveMonotoneX).x(function(d) {return xScale(d.x);})
-                                           .y(function(d) {return yScale(d.y);});
-for (var k=1; k<4; k++) {var data=make_data(k);
-    svg.append("path").datum(data).attr("class","line").attr("d",line)
-        .attr("fill","none").attr("stroke-width",2).transition().duration(5000)
-        .styleTween("stroke",function() {
-            var col1=randcolRB(k); var col2=randcolGB(k); 
+var svg=d3.select('#svg008').attr('width',width+margin.left+margin.right)
+                            .attr('height',height+margin.top+margin.bottom)
+                            .attr('transform',trans);
+var line=d3.line().curve(d3.curveMonotoneX)
+           .x(function(d) {return xScale(d.x);})
+           .y(function(d) {return yScale(d.y);});
+for (var k=1; k<4; k++) {
+    var data=make_data(k);
+    svg.append('path').datum(data)
+       .attr('class','line').attr('d',line)
+       .attr('fill','none').attr('stroke-width',2)
+       .transition().duration(5000)
+       .styleTween('stroke',function() {
+            var col1=randcolRB(k),col2=randcolGB(k); 
             return d3.interpolate(col1,col2);}); };
-svg.append("text").attr("transform","translate("+20+","+20+")").style("fill","#aaa")
-                   .text("a="+a+"; b="+b);
+svg.append('text').attr('transform',trans)
+   .style('fill','slategray').text('a='+a+'; b='+b);
 </script>
