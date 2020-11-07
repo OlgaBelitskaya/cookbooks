@@ -1,12 +1,20 @@
-import os,pandas as pd,numpy as np
-import seaborn as sn,pylab as pl
+%%writefile pictogram_photo_classify.py
+import pandas as pd,numpy as np,tensorflow as tf
+import os,seaborn as sn,pylab as pl
 from IPython.display import display
 from tensorflow.keras.preprocessing \
 import image as tkimg
 from tensorflow.keras.datasets import cifar10
+from IPython.core.magic import register_line_magic
+import tensorflow_hub as th
+from tensorflow.keras.models import Sequential
+from tensorflow.keras import layers as tkl
+from tensorflow.keras import callbacks as tkc
+
 img_size1,img_size2=32,96
 cmap1,cmap2='spring','autumn'
 fw='weights.best.hdf5'
+model,history=[],[]
 
 def images2array(files_path,img_size,
                  preprocess=False,grayscale=False):
@@ -113,3 +121,7 @@ def display_images(images,labels,names,n):
                      .format(str(label),str(name)),
                      fontsize=10)
     pl.show()
+    
+def img_resize(x,img_size=img_size2):       
+    x=tf.image.resize(x,[img_size,img_size])
+    return x.numpy()
