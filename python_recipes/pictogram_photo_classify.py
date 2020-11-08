@@ -133,3 +133,42 @@ def display_images(images,labels,n,names=names2):
 def img_resize(x,img_size=img_size2):       
     x=tf.image.resize(x,[img_size,img_size])
     return x.numpy()
+
+@register_line_magic
+def cnn_model(n):
+    global history,model,var_names
+    [x_train,x_valid,x_test,
+     y_train,y_valid,y_test]=\
+    [eval(el) for el in var_names[int(n)-1]]
+    for el in [y_train,y_valid,y_test]: el=el[int(n)%2]
+        
+    model=Sequential()
+    model.add(tkl.Conv2D(32,(5,5),padding='same',
+                         input_shape=x_train.shape[1:]))
+    model.add(tkl.Activation('relu'))
+    model.add(tkl.MaxPooling2D(pool_size=(2,2)))
+    model.add(tkl.Dropout(.25))
+    model.add(tkl.Conv2D(196,(5,5)))
+    model.add(tkl.Activation('relu'))    
+    model.add(tkl.MaxPooling2D(pool_size=(2,2)))
+    model.add(tkl.Dropout(.25))
+    model.add(tkl.GlobalAveragePooling2D())    
+    model.add(tkl.Dense(1024,activation='relu'))
+    model.add(tkl.Dropout(.5))         
+    model.add(tkl.Dense(10))
+    model.add(tkl.Activation('softmax'))
+    model.compile(loss='sparse_categorical_crossentropy',
+                  optimizer='adam',metrics=['accuracy'])
+    early_stopping=tkc.EarlyStopping(monitor='val_loss',
+                                     patience=20,verbose=2)
+    checkpointer=tkc.ModelCheckpoint(filepath=fw,verbose=2,
+                                     save_best_only=True)
+    lr_reduction=tkc.ReduceLROnPlateau(monitor='val_loss',verbose=2,
+                                       patience=5,factor=.8)
+    history=model.fit(x_train,y_train,epochs=100,
+                      batch_size=64,verbose=2,
+                      validation_data=(x_valid,y_valid),
+                      callbacks=[checkpointer,
+                                 early_stopping,
+                                 lr_reduction])
+
