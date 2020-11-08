@@ -21,7 +21,6 @@ names1=[['pictogram','contour','sketch'],
          'frog','ship','fish','house']]
 names2=[['plane','car','bird','cat','deer',
          'dog','frog','horse','ship','truck']]
-model,history=[],[]
 
 def images2array(files_path,img_size,
                  preprocess=False,grayscale=False):
@@ -163,20 +162,9 @@ def get_mixed_data(data1,data2):
     return x_train,x_valid,x_test,\
            y_train,y_valid,y_test
 
-@register_line_magic
-def cnn_model(n):
-    global history,model,\
-    x_train0,x_valid0,x_test0,\
-    y_train0,y_valid0,y_test0,\
-    x_train1,x_valid1,x_test1,\
-    y_train1,y_valid1,y_test1,\
-    x_train2,x_valid2,x_test2,\
-    y_train2,y_valid2,y_test2
-    var_list=['x_train','x_valid','x_test',
-              'y_train','y_valid','y_test']
+def cnn_model(data):
     [x_train,x_valid,x_test,
-     y_train,y_valid,y_test]=\
-    [eval(el+n) for el in var_list]
+     y_train,y_valid,y_test]=data
         
     model=Sequential()
     model.add(tkl.Conv2D(32,(5,5),padding='same',
@@ -207,21 +195,11 @@ def cnn_model(n):
                       callbacks=[checkpointer,
                                  early_stopping,
                                  lr_reduction])
-    
-@register_line_magic
-def hub_model(n):
-    global history,model,img_size2,\
-    rx_train0,rx_valid0,rx_test0,\
-    ry_train0,ry_valid0,ry_test0,\
-    rx_train1,rx_valid1,rx_test1,\
-    ry_train1,ry_valid1,ry_test1,\
-    rx_train2,rx_valid2,rx_test2,\
-    ry_train2,ry_valid2,ry_test2
-    var_list=['rx_train','rx_valid','rx_test',
-              'ry_train','ry_valid','ry_test']
+    return model,history
+
+def hub_model(data):
     [rx_train,rx_valid,rx_test,
-     ry_train,ry_valid,ry_test]=\
-    [eval(el+n) for el in var_list]
+     ry_train,ry_valid,ry_test]=data
     handle_base="mobilenet_v2_050_96"
     mhandle="https://tfhub.dev/google/imagenet/{}/feature_vector/4"\
     .format(handle_base)
@@ -248,6 +226,7 @@ def hub_model(n):
                       callbacks=[checkpointer,
                                  early_stopping,
                                  lr_reduction])
+    return model,history
 
 def history_plot(fit_history,fig_size,color):
     pl.style.use('seaborn-whitegrid')
