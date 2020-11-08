@@ -1,3 +1,4 @@
+%%writefile pictogram_photo_classify.py
 import pandas as pd,numpy as np,tensorflow as tf
 import os,seaborn as sn,pylab as pl
 from IPython.display import display
@@ -134,13 +135,48 @@ def img_resize(x,img_size=img_size2):
     x=tf.image.resize(x,[img_size,img_size])
     return x.numpy()
 
+def get_resized_data(data):
+    [rx_train,rx_valid,rx_test]=\
+    [img_resize(el) for el in data[:3]]
+    [y_train,y_valid,y_test]=data[3:]
+    print([rx_train.shape,rx_train.dtype])
+    print('Label: ',names2[0][y_valid[100]])
+    pl.figure(figsize=(1,1))
+    pl.xticks([]); pl.yticks([])
+    pl.imshow(rx_valid[100]); pl.show()
+    return rx_train,rx_valid,rx_test,\
+           y_train,y_valid,y_test
+
+def get_mixed_data(data1,data2):
+    data=[np.vstack([data1[i],data2[i]])
+          for i in range(3)]+\
+         [np.hstack([data1[i+3],data2[i+3]])
+          for i in range(3)]
+    [x_train,x_valid,x_test,
+     y_train,y_valid,y_test]=data
+    for [x,y] in [[x_train,y_train],
+                  [x_valid,y_valid],
+                  [x_test,y_test]]:
+        N=len(y); shuffle_ids=np.arange(N)
+        np.random.RandomState(23).shuffle(shuffle_ids)
+        x,y=x[shuffle_ids],y[shuffle_ids]
+    return x_train,x_valid,x_test,\
+           y_train,y_valid,y_test
+
 @register_line_magic
 def cnn_model(n):
-    global history,model,var_names
+    global history,model,\
+    x_train0,x_valid0,x_test0,\
+    y_train0,y_valid0,y_test0,\
+    x_train1,x_valid1,x_test1,\
+    y_train1,y_valid1,y_test1,\
+    x_train2,x_valid2,x_test2,\
+    y_train2,y_valid2,y_test2
+    var_list=['x_train','x_valid','x_test',
+              'y_train','y_valid','y_test']
     [x_train,x_valid,x_test,
      y_train,y_valid,y_test]=\
-    [eval(el) for el in var_names[int(n)-1]]
-    for el in [y_train,y_valid,y_test]: el=el[int(n)%2]
+    [eval(el+n) for el in var_list]
         
     model=Sequential()
     model.add(tkl.Conv2D(32,(5,5),padding='same',
@@ -171,4 +207,63 @@ def cnn_model(n):
                       callbacks=[checkpointer,
                                  early_stopping,
                                  lr_reduction])
+    
+@register_line_magic
+def hub_model(n):
+    global history,model,img_size2,\
+    rx_train0,rx_valid0,rx_test0,\
+    ry_train0,ry_valid0,ry_test0,\
+    rx_train1,rx_valid1,rx_test1,\
+    ry_train1,ry_valid1,ry_test1,\
+    rx_train2,rx_valid2,rx_test2,\
+    ry_train2,ry_valid2,ry_test2
+    var_list=['rx_train','rx_valid','rx_test',
+              'ry_train','ry_valid','ry_test']
+    [rx_train,rx_valid,rx_test,
+     ry_train,ry_valid,ry_test]=\
+    [eval(el+n) for el in var_list]
+    handle_base="mobilenet_v2_050_96"
+    mhandle="https://tfhub.dev/google/imagenet/{}/feature_vector/4"\
+    .format(handle_base)
+    
+    model=tf.keras.Sequential([
+        tf.keras.layers.Input((img_size2,img_size2,3),
+                              name='input'),
+        th.KerasLayer(mhandle,trainable=True),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(2048,activation='relu'),
+        tf.keras.layers.Dropout(rate=.5),
+        tf.keras.layers.Dense(10,activation='softmax')])
+    model.compile(optimizer='adam',metrics=['accuracy'],
+                  loss='sparse_categorical_crossentropy') 
+    early_stopping=tkc.EarlyStopping(monitor='val_loss',
+                                     patience=20,verbose=2)
+    checkpointer=tkc.ModelCheckpoint(filepath=fw,verbose=2,
+                                     save_best_only=True)
+    lr_reduction=tkc.ReduceLROnPlateau(monitor='val_loss',verbose=2,
+                                       patience=5,factor=.8)
+    history=model.fit(rx_train,ry_train,epochs=50,
+                      batch_size=64,verbose=2,
+                      validation_data=(rx_valid,ry_valid),
+                      callbacks=[checkpointer,
+                                 early_stopping,
+                                 lr_reduction])
 
+def history_plot(fit_history,fig_size,color):
+    pl.style.use('seaborn-whitegrid')
+    keys=list(fit_history.history.keys())
+    list_history=[fit_history.history[keys[i]] 
+                  for i in range(len(keys))]
+    dfkeys=pd.DataFrame(list_history).T
+    dfkeys.columns=keys
+    fig=pl.figure(figsize=(fig_size,fig_size))
+    ax1=fig.add_subplot(311)
+    dfkeys.iloc[:,[0,2]].plot(
+        ax=ax1,color=['slategray',color])
+    ax2=fig.add_subplot(312)
+    dfkeys.iloc[:,4].plot(ax=ax2,color=color)
+    pl.legend()
+    ax3=fig.add_subplot(313)
+    dfkeys.iloc[:,[1,3]].plot(
+        ax=ax3,color=['slategray',color])
+    pl.show();
