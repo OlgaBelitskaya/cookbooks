@@ -15,9 +15,9 @@ cmap1,cmap2='spring','autumn'
 fw='weights.best.hdf5'
 names1=[['pictogram','contour','sketch'],
         ['flower','bird','butterfly','tree',
-         'plane','crane','dog','horse','deer',
-         'truck','car','cat','frog',
-         'ship','fish','house']]
+         'plane','crane','dog','horse',
+         'deer','truck','car','cat',
+         'frog','ship','fish','house']]
 names2=[['plane','car','bird','cat','deer',
          'dog','frog','horse','ship','truck']]
 model,history=[],[]
@@ -69,12 +69,14 @@ def get_data(files_path,img_size,names1,names2,
     labels=labels2array(files_path)
     n=len(labels[0][labels[0]==0])
     images=images[:n]; labels=labels[1][:n]
+    cond1=np.where([l in names2[0] for l in names1[1]])[0]
+    cond2=np.where([l in cond1 for l in labels])[0]
+    images=images[cond2]; labels=labels[cond2]
     rd=dict(zip([names1[1].index(names2[0][i])
                  for i in range(10)],range(10)))
-    labels=np.array([rd.get(el,el) for el in labels],
-                     dtype='int32')
-    cond=np.where([l<10 for l in labels])[0]
-    return images[cond],labels[cond]
+    labels=[rd.get(el,el) for el in labels]
+    labels=np.array(labels,dtype='int32')
+    return images,labels
 
 def get_cifar():
     (images,labels),(_,_)=cifar10.load_data()
