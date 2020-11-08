@@ -1,13 +1,17 @@
 import os,pylab as pl,pandas as pd
+from IPython.core.display import display,HTML
 
 pl.style.use('seaborn-whitegrid')
 
-def pandas_history(fit_history):
+def pandas_history(fit_history,csv=False):
     keys=list(fit_history.history.keys())
     list_history=[fit_history.history[keys[i]] 
                   for i in range(len(keys))]
     df_history=pd.DataFrame(list_history).T
     df_history.columns=keys
+    if csv: 
+        df_history.to_csv('df_history.csv',
+                          index=False)
     return df_history 
     
 def keras_history_plot(fit_history,fig_size=10,
