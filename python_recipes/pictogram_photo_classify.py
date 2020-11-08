@@ -82,10 +82,11 @@ def get_cifar():
     labels=np.array(labels,dtype='int32').reshape(-1)
     return images,labels
 
-def data2nnarrays(images,labels,cmap,names=names2):
-    N=images.shape[0]; n=int(.1*N)
-    shuffle_ids=np.arange(N)
+def data2nnarrays(images,labels,num,cmap,names=names2):
+    N=num; n=int(.1*N)
+    shuffle_ids=np.arange(images.shape[0])
     np.random.RandomState(12).shuffle(shuffle_ids)
+    shuffle_ids=shuffle_ids[:N]
     images=images[shuffle_ids]
     labels=labels[shuffle_ids]
     x_test,x_valid,x_train=\
@@ -113,12 +114,12 @@ def data2nnarrays(images,labels,cmap,names=names2):
            y_train,y_valid,y_test
 
 def display_images(images,labels,n,names=names2):
-    fig=pl.figure(figsize=(10,n))
+    fig=pl.figure(figsize=(10,n//2))
     randch=np.random.choice(
         images.shape[0],size=n,replace=False)
     for i,idx in enumerate(randch):
         ax=fig.add_subplot(
-            n//3,3,i+1,xticks=[],yticks=[])
+            n//4,4,i+1,xticks=[],yticks=[])
         ax.imshow(images[idx])
         label=labels[idx]
         name=names[0][label]
