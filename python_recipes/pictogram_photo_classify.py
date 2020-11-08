@@ -13,11 +13,14 @@ from tensorflow.keras import callbacks as tkc
 img_size1,img_size2=32,96
 cmap1,cmap2='spring','autumn'
 fw='weights.best.hdf5'
+names1=[['pictogram','contour','sketch'],
+        ['flower','bird','butterfly','tree',
+         'plane','crane','dog','horse','deer',
+         'truck','car','cat','frog',
+         'ship','fish','house']]
+names2=[['plane','car','bird','cat','deer',
+         'dog','frog','horse','ship','truck']]
 model,history=[],[]
-
-def vars(n):
-    return [el for el in list(globals().keys()) 
-            if (el[-1]==n) and (el[0] in ['x','y'])]
 
 def images2array(files_path,img_size,
                  preprocess=False,grayscale=False):
@@ -59,30 +62,36 @@ def labels2array(files_path):
                    for x in labels[i]]
     return labels
 
-def get_data(files_path,img_size,
+def get_data(files_path,img_size,names1,names2,
              preprocess=False,grayscale=False):
     images=images2array(files_path,img_size,
                         preprocess,grayscale)
     labels=labels2array(files_path)
-    return images,labels
+    n=len(labels[0][labels[0]==0])
+    images=images[:n]; labels=labels[1][:n]
+    rd=dict(zip([names1[1].index(names2[0][i])
+                 for i in range(10)],range(10)))
+    labels=np.array([rd.get(el,el) for el in labels],
+                     dtype='int32')
+    cond=np.where([l<10 for l in labels])[0]
+    return images[cond],labels[cond]
 
 def get_cifar():
     (images,labels),(_,_)=cifar10.load_data()
     images=np.array(images,dtype='float32')/255
-    labels=labels.reshape(1,-1)
+    labels=np.array(labels,dtype='int32').reshape(-1)
     return images,labels
 
-def data2nnarrays(images,labels,names,cmap):
+def data2nnarrays(images,labels,cmap,names=names2):
     N=images.shape[0]; n=int(.1*N)
     shuffle_ids=np.arange(N)
     np.random.RandomState(12).shuffle(shuffle_ids)
     images=images[shuffle_ids]
-    labels=np.array([labels[i][shuffle_ids]
-                     for i in range(labels.shape[0])])
+    labels=labels[shuffle_ids]
     x_test,x_valid,x_train=\
     images[:n],images[n:2*n],images[2*n:]
     y_test,y_valid,y_train=\
-    labels[:,:n],labels[:,n:2*n],labels[:,2*n:]
+    labels[:n],labels[n:2*n],labels[2*n:]
     print('data outputs: ')
     df=pd.DataFrame([[x_train.shape,x_valid.shape,x_test.shape],
                      [x_train.dtype,x_valid.dtype,x_test.dtype],
@@ -93,22 +102,17 @@ def data2nnarrays(images,labels,names,cmap):
                            'label shape','label type'])
     display(df)
     print('distribution of labels: ')
-    idx=['labels %d'%(i+1) 
-         for i in range(labels.shape[0])]
-    df=pd.DataFrame(labels,index=idx).T
-    for i in range(labels.shape[0]):
-        df['name %d'%(i+1)]=\
-        [names[i][l] for l in labels[i]]
-    fig=pl.figure(figsize=(10,10))    
-    for i in range(labels.shape[0]):
-        ax=fig.add_subplot(labels.shape[0],1,i+1)
-        sn.countplot(x='name %s'%(i+1),data=df,
-                     palette=cmap,alpha=.5,ax=ax)
+    df=pd.DataFrame(labels,columns=['label'])
+    df['name']=[names[0][l] for l in labels]
+    fig=pl.figure(figsize=(10,5))    
+    ax=fig.add_subplot(1,1,1)
+    sn.countplot(x='name',data=df,
+                 palette=cmap,alpha=.5,ax=ax)
     pl.show()       
     return x_train,x_valid,x_test,\
            y_train,y_valid,y_test
 
-def display_images(images,labels,names,n):
+def display_images(images,labels,n,names=names2):
     fig=pl.figure(figsize=(10,n))
     randch=np.random.choice(
         images.shape[0],size=n,replace=False)
@@ -116,9 +120,8 @@ def display_images(images,labels,names,n):
         ax=fig.add_subplot(
             n//3,3,i+1,xticks=[],yticks=[])
         ax.imshow(images[idx])
-        label=[labels[:,idx]]
-        name=[names[i][labels[i][idx]]
-              for i in range(labels.shape[0])]
+        label=labels[idx]
+        name=names[0][label]
         ax.set_title('{} \n {}'\
                      .format(str(label),str(name)),
                      fontsize=10)
