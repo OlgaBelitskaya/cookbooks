@@ -121,11 +121,11 @@ def display_images(images,labels,n,names=names2):
         images.shape[0],size=n,replace=False)
     for i,idx in enumerate(randch):
         ax=fig.add_subplot(
-            n//4,4,i+1,xticks=[],yticks=[])
+            n//5,5,i+1,xticks=[],yticks=[])
         ax.imshow(images[idx])
         label=labels[idx]
         name=names[0][label]
-        ax.set_title('{} \n {}'\
+        ax.set_title('{} => {}'\
                      .format(str(label),str(name)),
                      fontsize=10)
     pl.show()
