@@ -1,6 +1,15 @@
 <script type='text/javascript' 
         src='https://www.gstatic.com/charts/loader.js'></script>
-<div id='div012' style='width:500px; height:500px;'></div>
+<style>
+@import 'https://fonts.googleapis.com/css?family=Ewert';
+.centered_resized {position:fixed; top:50%; left:50%; 
+                   transform:translate(-50%,-50%);
+                   width:500; height:500; margin:0 auto;}
+.centered_head {position:fixed; top:5%; left:33%;}
+</style>
+<h2 class='centered_head' style='font-family:Ewert; color:#3636ff'>
+Random Parametric Curves</h2>
+<div id='div012' class='centered_resized'></div>
 <script>
 function randi(xmin,xmax) {
     return Math.floor(Math.random()*(xmax-xmin+1))+xmin;};
@@ -31,10 +40,10 @@ function drawChart() {
     xy.unshift(['x',[a,b,c,q,n].toString()]); 
     for (var k=2; k<2*q+1; k++) {
         xy=xy.concat(ar(a,b,c,q,n,k));};
-    var data=google.visualization.arrayToDataTable(xy); 
+    var data=google.visualization.arrayToDataTable(xy);
     var options={chartArea:{left:0,top:0,right:0,bottom:20},
                  legend:{position:'bottom'},
-                 curveType:'none',lineWidth:.5,
+                 curveType:'none',lineWidth:.3,
                  colors:[randi_colorGB(a)],
                  hAxis:{ticks:[],baselineColor:'#fff'},
                  vAxis:{ticks:[],baselineColor:'#fff'}};
