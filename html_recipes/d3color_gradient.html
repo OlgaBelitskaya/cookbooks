@@ -1,0 +1,31 @@
+<script src='https://d3js.org/d3.v3.min.js'></script>
+<svg id='svg009' style='background-color:#101050;'></svg>
+<script>
+var width=250,height=250,ra=3*360,
+    col=['silver','darkgray','slategray','darkslategray'],
+    per=['40%','60%','80%','100%'];
+var svg=d3.select('#svg009')
+          .attr('width',2*width)
+          .attr('height',2*height).append('g')
+          .attr('transform','translate('+width+','+height+')');
+var gradient=svg.append('defs').append('linearGradient')
+                .attr("id","gradient")
+                .attr("x1","0%").attr("y1","50%")
+                .attr("x2","50%").attr("y2","100%");
+for (var i=0; i<4; i++){
+    gradient.append("stop").attr("offset",per[i])
+                           .attr("stop-color",col[i]);};
+svg.selectAll("path").data(d3.range(ra))
+   .enter().append("path").attr("stroke","#fff")
+   .attr("fill","url(#gradient)").attr("fill-opacity",.9)
+   .attr("d",function(){return raindrop(Math.random()*100);})
+   .attr("transform",function(d){
+       return "rotate("+d+")"
+              +"translate("+.9*height*Math.random()+",0)"
+              +"rotate(270)";});
+function raindrop(size){
+  var r=Math.cos(Math.PI*size)+Math.sqrt(size);
+  return "M"+r+",0"+"A"+r+","+r+" 0 1,1 "+-r+",0"
+         +"C"+-r+","+-r+" 0,"+-r+" 0,"+-3*r
+         +"C0,"+-r+" "+r+","+-r+" "+r+",0"+"Z";};
+</script>
