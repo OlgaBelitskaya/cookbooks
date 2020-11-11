@@ -32,6 +32,7 @@
 'gchart_random_function.html','div009'
 'gchart_bar.html','div010'
 'highcharts_histogram_bellcurve.html','div011'
+'gchart_random_curve.html','div012'
 'graph.html','graph001'
 'canvas_draw.html','canvas001'
 'animated_button.html','button001'
