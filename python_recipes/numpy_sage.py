@@ -9,12 +9,13 @@ def sage_list_plot(array,width,height):
     """<script src='https://sagecell.sagemath.org/"""+\
     """static/embedded_sagecell.js'>"""+\
     """</script><script>$(function(){"""+\
-    """sagecell.makeSagecell({inputLocation:'#cell0001',"""+\
-    """evalButtonText:'run'}); });</script></head>"""+\
+    """sagecell.makeSagecell({inputLocation:'div.plot',"""+\
+    """evalButtonText:'run',linked:true}); });</script></head>"""+\
     """<style>.sagecell .CodeMirror-scroll {"""+\
-    """min-height:3em; max-height:11em;}</style>"""+\
-    """<body><div id='cell0001'><script type='text/x-sage'>"""+\
-    """array="""+str_array+"""\n"""+\
+    """min-height:3em; max-height:6em;}</style>"""+\
+    """<body><div class='plot'><script type='text/x-sage'>"""+\
+    """array="""+str_array+"""</script></div><br/>"""+\
+    """<div class='plot'><script type='text/x-sage'>"""+\
     """n=len(array)\n"""+\
     """p=sum([list_plot(array[i],color=hue(i/n))\n"""+\
     """       for i in range(n)])\n"""+\
