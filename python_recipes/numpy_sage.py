@@ -11,9 +11,8 @@ def sage_list_plot(array,width,height):
     """</script><script>$(function(){"""+\
     """sagecell.makeSagecell({inputLocation:'#cell0001',"""+\
     """evalButtonText:'run'}); });</script></head>"""+\
-    """<style>.sagecell .CodeMirror-scroll {"""+\
-    """ width:"""+str(width+20)+"""; """+\
-    """min-height:3em; max-height:7em;}</style>"""+\
+    """<style>.sagecell .CodeMirror-scroll {width:99%;"""+\
+    """min-height:3em; max-height:11em;}</style>"""+\
     """<body><div id='cell0001'><script type='text/x-sage'>"""+\
     """array="""+str_array+"""\n"""+\
     """n=len(array)\n"""+\
