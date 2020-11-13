@@ -11,12 +11,15 @@ def sage_list_plot(array,width,height):
     """</script><script>$(function(){"""+\
     """sagecell.makeSagecell({inputLocation:'#cell0001',"""+\
     """evalButtonText:'run'}); });</script></head>"""+\
+    """<style>.sagecell .CodeMirror-scroll {"""+\
+    """ width:"""+str(width+20)+"""; """+\
+    """min-height:3em; max-height:7em;}</style>"""+\
     """<body><div id='cell0001'><script type='text/x-sage'>"""+\
     """array="""+str_array+"""\n"""+\
     """n=len(array)\n"""+\
     """p=sum([list_plot(array[i],color=hue(i/n))\n"""+\
     """       for i in range(n)])\n"""+\
-    """p.show(figsize=(4.5,3))"""+\
+    """p.show(figsize=(4.7,3),axes=False,frame=True)"""+\
     """</script></div></body></html>"""
     file='sage_coderun'+str(random.uniform(0,9999999))+'.html'
     with open(file,'w') as f:
