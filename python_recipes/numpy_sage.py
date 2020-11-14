@@ -12,9 +12,11 @@ def sage_list_plot(array,width,height):
     """sagecell.makeSagecell({inputLocation:'div.plot',"""+\
     """evalButtonText:'run',linked:true}); """+\
     """});</script></head>"""+\
-    """<style>.sagecell .CodeMirror-scroll {"""+\
-    """min-height:3em; max-height:8em;}</style><body>"""+\
-    """<div class='plot'><script type='text/x-sage'>"""+\
+    """<style>#array1.sagecell .CodeMirror-scroll {"""+\
+    """min-height:3em; max-height:3em;} """+\
+    """.sagecell .CodeMirror-scroll {"""+\
+    """min-height:3em; max-height:10em;}</style><body>"""+\
+    """<div class='plot' id='array1'><script type='text/x-sage'>"""+\
     """import numpy as np\n"""+\
     """array=np.array("""+str_array+""")\n"""+\
     """</script></div><br/>"""+\
