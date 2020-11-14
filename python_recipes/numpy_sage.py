@@ -10,7 +10,7 @@ def sage_list_plot(array,width,height):
     """static/embedded_sagecell.js'>"""+\
     """</script><script>$(function() {"""+\
     """sagecell.makeSagecell({inputLocation:'div.plot',"""+\
-    """evalButtonText:'run',linked:true,autoeval:true}); """+\
+    """evalButtonText:'run',linked:true}); """+\
     """});</script></head>"""+\
     """<style>.sagecell .CodeMirror-scroll {"""+\
     """min-height:3em; max-height:7em;}</style><body>"""+\
