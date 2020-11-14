@@ -8,15 +8,19 @@ def sage_list_plot(array,width,height):
     html_str="""<html><head><meta charset='utf-8'>"""+\
     """<script src='https://sagecell.sagemath.org/"""+\
     """static/embedded_sagecell.js'>"""+\
-    """</script><script>$(function(){"""+\
+    """</script><script>$(function() {"""+\
     """sagecell.makeSagecell({inputLocation:'div.plot',"""+\
-    """evalButtonText:'run',linked:true}); });</script></head>"""+\
+    """evalButtonText:'run',linked:true,autoeval:true}); """+\
+    """});</script></head>"""+\
     """<style>.sagecell .CodeMirror-scroll {"""+\
-    """min-height:3em; max-height:6em;}</style>"""+\
-    """<body><div class='plot'><script type='text/x-sage'>"""+\
-    """array="""+str_array+"""</script></div><br/>"""+\
+    """min-height:3em; max-height:7em;}</style><body>"""+\
     """<div class='plot'><script type='text/x-sage'>"""+\
-    """n=len(array)\n"""+\
+    """import numpy as np\n"""+\
+    """array=np.array("""+str_array+""")\n"""+\
+    """</script></div><br/>"""+\
+    """<div class='plot'><script type='text/x-sage'>"""+\
+    """print('array dimensions:%s'%str(array.shape))\n"""+\
+    """n=array.shape[0]\n"""+\
     """p=sum([list_plot(array[i],color=hue(i/n))\n"""+\
     """       for i in range(n)])\n"""+\
     """p.show(figsize=(4.7,3),axes=False,frame=True)"""+\
