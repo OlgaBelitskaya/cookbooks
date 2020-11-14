@@ -13,7 +13,7 @@ def sage_list_plot(array,width,height):
     """evalButtonText:'run',linked:true}); """+\
     """});</script></head>"""+\
     """<style>.sagecell .CodeMirror-scroll {"""+\
-    """min-height:3em; max-height:7em;}</style><body>"""+\
+    """min-height:3em; max-height:8em;}</style><body>"""+\
     """<div class='plot'><script type='text/x-sage'>"""+\
     """import numpy as np\n"""+\
     """array=np.array("""+str_array+""")\n"""+\
@@ -21,9 +21,12 @@ def sage_list_plot(array,width,height):
     """<div class='plot'><script type='text/x-sage'>"""+\
     """print('array dimensions:%s'%str(array.shape))\n"""+\
     """n=array.shape[0]\n"""+\
-    """p=sum([list_plot(array[i],color=hue(i/n))\n"""+\
+    """p=sum([list_plot(\n"""+\
+    """    array[i],color=hue(i/n),plotjoined=True,\n"""+\
+    """    marker='o',markersize=2,legend_label=i+1)\n"""+\
     """       for i in range(n)])\n"""+\
-    """p.show(figsize=(4.7,3),axes=False,frame=True)"""+\
+    """p.show(figsize=(4.7,3),axes=False,\n"""+\
+    """       frame=True,gridlines=True)"""+\
     """</script></div></body></html>"""
     file='sage_coderun'+str(random.uniform(0,9999999))+'.html'
     with open(file,'w') as f:
