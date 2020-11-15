@@ -1,11 +1,11 @@
 from IPython.core.display import display,HTML
 import random,numpy as np
 
-def sage_list_plot(array,labels=None,
+def sage_list_plot(array,labels=None,precision=8,
                    width=650,height=700,
                    kw=.0095,kh=0.0035):
     str_array=np.array2string(
-        array,precision=8,separator=',',
+        array,precision=precision,separator=',',
         suppress_small=True)
     if labels==None: 
         labels=[i+1 for i in range(len(array))]
@@ -45,12 +45,12 @@ def sage_list_plot(array,labels=None,
            file+"""' height="""+str(height+20)+\
            """ width="""+str(width+20)+"""></iframe></div>"""
     display(HTML(string))
-
-def sage_list_plot_min(array,labels=None,
+    
+def sage_list_plot_min(array,labels=None,precision=8,
                        width=650,height=450,
                        kw=.0095,kh=.0075):
     str_array=np.array2string(
-        array,precision=8,separator=',',
+        array,precision=precision,separator=',',
         suppress_small=True)
     if labels==None: 
         labels=[i+1 for i in range(len(array))]
