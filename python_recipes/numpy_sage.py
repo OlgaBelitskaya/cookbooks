@@ -2,8 +2,8 @@ from IPython.core.display import display,HTML
 import random,numpy as np
 
 def sage_list_plot(array,labels=None,
-                   width=700,height=700,
-                   kw=.0095,kh=0.0075):
+                   width=650,height=700,
+                   kw=.0095,kh=0.0035):
     str_array=np.array2string(
         array,precision=8,separator=',',
         suppress_small=True)
@@ -17,9 +17,9 @@ def sage_list_plot(array,labels=None,
     """evalButtonText:'run',linked:true}); """+\
     """});</script></head>"""+\
     """<style>#array1.sagecell .CodeMirror-scroll {"""+\
-    """min-height:3em; max-height:7em;} """+\
+    """min-height:3em; max-height:5em;} """+\
     """.sagecell .CodeMirror-scroll {"""+\
-    """min-height:3em; max-height:10em;}</style><body>"""+\
+    """min-height:3em; max-height:11em;}</style><body>"""+\
     """<div class='plot' id='array1'><script type='text/x-sage'>"""+\
     """import numpy as np\n"""+\
     """array=np.array("""+str_array+""")\n"""+\
@@ -47,8 +47,8 @@ def sage_list_plot(array,labels=None,
     display(HTML(string))
 
 def sage_list_plot_min(array,labels=None,
-                       width=700,height=400,
-                       kw=.0095,kh=.0065):
+                       width=650,height=450,
+                       kw=.0095,kh=.0075):
     str_array=np.array2string(
         array,precision=8,separator=',',
         suppress_small=True)
