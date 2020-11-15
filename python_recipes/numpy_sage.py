@@ -1,10 +1,14 @@
 from IPython.core.display import display,HTML
 import random,numpy as np
 
-def sage_list_plot(array,width,height,kw,kh):
+def sage_list_plot(array,labels=None,
+                   width=700,height=700,
+                   kw=.0095,kh=0.0075):
     str_array=np.array2string(
         array,precision=8,separator=',',
         suppress_small=True)
+    if labels==None: 
+        labels=[i+1 for i in range(len(array))]
     html_str="""<html><head><meta charset='utf-8'>"""+\
     """<script src='https://sagecell.sagemath.org/"""+\
     """static/embedded_sagecell.js'>"""+\
@@ -19,13 +23,15 @@ def sage_list_plot(array,width,height,kw,kh):
     """<div class='plot' id='array1'><script type='text/x-sage'>"""+\
     """import numpy as np\n"""+\
     """array=np.array("""+str_array+""")\n"""+\
+    """labels="""+str(labels)+"""\n"""+\
     """</script></div><br/>"""+\
     """<div class='plot'><script type='text/x-sage'>"""+\
     """print('array dimensions:%s'%str(array.shape))\n"""+\
     """n=array.shape[0]\n"""+\
     """p=sum([list_plot(\n"""+\
-    """    array[i],color=hue(i/n),plotjoined=True,\n"""+\
-    """    marker='o',markersize=2,legend_label=i+1)\n"""+\
+    """    array[i],plotjoined=True,\n"""+\
+    """    color=hue(i/n),marker='o',markersize=2,\n"""+\
+    """    legend_label=labels[i])\n"""+\
     """       for i in range(n)])\n"""+\
     """p.show(figsize=("""+str(
         (np.round(kw*width,2),np.round(kh*height,2)))+\
