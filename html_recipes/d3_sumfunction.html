@@ -1,18 +1,19 @@
 <style>
-@import 'https://fonts.googleapis.com/css?family=Orbitron|Akronim';
-#d3ch1 {background:whitesmoke;}
-#d3ch1 text {fill:#3636ff; font-size:110%; font-family:Orbitron} 
-.grid line,.grid path {stroke:#3636ff; stroke-opacity:.5; 
-                       shape-rendering:crispEdges;}
+@import 'https://fonts.googleapis.com/css?family=Orbitron&effect=3d';
+#d3ch1 {background:slategray;}
+#d3ch1 text {fill:#fff; font-size:110%; font-family:Orbitron} 
+.grid line,.grid path {
+  stroke:#3636ff; stroke-opacity:.5; stroke-width:.7;
+  shape-rendering:crispEdges;}
 </style>
 <script src='https://d3js.org/d3.v6.min.js'></script>
 <svg id='d3ch1'></svg><script>
-var m=30,x1=0,x2=4,y1=-100,y2=100;
+var m=30,x1=0,x2=4,y1=-115,y2=115;
 var margin={top:m,right:m,bottom:m,left:m},
-    width=600-margin.left-margin.right,
-    height=600-margin.top-margin.bottom; 
+    width=500-margin.left-margin.right,
+    height=500-margin.top-margin.bottom; 
 function make_x_gridlines(){
-    return d3.axisBottom(xScale).ticks(11).tickFormat('')};
+    return d3.axisBottom(xScale).ticks(15).tickFormat('')};
 function make_y_gridlines(){
     return d3.axisLeft(yScale).ticks(10).tickFormat('')}; 
 var xScale=d3.scaleLinear().domain([x1,x2]).range([0,width]),
@@ -24,14 +25,16 @@ var svg=d3.select('#d3ch1')
           .attr('height',height+margin.top+margin.bottom)
           .append('g').attr('transform',ttr1);
 svg.append('g').attr('class','x axis')
-               .call(d3.axisBottom(xScale).tickSize(.5))
-               .attr('transform',ttr2); 
+   .attr('class','font-effect-3d')
+   .call(d3.axisBottom(xScale).tickSize(.5))
+   .attr('transform',ttr2); 
 svg.append('g').attr('class','y axis')
-               .call(d3.axisLeft(yScale).tickSize(.5));    
+   .attr('class','font-effect-3d')
+   .call(d3.axisLeft(yScale).tickSize(.5));    
 svg.append('g').attr('class','grid').attr('transform',ttr2)
-               .call(make_x_gridlines().tickSize(-height));
+   .call(make_x_gridlines().tickSize(-height));
 svg.append('g').attr('class','grid')
-               .call(make_y_gridlines().tickSize(-width));
+   .call(make_y_gridlines().tickSize(-width));
 function sumfunction(n,x) {
   var funsum=0;
   for (var i=1; i<n+1; i++) {
