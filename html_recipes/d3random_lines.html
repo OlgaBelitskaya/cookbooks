@@ -1,7 +1,7 @@
 <style>
-@import 'https://fonts.googleapis.com/css?family=Ewert&effect=3d';
+@import 'https://fonts.googleapis.com/css?family=Orbitron&effect=3d';
 #d3ch2 {background:ivory;}
-#d3ch2 text {fill:#ff3636; font-size:130%; font-family:Ewert} 
+#d3ch2 text {fill:#ff3636; font-size:130%; font-family:Orbitron} 
 .grid2 line,.grid2 path {
     stroke:#ff3636; stroke-opacity:.5; stroke-width:.3; 
     stroke-opacity:.5shape-rendering:crispEdges;}
@@ -28,6 +28,7 @@ var ttr1='translate('+margin.left+','+margin.top+')',
 var svg=d3.select('#d3ch2')
           .attr('width',width+margin.left+margin.right)
           .attr('height',height+margin.top+margin.bottom)
+          .attr('class','font-effect-3d')
           .append('g').attr('transform',ttr1);
 svg.append('g').attr('class','x axis')
    .call(d3.axisBottom(xScale).tickSize(.5))
