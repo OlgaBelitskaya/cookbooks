@@ -31,12 +31,13 @@ def d3barchart_list(num_list,
     """   .attr('width',xScale.bandwidth())"""+\
     """   .attr('height',function(d) {return yScale(d);})"""+\
     """   .attr('fill',function(d) { """+\
-    """       return 'rgb('+Math.round(d)+',0,'+"""+\
+    """       return 'rgb('+Math.round(d*50/ymax)+',0,'+"""+\
     """              Math.round(d*255/ymax)+')';}); """+\
     """function newData() {"""+\
+    """    var n=data.length,ymax=d3.max(data); """+\
     """    while (data.length>0) {data.pop();}; """+\
-    """    for (var i=0; i<30; i++) {"""+\
-    """        data.push(Math.floor(Math.random()*30)+1);}; """+\
+    """    for (var i=0; i<n; i++) {"""+\
+    """        data.push(Math.floor(Math.random()*ymax)+1);}; """+\
     """    return data}; """+\
     """function updateBar() {"""+\
     """    svg.selectAll('rect').data(data)"""+\
@@ -44,7 +45,7 @@ def d3barchart_list(num_list,
     """       .attr('y',function(d) {return height-yScale(d);})"""+\
     """       .attr('height', function(d) {return yScale(d);})"""+\
     """       .attr('fill',function(d) {"""+\
-    """           return 'rgb('+Math.round(d)+',0,'+"""+\
+    """           return 'rgb('+Math.round(d*50/ymax)+',0,'+"""+\
     """                Math.round(d*255/ymax)+')';}); }; """+\
     """svg.append('circle').attr('id','circle_bar')"""+\
     """   .attr('cx',m).attr('cy',m).attr('r',15)"""+\
