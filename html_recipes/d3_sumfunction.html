@@ -7,7 +7,7 @@
   shape-rendering:crispEdges;}
 </style>
 <script src='https://d3js.org/d3.v6.min.js'></script>
-<svg id='d3ch1'></svg><script>
+<svg id='svg010'></svg><script>
 var m=30,x1=0,x2=4,y1=-115,y2=115;
 var margin={top:m,right:m,bottom:m,left:m},
     width=500-margin.left-margin.right,
@@ -20,7 +20,7 @@ var xScale=d3.scaleLinear().domain([x1,x2]).range([0,width]),
     yScale=d3.scaleLinear().domain([y1,y2]).range([height,0]);
 var ttr1='translate('+margin.left+','+margin.top+')',
     ttr2='translate(0,'+height+')';
-var svg=d3.select('#d3ch1')
+var svg=d3.select('#svg010')
           .attr('width',width+margin.left+margin.right)
           .attr('height',height+margin.top+margin.bottom)
           .append('g').attr('transform',ttr1);
