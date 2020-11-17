@@ -42,8 +42,7 @@ def d3scatter_xy_csv(csv_url,x='x',y='y',ms=3,
     """var svg=d3.select('#svg0001')"""+\
     """          .attr('width',width+margin.left+margin.right)"""+\
     """          .attr('height',height+margin.top+margin.bottom)"""+\
-    """          .append('g')"""+\
-    """          .attr('transform',tr);"""+\
+    """          .append('g').attr('transform',tr); """+\
     """svg.append('g').attr('class','xaxis1')"""+\
     """   .call(d3.axisBottom(xScale).tickSize(.5))"""+\
     """   .attr('transform','translate(0,'+height+')'); """+\
@@ -66,8 +65,7 @@ def d3scatter_xy_csv(csv_url,x='x',y='y',ms=3,
     """   .attr('cx',function(d) {return xScale(d."""+\
     x+""")})"""+\
     """   .attr('cy',function(d) {return yScale(d."""+\
-    y+""")}); });"""+\
-    """</script>"""
+    y+""")}); });</script>"""
     file='d3scatter_xy_csv'+str(random.uniform(0,9999999))+'.html'
     with open(file,'w') as f:
         f.write(html_str); f.close()
