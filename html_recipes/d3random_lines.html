@@ -1,17 +1,17 @@
 <style>
-@import 'https://fonts.googleapis.com/css?family=Orbitron&effect=3d';
-#svg011 {background:ivory;}
-#svg011 text {fill:#ff3636; font-size:130%; font-family:Orbitron} 
+@import 'https://fonts.googleapis.com/css?family=Ewert';
+#d3ch2 {background:ivory;}
+#d3ch2 text {fill:#ff3636; font-size:130%; font-family:Ewert} 
 .grid2 line,.grid2 path {
     stroke:#ff3636; stroke-opacity:.5; stroke-width:.3; 
     stroke-opacity:.5shape-rendering:crispEdges;}
 </style>
 <script src='https://d3js.org/d3.v6.min.js'></script>
-<svg id='svg011'></svg><script>
+<svg id='d3ch2'></svg><script>
 var m=30,x1=-7,x2=7,y1=-7,y2=7;
 var margin={top:m,right:m,bottom:m,left:m},
-    width=500-margin.left-margin.right,
-    height=500-margin.top-margin.bottom;
+    width=600-margin.left-margin.right,
+    height=600-margin.top-margin.bottom;
 function randi(min,max) {
     return Math.floor(Math.random()*(max-min+1))+min;};
 function randcolR(i) {
@@ -25,10 +25,9 @@ var xScale=d3.scaleLinear().domain([x1,x2]).range([0,width]),
     yScale=d3.scaleLinear().domain([y1,y2]).range([height,0]);
 var ttr1='translate('+margin.left+','+margin.top+')',
     ttr2='translate(0,'+height+')';
-var svg=d3.select('#svg011')
+var svg=d3.select('#d3ch2')
           .attr('width',width+margin.left+margin.right)
           .attr('height',height+margin.top+margin.bottom)
-          .attr('class','font-effect-3d')
           .append('g').attr('transform',ttr1);
 svg.append('g').attr('class','x axis')
    .call(d3.axisBottom(xScale).tickSize(.5))
