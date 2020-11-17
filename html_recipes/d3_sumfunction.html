@@ -1,7 +1,7 @@
 <style>
 @import 'https://fonts.googleapis.com/css?family=Orbitron&effect=3d';
-#d3ch1 {background:slategray;}
-#d3ch1 text {fill:#fff; font-size:110%; font-family:Orbitron} 
+#svg010 {background:slategray;}
+#svg010 text {fill:#fff; font-size:110%; font-family:Orbitron} 
 .grid line,.grid path {
   stroke:#3636ff; stroke-opacity:.5; stroke-width:.7;
   shape-rendering:crispEdges;}
@@ -20,16 +20,14 @@ var xScale=d3.scaleLinear().domain([x1,x2]).range([0,width]),
     yScale=d3.scaleLinear().domain([y1,y2]).range([height,0]);
 var ttr1='translate('+margin.left+','+margin.top+')',
     ttr2='translate(0,'+height+')';
-var svg=d3.select('#svg010')
+var svg=d3.select('#svg010').attr('class','font-effect-3d')
           .attr('width',width+margin.left+margin.right)
           .attr('height',height+margin.top+margin.bottom)
           .append('g').attr('transform',ttr1);
 svg.append('g').attr('class','x axis')
-   .attr('class','font-effect-3d')
    .call(d3.axisBottom(xScale).tickSize(.5))
    .attr('transform',ttr2); 
 svg.append('g').attr('class','y axis')
-   .attr('class','font-effect-3d')
    .call(d3.axisLeft(yScale).tickSize(.5));    
 svg.append('g').attr('class','grid').attr('transform',ttr2)
    .call(make_x_gridlines().tickSize(-height));
