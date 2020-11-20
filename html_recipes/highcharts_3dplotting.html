@@ -1,24 +1,20 @@
 <script src='https://code.highcharts.com/highcharts.js'></script>
 <script src='https://code.highcharts.com/highcharts-3d.js'></script>
 <script src='https://code.highcharts.com/modules/accessibility.js'></script>
-<div id='div013' style='width:500px; height:500px;'></div>
+<div id='div013' style='width:600px; height:600px;'></div>
 <script>
 function randi(min,max) {
     return Math.floor(Math.random()*(max-min+1))+min;};
-var d=.005,l=5,n=3,a=randi(11,19),b=randi(24,64);
+var d=.005,l=6,n=3,a=randi(11,19),b=randi(24,64);
 function ar(k,a,b) {return Array(1280).fill(k).map((k,t)=>
     [k*(Math.cos(d*t)+Math.sin(a*d*t)/2-Math.cos(b*d*t)/6),
-     k*(Math.sin(d*t)+Math.cos(a*d*t)/2-Math.sin(b*d*t)/6),k]);};
-Highcharts.setOptions({
-    colors:Highcharts.getOptions().colors.map(function (color) {return {
-radialGradient:{cx:.4,cy:.3,r:.2},
-stops:[[0,color],
-       [1,Highcharts.color(color).brighten(-0.2).get('rgb')]]};})});
-var series=[];
+     k*(Math.sin(d*t)+Math.cos(a*d*t)/2-Math.sin(b*d*t)/6),
+     2*k]);};
+var series=[],colors=['#9636ff','#3696ff','#ff9636','#ff3696',];
 for (var i=1; i<n+1; i++){
-    series.push({name:i,colorByPoint:true,
+    series.push({name:i,color:colors[i-1],
                  accessibility:{exposeAsGroupOnly:true},
-                 marker:{radius:1},data:ar(i,a,b)})};
+                 marker:{symbol:'o',radius:.5+i/4},data:ar(i,a,b)})};
 var chart=new Highcharts.Chart({
     chart:{renderTo:'div013',margin:100,type:'scatter3d',
     animation:false,
@@ -31,7 +27,7 @@ var chart=new Highcharts.Chart({
   plotOptions:{scatter:{width:l,height:l,depth:l}},
   yAxis:{min:-l,max:l,title:null},
   xAxis:{min:-l,max:l,gridLineWidth:1},
-  zAxis:{min:0,max:l,showFirstLabel:false},
+  zAxis:{min:0,max:2*l,showFirstLabel:false},
   legend:{enabled:false},series:series});
 (function(H){function dragStart(eStart){
     eStart=chart.pointer.normalize(eStart);
