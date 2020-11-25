@@ -1,5 +1,5 @@
 <script src='https://d3js.org/d3.v6.min.js'></script>
-<svg id='d302' style='background-color:whitesmoke;'></svg>
+<svg id='svg012' style='background-color:whitesmoke;'></svg>
 <script>
 db_data=[{name:'Fresh',median_mean:[8504,12000.297727272728]},
          {name:'Milk',median_mean:[3627,5796.265909090909]},
@@ -9,8 +9,8 @@ db_data=[{name:'Fresh',median_mean:[8504,12000.297727272728]},
          {name:'Delicatessen',median_mean:[965.5,1524.8704545454545]}];
 m=20,margin={top:m,right:m,bottom:m,left:6*m},
 width=800,height=400,col1='#36ff36',col2='#3636ff';
-svg=d3.select('#d302')
-      .attr('viewBox',[0,0,1.2*width,1.2*height]);
+svg=d3.select('#svg012')
+      .attr('viewBox',[-10,-10,1.2*width,1.2*height]);
 x=d3.scaleLinear()
     .domain([0,d3.max(db_data,d=>d.median_mean[1])])
     .range([margin.left,width-margin.right]);
