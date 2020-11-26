@@ -10,7 +10,7 @@ function ar(k,a,b) {return Array(1280).fill(k).map((k,t)=>
     [k*(Math.cos(d*t)+Math.sin(a*d*t)/2-Math.cos(b*d*t)/6),
      k*(Math.sin(d*t)+Math.cos(a*d*t)/2-Math.sin(b*d*t)/6),
      2*k]);};
-var series=[],colors=['#9636ff','#3696ff','#ff9636','#ff3696',];
+var series=[],colors=['#9636ff','#3696ff','#ff9636','#ff3696'];
 for (var i=1; i<n+1; i++){
     series.push({name:i,color:colors[i-1],opacity:1.2-.2*i,
                  accessibility:{exposeAsGroupOnly:true},
@@ -41,7 +41,7 @@ var chart=new Highcharts.Chart({
       chart.update({chart:{
           options3d:{alpha:alpha+(e.chartY-posY)/sensitivity,
                      beta:beta+(posX-e.chartX)/sensitivity}}},
-                    undefined,undefined,false);}
+                     undefined,undefined,false);}
     function unbindAll(){handlers.forEach(function(unbind){
         if (unbind){unbind();}});
         handlers.length=0;}
