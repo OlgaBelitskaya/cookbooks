@@ -1,6 +1,16 @@
 <script src='https://d3js.org/d3.v6.min.js'></script>
-<svg id='svg014' style='background-color:silver;'></svg>
-<script>m=15,n=1,s=600;
+n <input type='number' id='n_frames' value=1
+style='width:160px; font-size:120%; color:#363636;
+background-color:silver; text-align:center;'> 
+m <input type='number' id='m_frames' value=15
+style='width:160px; font-size:120%; color:#363636;
+background-color:silver; text-align:center;'>
+run =>>> <input type='button' onclick='draw_curves();' value='update'
+style='width:160px; font-size:120%; color:#363636;
+background-color:silver; text-align:center;'><br/><br/>
+<svg id='svg013' style='background-color:silver;'></svg>
+<script>
+s=600;
 colors=['#3636ff','#ff3636','#ff36ff',
         '#ffff36','#36ff36','#36ffff'];
 function subpoint(a,b,m) {
@@ -21,10 +31,14 @@ function recursive_curve(len,m,iterations) {
   var half1=subdivpoly(contour1,m,iterations),
       half2=subdivpoly(contour2,m,iterations);
   return [...half1,...half2];};
-line=d3.line();
-svg=d3.select('#svg014').attr('width',s).attr('height',s);
-svg.selectAll('.curve').data(colors).join('path')
+function draw_curves() {
+  var m=parseInt(document.getElementById('m_frames').value);
+  var n=parseInt(document.getElementById('n_frames').value);
+  var line=d3.line();
+  var svg=d3.select('#svg013').attr('width',s).attr('height',s);
+  svg.selectAll('path').remove();
+  svg.selectAll('.curve').data(colors).join('path')
      .attr('d',(_,i)=>line(recursive_curve(s,m,i+n))+'z')
      .style('fill',d=>d).style('fill-opacity',.02)
-     .style('stroke',d=>d).style('stroke-width',2);
+     .style('stroke',d=>d).style('stroke-width',2); };
 </script>
