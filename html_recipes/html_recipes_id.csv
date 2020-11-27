@@ -43,6 +43,7 @@
 'highcharts_3dplotting.html','div013'
 'plotly_polar.html','div014'
 'danfo_csv.html','div015'
+'danfo_tfarray.html','div016'
 'graph.html','graph001'
 'canvas_draw.html','canvas001'
 'animated_button.html','button001'
