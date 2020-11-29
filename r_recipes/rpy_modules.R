@@ -1,5 +1,3 @@
-#unlock for running in SageMathCell 
-#%%r
 library(IRdisplay); library(reticulate)
 library(imager); library(ggplot2); library(reshape2)
 pl<-c('matplotlib','seaborn','pandas','networkx',
