@@ -3,7 +3,8 @@
 #svg(filename='Rplots.svg',onefile=T,width=8,height=3,
 #    pointsize=12,family='times',bg='white',
 #    antialias=c('default','none','gray','subpixel'))
-options(repr.plot.width=8,repr.plot.height=3)
+options(repr.plot.width=8,repr.plot.height=3,
+        repr.plot.bg='white')
 col.list<-c('skyblue','red2','coral','orchid3',
             'bisque','tan','green3','blue4')
 plot(1:8,rep(1.5,8),axes=FALSE,pch=15,cex=7,
