@@ -1,4 +1,5 @@
-library(IRdisplay); library(reticulate)
+library(IRdisplay)
+library(reticulate); library(keras)
 library(imager); library(ggplot2); library(reshape2)
 pl<-c('matplotlib','seaborn','pandas','networkx',
       'tensorflow','sklearn','h5py')

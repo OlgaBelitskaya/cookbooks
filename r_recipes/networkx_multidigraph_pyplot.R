@@ -19,7 +19,6 @@ function(edge_list,sfig,sarrow,snode,sfont)
                        sample(1:9999999,1),'.png')
      pl$savefig(file_name)
      im<-load.image(file_name)
-     options(repr.plot.width=sfig,repr.plot.height=sfig,
-             repr.plot.bg='whitesmoke')
+     options(repr.plot.width=sfig,repr.plot.height=sfig)
      par(mar=c(0,0,0,0)); plot(im,axes=FALSE)}
 
