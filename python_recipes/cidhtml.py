@@ -36,3 +36,26 @@ def idhtml(string,fontcolor='darkslategray',font=f5,fontsize=fs5):
     """+(250-Math.abs(245-8*sec))+')'; """+\
     """iddoc.style.color=col;},1000);</"""+"""script>"""
     display(HTML(style_str+h_str+script_str))
+
+def whtml(string,background_color='black',padding=2,
+          font_family='Akronim',font_size_px=int(28),
+          deg=int(120),percent=[0,33,67,100],
+          colors=['magenta','orange','cyan','purple']):
+    randi=random.randint(1,999999999)
+    html_str="""<style>@import """+\
+    """'https://fonts.googleapis.com/css?family="""+\
+    font_family+"""';</style>"""+\
+    """<div id='colorized_div' """+str(randi)+\
+    """ style='background:"""+background_color+\
+    """; padding:"""+str(padding)+"""vw;'>"""+\
+    """<div style='background:linear-gradient("""+\
+    str(deg)+"""deg, """+\
+    colors[0]+""" """+str(percent[0])+"""%,"""+\
+    colors[1]+""" """+str(percent[1])+"""%,"""+\
+    colors[2]+""" """+str(percent[2])+"""%,"""+\
+    colors[3]+""" """+str(percent[3])+"""%"""+\
+    """); font-family:"""+font_family+"""; """+\
+    """font-size:"""+str(font_size_px)+"""px; """+\
+    """-webkit-background-clip:text; color:transparent;'> """+\
+    string+"""</div></div>"""   
+    display(HTML(html_str))
