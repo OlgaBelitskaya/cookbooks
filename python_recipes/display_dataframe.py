@@ -1,13 +1,14 @@
 import numpy as np,pandas as pd
 from IPython.display import display
 
-def display_dataframe(df,cmap,dhead=False):
-    style_dict={'font-size':'130%',
+def display_dataframe(df,cmap,dhead=False,
+                      td_font_size=110,th_font_size=150):
+    style_dict={'font-size':'%d'%td_font_size+'%',
                 'font-family':'times',
                 'text-shadow':'slategray 2px 2px 2px'}
     head_styler=(('color','darkslategray'),
-	             ('font-family','times'),
-                 ('font-size','300%'),
+                 ('font-family','times'),
+                 ('font-size','%d'%th_font_size+'%'),
                  ('text-shadow','slategray 2px 2px 2px'))
     if dhead=='head': data=df.head()
     elif dhead=='tail': data=df.tail()
