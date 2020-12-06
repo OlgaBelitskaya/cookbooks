@@ -1,4 +1,4 @@
-# with libraries rpy_sklearn.R
+# with the libraries rpy_sklearn.R
 print('Boston Data =>>>')
 boston<-slds$load_boston()
 X1<-boston$data; y1<-boston$target
