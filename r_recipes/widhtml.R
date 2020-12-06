@@ -13,10 +13,10 @@ idhtml<-function(string,font_color=vfont_color[6],
     html_str<-c(
       '<style>@import ',s,'https://fonts.',
       'googleapis.com/css?family=',font_family,
-      s,'; #rh1 {font-family:',font_family,
+      s,'; #rh1',randi,' {font-family:',font_family,
       '; color:',font_color,'; font-size:',font_size,
       'px; text-shadow:3px 3px 3px #aaa;}</style>',
-      '<h1 id=',s,'rh1',s,';>',string,'</h1>')
+      '<h1 id=',s,'rh1',randi,s,';>',string,'</h1>')
     str<-paste0(html_str,collapse='')
     IRdisplay::display_html(str)}
 
