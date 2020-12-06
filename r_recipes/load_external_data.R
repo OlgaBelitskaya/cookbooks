@@ -11,11 +11,13 @@ im<-array_reshape(X_train6[n,],c(28,28))
 options(repr.plot.width=4,repr.plot.height=4)
 plot(as.raster(im))
 print('MNIST Keras =>>>')
-print(paste0(c('dim: train features -',list(X_train6),
-               ', train target -',dim(y_train6),
-               ', test features -',list(X_test6),
-               ', test target -',dim(y_test6)),
-             collapse=' '))
+print(paste0(c(
+    'train features -',list(dim(X_train6)),
+    ', train target -',list(dim(y_train6))),
+    collapse=' '))
+print(paste0(c('test features -',list(dim(X_test6)),
+    ', test target -',list(dim(y_test6))),
+    collapse=' '))
 
 fpath<-'../input/classification-of-handwritten-letters/'
 fname<-'LetterColorImages_123.h5'
@@ -27,11 +29,10 @@ y7<-np$array(f['labels'])
 im<-array_reshape(X7[n,],c(32,32,3))
 options(repr.plot.width=4,repr.plot.height=4)
 plot(as.raster(im))
-print(substring(letters,y7[n],y7[n]))
 print('Letters Kaggle =>>>')
-print(paste0(c('keys: ',keys[[1]],
-               '\n; dim: train features -',list(X_train7),
-               ', train target -',dim(y_train7),
-               ', test features -',list(X_test7),
-               ', test target -',dim(y_test7)),
-             collapse=' '))
+print(paste0(c('keys: ',keys)))
+print(paste0(
+    c('dim: features -',list(dim(X7)),
+      ', target -',list(dim(y7))),
+    collapse=' '))
+print(substring(letters,y7[n],y7[n]))
