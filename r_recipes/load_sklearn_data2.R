@@ -1,3 +1,4 @@
+# with the libraries rpy_sklearn.R
 digits<-slds$load_digits()
 X2<-digits$data; y2<-digits$target
 print('Digit Data =>>>')
