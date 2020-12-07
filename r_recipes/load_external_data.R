@@ -8,8 +8,8 @@ X_test6<-array_reshape(np$array(test6[[1]]),c(10000,784))
 X_test6<-X_test6/max(X_test6)
 y_test6<-np$array(test6[[2]])
 im<-array_reshape(X_train6[n,],c(28,28))
-options(repr.plot.width=4,repr.plot.height=4)
-plot(as.raster(im))
+options(repr.plot.width=3,repr.plot.height=3)
+par(mar=c(0,0,0,0)); plot(as.raster(im))
 print('MNIST Keras =>>>')
 print(paste0(c(
     'train features -',list(dim(X_train6)),
@@ -27,8 +27,8 @@ letters<-'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 X7<-array_reshape(np$array(f['images'])/255,c(-1,32*32*3))
 y7<-np$array(f['labels'])
 im<-array_reshape(X7[n,],c(32,32,3))
-options(repr.plot.width=4,repr.plot.height=4)
-plot(as.raster(im))
+options(repr.plot.width=3,repr.plot.height=3)
+par(mar=c(0,0,0,0)); plot(as.raster(im))
 print('Letters Kaggle =>>>')
 print(paste0(c('keys: ',keys)))
 print(paste0(

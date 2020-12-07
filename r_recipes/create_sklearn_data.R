@@ -11,7 +11,7 @@ options(repr.plot.width=10,repr.plot.height=5)
 matplot(y3[1:500],X3[1:500,1:5],type='p')
 print('Make Regression =>>>')
 print(paste0(c('dim: features -',list(dim(X3)),
-               ', target -',dim(y3)),
+               ', target -',list(dim(y3))),
              collapse=' '))
 
 ce<-array_reshape(c(1,1,-1,-1,1,-1,-1,1),c(4,2))
@@ -28,7 +28,7 @@ options(repr.plot.width=10,repr.plot.height=5)
 par(mar=c(0,0,0,0)); plot(im,axes=FALSE)
 print('Make Blobs =>>>')
 print(paste0(c('dim: features -',list(dim(X4)),
-               ', target -',dim(y4)),
+               ', target -',list(dim(y4))),
              collapse=' '))
 
 artmlc<-slds$make_multilabel_classification(n_classes=ip(3),
