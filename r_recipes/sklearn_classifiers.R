@@ -1,0 +1,28 @@
+
+clf<-slne$KNeighborsClassifier()
+clf$fit(X_train2,y_train2)    
+y_clf_train2<-clf$predict(X_train2)
+y_clf_test2<-clf$predict(X_test2)        
+acc_clf_train2<-slme$accuracy_score(y_train2,y_clf_train2)
+acc_clf_test2<-slme$accuracy_score(y_test2,y_clf_test2)
+print('KNeighbors =>>>')
+print(c(acc_clf_train2,acc_clf_test2))
+clf<-slen$GradientBoostingClassifier()
+clf$fit(X_train6[1:10000,],y_train6[1:10000])    
+y_clf_train6<-clf$predict(X_train6[1:10000,])
+y_clf_test6<-clf$predict(X_test6[1:2000,])        
+acc_clf_train6<-
+slme$accuracy_score(y_train6[1:10000],y_clf_train6)
+acc_clf_test6<-
+slme$accuracy_score(y_test6[1:2000],y_clf_test6)
+print('Gradient Boosting =>>>')
+print(c(acc_clf_train6,acc_clf_test6))
+clf<-slen$RandomForestClassifier()
+clf$fit(X_train7,y_train7)    
+y_clf_train7<-clf$predict(X_train7)
+y_clf_test7<-clf$predict(X_test7)        
+acc_clf_train7<-slme$accuracy_score(y_train7,y_clf_train7)
+acc_clf_test7<-slme$accuracy_score(y_test7,y_clf_test7)
+print('Random Forest =>>>')
+print(c(acc_clf_train7,acc_clf_test7))
+
