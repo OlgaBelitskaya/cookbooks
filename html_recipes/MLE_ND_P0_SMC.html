@@ -17,10 +17,11 @@
     h1 {color:#ff603b; font-family:Orbitron; text-shadow:4px 4px 4px #ccc;} 
     h2,h3 {color:slategray; font-family:Orbitron; text-shadow:4px 4px 4px #ccc;}
     h4 {color:#ff603b; font-family:Roboto;}
-    .sagecell .CodeMirror-scroll {min-height:3em; max-height:70em; font-family:courier;}
+    .sagecell .CodeMirror-scroll {min-height:3em; max-height:70em;}
   </style>  
   <body>
-    <h1>Machine Learning Engineer Nanodegree</h1>
+    <h1>🏙 Machine Learning Engineer Nanodegree &nbsp;
+      <a href='https://olgabelitskaya.github.io/README.html'>&#x1F300; &nbsp; Home Page &nbsp; &nbsp; &nbsp;</a></h1>
     <h2>Introduction and Foundations</h2>
     <h1>&#x1F4D1; &nbsp;P0: Titanic Survival Exploration</h1>
 In 1912, the ship RMS Titanic struck an iceberg on its maiden voyage and sank, resulting in the deaths of most of its passengers and crew.<br/>
@@ -38,35 +39,34 @@ import numpy,pandas,pylab; pylab.style.use('ggplot')
 <div class='linked'><script type='text/x-sage'>
 # https://github.com/udacity/machine-learning/blob/master/projects/titanic_survival_exploration/visuals.py
 def filter_data(data,condition):
-    field,sign,value=condition.split(" ")
+    field,sign,value=condition.split(' ')
     try: value=float(value)
-    except: value=value.strip("\'\"")
-    if sign==">": exp=data[field]>value
-    elif sign=="<": exp=data[field]<value
-    elif sign==">=": exp=data[field]>=value
-    elif sign=="<=": exp=data[field]<=value
-    elif sign=="==": exp=data[field]==value
-    elif sign=="!=": exp=data[field]!=value
+    except: value=value.strip('\'\"')
+    if sign=='>': exp=data[field]>value
+    elif sign=='<': exp=data[field]<value
+    elif sign=='>=': exp=data[field]>=value
+    elif sign=='<=': exp=data[field]<=value
+    elif sign=='==': exp=data[field]==value
+    elif sign=='!=': exp=data[field]!=value
     else:
-        st="Invalid comparison operator. "+\
-           "Only >, <, >=, <=, ==, != allowed."
+        st='Invalid comparison operator. Only >, <, >=, <=, ==, != allowed.'
         raise Exception(st)
     return data[exp].reset_index(drop=True)    
 </script></div><br/>
 <div class='linked'><script type='text/x-sage'>
 def survival_stats(data,outcomes,key,filters=[]):
     if (key not in data.columns.values):
-        st11="'{}' is not a feature of the Titanic data. "
-        st12="Did you spell something wrong?"
+        st11='`{}` is not a feature of the Titanic data. '
+        st12='Did you spell something wrong?'
         print(st11.format(key)+st12); return False
     if (key=='Cabin' or key=='PassengerId' or key=='Ticket'):
-        st21="'{}' has too many unique categories to display! "
-        st22="Try a different feature."
+        st21='`{}` has too many unique categories to display! '
+        st22='Try a different feature.'
         print(st21.format(key)+st22); return False
     all_data=data.T.append(outcomes).T
     for condition in filters: all_data=filter_data(all_data,condition)
     all_data=all_data[[key,'Survived']]
-    pylab.figure(figsize=(11,5))
+    pylab.figure(figsize=(10,5))
     if (key=='Age' or key=='Fare'):
         all_data=all_data[~pandas.isnull(all_data[key])]
         min_value=all_data[key].min(); max_value=all_data[key].max()
@@ -106,11 +106,11 @@ def survival_stats(data,outcomes,key,filters=[]):
             pylab.legend((nonsurv_bar[0],surv_bar[0]),
                          ('Did not survive','Survived'),framealpha=.8)
     pylab.xlabel(key); pylab.ylabel('Number of Passengers')
-    ti='Passenger Survival Statistics With the \"%s\" Feature'
-    pylab.title(ti%(key)); pylab.show()
+    ti='Passenger Survival Statistics With the `%s` Feature'
+    pylab.title(ti%(key)); pylab.tight_layout(); pylab.show()
     if sum(pandas.isnull(all_data[key])):
         nan_outcomes=all_data[pandas.isnull(all_data[key])]['Survived']
-        ms="Passengers with missing '{}' values: {} ({} survived, {} did not survive)"
+        ms='Passengers with missing `{}` values: {} ({} survived, {} did not survive)'
         print (ms.format(key,len(nan_outcomes),
                          sum(nan_outcomes==1),sum(nan_outcomes==0)))
 </script></div><br/>
@@ -155,10 +155,10 @@ what would you expect the accuracy of our predictions to be?
 <div class='linked'><script type='text/x-sage'>
 def accuracy_score(truth, pred):
     if len(truth)==len(pred): 
-        return "Predictions have an accuracy of {:.2f}%."\
+        return 'Predictions have an accuracy of {:.2f}%.'\
         .format((truth==pred).mean()*100)    
     else:
-        return "Number of predictions does not match number of outcomes!"
+        return 'Number of predictions does not match number of outcomes!'
 predictions=pandas.Series(numpy.ones(5,dtype=int)).astype('int')
 accuracy_score(outcomes[:int(5),],predictions)
 </script></div><br/>
@@ -212,7 +212,7 @@ For example, consider all of the male passengers aboard the RMS Titanic: can we 
 Let's start by looking at the <b>Age</b> of each male, by again using the <i>survival_stats()</i> function.<br/> 
 This time, we'll use the fourth parameter to filter out the data so that only passengers with the <b>Sex</b> 'male' will be included.     
 <div class='linked'><script type='text/x-sage'>
-survival_stats(data,outcomes,'Age',["Sex=='male'"])
+survival_stats(data,outcomes,'Age',['Sex == "male"'])
 </script></div><br/>
 Examining the survival statistics, the majority of males younger than 10 survived the ship sinking, whereas most males age 10 or older did not survive the ship sinking.<br/>
 Let's continue to build on our previous prediction: if a passenger was female, then we will predict they survive.<br/> 
@@ -242,10 +242,10 @@ This may require multiple features and multiple levels of conditional statements
 We can use the same feature multiple times with different conditions.<br/>
 There are some experiments and the function <i>prediction_final()</i> as a result:
 <div class='linked'><script type='text/x-sage'>
-survival_stats(data,outcomes,'SibSp',["Sex=='male'","Age<15"])
+survival_stats(data,outcomes,'SibSp',['Sex == "male"','Age < 15'])
 </script></div><br/>
 <div class='linked'><script type='text/x-sage'>
-survival_stats(data,outcomes,'Pclass',["Sex=='male'","Age<15"])
+survival_stats(data,outcomes,'Pclass',['Sex == "male"','Age < 15'])
 </script></div><br/>
 <div class='linked'><script type='text/x-sage'>
 def predictions_final(data):   
@@ -277,11 +277,11 @@ There is a set of metrics in the <b>scikit-learn</b> package for evaluation the 
 <div class='linked'><script type='text/x-sage'>
 from sklearn.metrics import recall_score,\
 accuracy_score,precision_score
-print ("Predictions have an accuracy of {:.2f}%."\
+print ('Predictions have an accuracy of {:.2f}%.'\
 .format(accuracy_score(outcomes, predictions)*100))
-print ("Predictions have a recall score equal to {:.2f}%."\
+print ('Predictions have a recall score equal to {:.2f}%.'\
 .format(recall_score(outcomes, predictions)*100))
-print ("Predictions have a precision score equal to {:.2f}%."\
+print ('Predictions have a precision score equal to {:.2f}%.'\
 .format(precision_score(outcomes,predictions)*100))
 </script></div><br/>
 The evaluation terminology:
