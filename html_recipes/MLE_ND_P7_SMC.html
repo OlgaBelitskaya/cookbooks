@@ -1,0 +1,381 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>MLE_ND_P7_SMC</title>
+    <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
+    <script>$(function (){
+    sagecell.makeSagecell({inputLocation:'div.linked',linked:true,evalButtonText:'Run Linked Cells'});  
+    sagecell.makeSagecell({inputLocation:'div.sage',evalButtonText:'Run'});});
+    </script>
+  </head>
+  <style>
+  @import url('https://fonts.googleapis.com/css?family=Orbitron|Roboto');
+  body {margin:5px 5px 5px 15px; background-color:#f6e4e4;}
+  a,p {color:#a44a4a; font-family:'Roboto';} 
+  h1 {color:#cd5c5c; font-family:'Orbitron'; text-shadow:4px 4px 4px #ccc;} 
+  h2,h3 {color:slategray; font-family:'Orbitron'; text-shadow:4px 4px 4px #ccc;}
+  h4 {color:#cd5c5c; font-family:'Roboto';}
+  .sagecell .CodeMirror-scroll {min-height:3em; max-height:70em;}
+  .sagecell table.table_form tr.row-a {background-color:lightgray;} 
+  .sagecell table.table_form tr.row-b {background-color:#f6e4e4;}
+  .sagecell table.table_form td {padding:5px 15px; color:#a44a4a; font-family:'Roboto';}
+  .sagecell_sessionOutput, .sagecell_sessionOutput pre {color:#a44a4a; font-family:'Roboto';}
+  </style>  
+  <body>
+    <h1>Machine Learning Engineer Nanodegree</h1>
+    <h2>Deep Learning</h2>
+    <h1>&#x1F4D1; &nbsp;P7: Building a Student Intervention System</h1>
+    <h2>Introduction</h2>      
+    <h3>Resources</h3>
+<a href="https://scikit-learn.org/stable/index.html">&#x1F578;scikit-learn. Machine Learning in Python&nbsp;</a>
+<a href="http://scipy-lectures.org/">&#x1F578;Scipy Lecture Notes&nbsp;</a><br/>
+    <h3>Code Library</h3> 
+<div class="linked"><script type="text/x-sage">
+import warnings; warnings.filterwarnings("ignore")
+from sklearn.exceptions import DataConversionWarning
+warnings.filterwarnings("ignore",category=DataConversionWarning)
+import numpy,pandas,time,pylab
+pylab.style.use('seaborn-whitegrid')
+from sklearn import linear_model,svm
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV,ShuffleSplit
+from sklearn.neural_network import MLPClassifier
+from sklearn.tree import DecisionTreeClassifier,ExtraTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier,RadiusNeighborsClassifier
+from sklearn.ensemble import BaggingClassifier,AdaBoostClassifier
+from sklearn.ensemble import GradientBoostingClassifier,RandomForestClassifier
+from sklearn.metrics import f1_score,make_scorer
+</script></div><br/>
+    <h3>Question 1 - Classification vs. Regression</h3>
+<i>The goal for this project is to identify students who might need early intervention before they fail to graduate.<br/>
+Which type of supervised learning problem is this, classification or regression? Why?</i>
+    <h3>Answer 1</h3>
+For simplicity, the border between regression and classification can be described in this way.<br/>
+- <b>Classification</b>: predict the values of discrete or categorical targets.<br/>
+- <b>Regression</b>: predict the values of continuous targets.<br/>
+This supervised learning problem is in the classification field. We should predict the labels for the students (<i>yes</i> or <i>no</i>) for the feature <i>passed</i>.
+    <h2>Exploring the Data</h2>
+We will start from loading the student data.<br/>
+Note that the last column from this dataset <i>passed</i> will be our target label (whether the student graduated or didn't graduate).<br/>
+All other columns are features about each student.<br/>
+<div class="linked"><script type="text/x-sage">
+path='https://raw.githubusercontent.com/OlgaBelitskaya/'+\
+     'machine_learning_engineer_nd009/master/'+\
+     'Machine_Learning_Engineer_ND_P7/'
+data=pandas.read_csv(path+'student-data.csv')
+print('Data were read successfully!'); data.describe().T
+</script></div><br/>
+Let's begin by investigating the dataset to determine how many students we have information on, and learn about the graduation rate among these students. <br/>
+We will need to compute the following:<br/>
+- The total number of students, <i>n_students</i>.<br/>
+- The total number of features for each student, <i>n_features</i>.<br/>
+- The number of those students who passed, <i>n_passed</i>.<br/>
+- The number of those students who failed, <i>n_failed</i>.<br/>
+- The graduation rate of the class, <i>grad_rate</i>, in percent (%).
+<div class="linked"><script type="text/x-sage">
+n_students,n_features=len(data),len(list(data.T.index))
+n_passed=len(data[data['passed']=='yes'])
+n_failed=len(data[data['passed']=='no'])
+grad_rate=n_passed*100.0/n_students
+print ("Total number of students: {}".format(n_students))
+print ("Number of features: {}".format(n_features))
+print ("Number of students who passed: {}".format(n_passed))
+print ("Number of students who failed: {}".format(n_failed))
+print ("Graduation rate of the class: {:.2f}%"\
+.format(float(grad_rate)))
+</script></div><br/>
+    <h2>Preparing the Data</h2>
+In this section, we will prepare the data for modeling, training and testing.
+    <h3>Identify feature and target columns</h3>
+It is often the case that the data you obtain contains non-numeric features. 
+This can be a problem because most machine learning algorithms expect numeric data to perform computations with.
+<div class="linked"><script type="text/x-sage">
+feature_cols=list(data.columns[:-1])
+target_col=data.columns[-1] 
+print ("Feature columns:")
+for i in range(4): print(feature_cols[i*8:(i+1)*8])
+print ("\nTarget column: {}".format(target_col))
+X_all,y_all=data[feature_cols],data[target_col]
+print ("Feature values:"); X_all.head().T
+</script></div><br/>
+    <h3>Preprocess Feature Columns</h3>
+As we can see, there are several non-numeric columns that need to be converted! <br/>
+Many of them are simply <b>yes/no</b>, e.g. <i>internet</i>. These can be reasonably converted into <b>1/0</b> (binary) values.<br/>
+Other columns, like <i>Mjob</i> and <i>Fjob</i>, have more than two values, and are known as categorical variables.<br/>
+The recommended way to handle such a column is to create as many columns as possible values (e.g. <i>Fjob_teacher, Fjob_other, Fjob_services</i>, etc.),<br/> and assign a 1 to one of them and 0 to all others.<br/>
+These generated columns are sometimes called dummy variables, and we will use the <i>pandas.get_dummies()</i> function to perform this transformation.
+<div class="linked"><script type="text/x-sage">
+def preprocess_features(X):
+    output=pandas.DataFrame(index=X.index)
+    for col,col_data in X.iteritems():
+        if col_data.dtype==object: 
+            col_data=col_data.replace(['yes','no'],[1,0])
+        if col_data.dtype==object:
+            col_data=pandas.get_dummies(col_data,prefix=col)  
+        output=output.join(col_data)    
+    return output
+X_all=preprocess_features(X_all)
+print("Processed feature columns (%d total features):"\
+     %len(X_all.columns))
+for i in range(6): print(list(X_all.columns)[i*8:(i+1)*8])
+</script></div><br/>
+    <h3>Training and Testing Data Split</h3>
+So far, we have converted all categorical features into numeric values.<br/>
+Next, we will randomly shuffle and split the data <i>(X_all, y_all)</i> into training and testing subsets by the following steps:<br/>
+- Use 300 training points (approximately 75%) and 95 testing points (approximately 25%).<br/>
+- Set the <i>random_state</i> parameter for the function(s) we use, if provided.<br/>
+- Store the results in <i>X_train, X_test, y_train, y_test</i>.
+<div class="linked"><script type="text/x-sage">
+num_train=300; num_test=X_all.shape[0]-num_train
+X_train,X_test,y_train,y_test=\
+train_test_split(X_all,y_all,test_size=1.*num_test/len(X_all),random_state=1)
+print ("Training set has {} samples.".format(X_train.shape[0]))
+print ("Testing set has {} samples.".format(X_test.shape[0]))
+</script></div><br/>
+    <h2>Training and Evaluating Models</h2>
+In this section, you will choose 3 <b>supervised learning</b> models that are appropriate for this problem and available in <i>scikit-learn</i>.<br/>
+You will first discuss the reasoning behind choosing these three models by considering what you know about the data and each model's strengths and weaknesses. <br/>
+You will then fit the model to varying sizes of training data (100 data points, 200 data points, and 300 data points) and measure the F1 score. <br/>
+You will need to produce three tables (one for each model) that shows: <br/>
+- training set size, training time, prediction time, F1 score on the training set, and F1 score on the testing set.<br/>
+The following <b>supervised learning</b> models are currently available in <i>scikit-learn</i> that you may choose from:<br/>
+<i>- Gaussian Naive Bayes (GaussianNB)<br/>
+- Decision Trees<br/>
+- Ensemble Methods (Bagging, AdaBoost, Random Forest, Gradient Boosting)<br/>
+- K-Nearest Neighbors (KNeighbors)<br/>
+- Stochastic Gradient Descent (SGDC)<br/>
+- Support Vector Machines (SVM)<br/>
+- Logistic Regression</i>
+    <h3>Question 2 - Model Application</h3>
+<i>List three supervised learning models that are appropriate for this problem. For each model chosen:<br/>
+- Describe one real-world application in industry where the model can be applied. (You may need to do a small bit of research for this — give references!)<br/>
+- What are the strengths of the model; when does it perform well?<br/>
+- What are the weaknesses of the model; when does it perform poorly?<br/>
+- What makes this model a good candidate for the problem, given what you know about the data?</i>
+    <h3>Answer 2</h3>
+Let's make quick checking F1 scores of the mentioned models:
+<div class="linked"><script type="text/x-sage">
+clf=[linear_model.LogisticRegression(solver='liblinear',multi_class='ovr'),
+     linear_model.LogisticRegressionCV(solver='liblinear',multi_class='ovr'),
+     linear_model.SGDClassifier(max_iter=1000,tol=0.00001),
+     svm.LinearSVC(),svm.SVC(gamma='scale',C=1.0,kernel='poly'),
+     svm.NuSVC(gamma='scale',kernel='poly'),
+     KNeighborsClassifier(),RadiusNeighborsClassifier(radius=10),
+     DecisionTreeClassifier(),ExtraTreeClassifier(),
+     BaggingClassifier(),RandomForestClassifier(n_estimators=100),
+     AdaBoostClassifier(),GradientBoostingClassifier()]
+print('F1 scores:')
+for c in clf:
+    c.fit(X_train,y_train); y_test_pred=c.predict(X_test)
+    print(c.__class__.__name__+' - '+\
+          str(f1_score(y_test,y_test_pred,pos_label='yes')))
+</script></div><br/>
+I have chosen the following models: <i>LogisticRegressionCV, svm.SVC, RadiusNeighborsClassifier</i>.<br/>
+In the experiments, they usually have a higher result than others.<br/>
+Let's have a look at their applications and characteristics:<br/>
+1) <i>LogisticRegressionCV</i>.<br/>
+<b>Applications</b>: <br/>
+- spam detection (to separate spam emails);<br/>
+- credit card fraud (to detect fraud transactions);<br/>
+- health diagnostics (to be sure about the right conclusions);<br/>
+- banking (to predict finance defaults);<br/>
+etc.<br/>
+Example of Real World Business Applying<br/>
+<a href="http://smartdrill.com/logistic-regression.html">&#x1F578;Credit Risk Analysis Using Logistic Regression Modeling</a><br/>
+Example of Courses about Linear Regression Models in Health Care<br/>
+<a href="https://www.coursera.org/learn/logistic-regression-r-public-health">&#x1F578;Logistic Regression in R for Public Health</a><br/>    
+<b>Strengths</b>: <br/>
+This model combines strong sides of logistic regression and cross-validation and fits data for a range of parameters instead of a single parameter value. <br/>
+Estimation is done through maximum likelihood and suits very well for a binary classification case (the simple "yes/no" choice).<br/>
+It’s easy interpretable and regularizable and can be used as a base for checking how more complex models work. <br/>
+<b>Weaknesses</b>: <br/>
+It requires independent (not correlated to each other) features and quite large sample sizes.<br/>
+The algorithm does not work well when variables are not enough strongly correlated with a prediction target. <br/>
+This model doesn't solve non-linear problems. <br/>
+Adding more and more variables to the model can result in overfitting. <br/>
+2) <i>svm.SVC</i>.<br/>
+<b>Applications</b>: <br/>
+- face detection;<br/>
+- intrusion detection;<br/> 
+- complex classification of emails, news articles and web pages;<br/> 
+- classification of genes;<br/>
+- handwriting recognition;<br/>
+etc.<br/>
+Example of Real World Medicine Applying<br/>
+<a href="https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/1472-6947-10-16">&#x1F578;Application of support vector machine modeling for prediction of common diseases: the case of diabetes and pre-diabetes</a><br/>
+Examples of Real World Engineering Applying<br/>
+<a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/widm.1125">&#x1F578;Support vector machines in engineering: an overview</a><br/>
+<b>Strengths</b>: <br/>
+It usually offers high accuracy and fast prediction compared to other simple classifiers.<br/> 
+This model uses less memory by subsetting of training points.<br/> 
+It works enough well with high dimensional space.<br/>
+<b>Weaknesses</b>: <br/>
+It has high training time and not suitable for big data.<br/> 
+This model sensitive for kernel choice.<br/> 
+It doesn't work with overlapping classes.<br/>     
+3) <i>RadiusNeighborsClassifier</i>.<br/>
+<b>Applications</b>: <br/>
+- recommender systems for clients;<br/>
+- identification (persons, products or other objects).<br/> 
+Examples of Real World Bioinformatics Applying<br/>
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/8371270">&#x1F578;Protein secondary structure prediction using nearest-neighbor methods</a><br/>
+<b>Strengths</b>: <br/>
+It's one of the best choice for not uniformly sampled data. <br/>
+This method is universal in the meaning of applying in supervised and unsupervised learning. <br/>   
+<b>Weaknesses</b>: <br/>
+The algorithm becomes less effective for high-dimensional parameter spaces. <br/>
+It simply collects the data examples and does not construct any internal functions, regularities or models for generalization.
+    <p></p>      
+All these classifiers will make enough good predictions in this case. <br/>
+We should produce the result with the variant of ranking and it's a well-known fact that classification tends to be a better paradigm for ranking than regression.
+    <h3>Setup</h3>
+Let's initialize three helper functions which we can use for training and testing the three supervised learning models we've chosen above.<br/>
+The functions are as follows:<br/>
+<i>train_classifier</i> - takes as input a classifier and training data and fits the classifier to the data;<br/>
+<i>predict_labels</i> - takes as input a fit classifier, features, and a target labeling and makes predictions using the F1 score; <br/>
+<i>train_predict</i> - takes as input a classifier, and the training and testing data, and performs <i>train_classifier</i> and <i>predict_labels</i>.<br/>
+&nbsp;&nbsp;- This function will report the F1 score for both the training and testing data separately.
+<div class="linked"><script type="text/x-sage">
+def train_classifier(clf,t_fit,X_train,y_train):
+    start=time.time(); clf.fit(X_train,y_train)
+    end=time.time(); t_fit.append(end-start)
+    print ("Trained model in {:.4f} seconds".format(end-start)) 
+def predict_labels(clf,t_pred,features,target):
+    start=time.time(); y_pred=clf.predict(features)
+    end=time.time(); t_pred.append(end-start)
+    print ("Made predictions in {:.4f} seconds.".format(end-start))    
+    return f1_score(target.values,y_pred,pos_label='yes')
+def train_predict(clf,t_fit,t_pred,f1_scores,
+                  X_train,y_train,X_test,y_test):
+    print ("Training a {} using a training set size of {}. . .".\
+           format(clf.__class__.__name__,len(X_train)))
+    train_classifier(clf,t_fit,X_train,y_train)
+    f1_train=predict_labels(clf,t_pred,X_train,y_train)
+    f1_scores.append(f1_train)
+    f1_test=predict_labels(clf,t_pred,X_test,y_test)
+    f1_scores.append(f1_test)    
+    print ("F1 score for training set: {:.4f}.".format(f1_train))
+    print ("F1 score for test set: {:.4f}.".format(f1_test))
+</script></div><br/>
+    <h3>Model Performance Metrics</h3>
+With the predefined functions above, we will now import the three supervised learning models of our choice and run the <i>train_predict</i> function for each one.<br/>
+We will need to train and predict on each classifier for three different training set sizes: 100, 200, and 300.<br/>
+Hence, we should expect to have 9 different outputs below — 3 for each model using the varying training set sizes.<br/>
+It's time to implement the following steps:<br/>
+- Import the three supervised learning models you've discussed in the previous section.<br/>
+- Initialize the three models and store them in <i>clf_A, clf_B</i>, and <i>clf_C</i>.<br/>
+&nbsp;&nbsp;- Use the <i>random_state</i> parameter for each model we use, if provided.<br/>
+&nbsp;&nbsp;- Note: Use the default settings for each model — we will tune one specific model in the next section.<br/>
+- Create the different training set sizes to be used to train each model.<br/>
+&nbsp;&nbsp;- Do not reshuffle and resplit the data! The new training points should be drawn from <i>X_train</i> and <i>y_train</i>.<br/>
+- Fit each model with each training set size and make predictions on the test set (9 in total).
+<div class="linked"><script type="text/x-sage">
+clf_A=linear_model.LogisticRegressionCV(solver='liblinear',multi_class='ovr')
+clf_B=svm.SVC(gamma='scale',C=1.0,kernel='poly')
+clf_C=RadiusNeighborsClassifier(radius=30)
+X_train_100,y_train_100=X_train[:int(100)],y_train[:int(100)]
+X_train_200,y_train_200=X_train[:int(200)],y_train[:int(200)]
+X_train_300,y_train_300=X_train,y_train
+t_fit,t_pred,f1_scores=[],[],[]
+for clf in [clf_A,clf_B,clf_C]:
+    for (X,y) in [(X_train_100,y_train_100),
+                  (X_train_200,y_train_200),
+                  (X_train_300, y_train_300)]:
+        train_predict(clf,t_fit,t_pred,f1_scores,
+                      X,y,X_test,y_test)
+</script></div><br/>
+    <h3>Tabular Results</h3>
+<div class="linked"><script type="text/x-sage">
+print(clf_A.__class__.__name__)
+table([['Training Set Size','Training Time','Prediction Time (test)',
+        'F1 Score (train)','F1 Score (test)'],
+       [100,t_fit[0],t_pred[1],f1_scores[0],f1_scores[1]],
+       [200,t_fit[1],t_pred[3],f1_scores[2],f1_scores[3]],
+       [300,t_fit[2],t_pred[5],f1_scores[4],f1_scores[5]]])
+</script></div><br/>
+<div class="linked"><script type="text/x-sage">
+print(clf_B.__class__.__name__)
+table([['Training Set Size','Training Time','Prediction Time (test)',
+        'F1 Score (train)','F1 Score (test)'],
+       [100,t_fit[3],t_pred[7],f1_scores[6],f1_scores[7]],
+       [200,t_fit[4],t_pred[9],f1_scores[8],f1_scores[9]],
+       [300,t_fit[5],t_pred[11],f1_scores[10],f1_scores[11]]])
+</script></div><br/>
+<div class="linked"><script type="text/x-sage">
+print(clf_C.__class__.__name__)
+table([['Training Set Size','Training Time','Prediction Time (test)',
+        'F1 Score (train)','F1 Score (test)'],
+       [100,t_fit[6],t_pred[13],f1_scores[12],f1_scores[13]],
+       [200,t_fit[7],t_pred[15],f1_scores[14],f1_scores[15]],
+       [300,t_fit[8],t_pred[17],f1_scores[16],f1_scores[17]]])
+</script></div><br/>
+    <h2>Choosing the Best Model</h2>
+In this final section, we will choose from the three supervised learning models the best model to use on the student data.<br/>
+We will then perform a grid search optimization for the model over the entire training set (<i>X_train</i> and <i>y_train</i>)<br/> 
+by tuning at least one parameter to improve upon the untuned model's F1 score.
+    <h3>Question 3 - Choosing the Best Model</h3>
+<i>Based on the experiments you performed earlier, in one to two paragraphs, explain to the board of supervisors what single model you chose as the best model.<br/>
+Which model is generally the most appropriate based on the available data, limited resources, cost, and performance?</i>
+    <h3>Answer 3</h3>
+I have chosen the svm.SVC algorithm as it showed the highest f-scores for the testing set and escaped overfitting.<br/> 
+The algorithm is proved to be not so time-consuming in the training and predicting processes, the number of data points is quite small and we have the result very quickly.
+    <h3>Question 4 - Model in Layman's Terms</h3>
+<i>In one to two paragraphs, explain to the board of directors in layman's terms how the final model chosen is supposed to work.<br/>
+Be sure that you are describing the major qualities of the model, such as how the model is trained and how the model makes a prediction.<br/>
+Avoid using advanced mathematical or technical jargon, such as describing equations or discussing the algorithm implementation.</i>
+    <h3>Answer 4</h3>
+The mechanism of SVM groups of algorithms can be explained very simply using geometric interpretation.<br/>
+They create decision planes (or hyperplanes) which separate sets of objects having different class memberships.<br/>
+A gap (margin) between the closest points in different classes is calculated like a distance and allows to check the effectiveness of the separation process.<br/><br/>
+SVM algorithms construct borders between classes using the kernel tricks which transform input data into high dimensional space,<br/>
+i.e. data becomes separatable by adding more dimensions.<br/>
+The choice of a suitable kernel allows to build a very accurate classifier. 
+    <h3>Model Tuning</h3>
+Finaly, we will tune the chosen model and use grid search (<i>GridSearchCV</i>) with at least one important parameter tuned with at least 3 different values.<br/> 
+We will need to use the entire training set for this.<br/>
+Our steps in the tuning:<br/>
+- Import <i>sklearn.model_selection.GridSearchCV</i> and <i>sklearn.metrics.make_scorer</i>.<br/>
+- Create a dictionary of parameters you wish to tune for the chosen model.<br/>
+&nbsp;&nbsp;- Example: <i>parameters = {'parameter' : [list of values]}</i>.<br/>
+- Initialize the classifier you've chosen and store it in <i>clf</i>.<br/>
+- Create the F1 scoring function using make_scorer and store it in <i>f1_scorer</i>.<br/>
+&nbsp;&nbsp;- Set the <i>pos_label</i> parameter to the correct value!<br/>
+- Perform grid search on the classifier <i>clf</i> using <i>f1_scorer</i> as the scoring method, and store it in <i>grid_obj</i>.<br/>
+- Fit the grid search object to the training data (<i>X_train, y_train</i>), and store it in <i>grid_obj</i>.    
+<div class="linked"><script type="text/x-sage">
+t_pred=[]; parameters={'C':[1,2,3,4,5,6,7,8,9,10],
+                       'degree':[2,3,4],'gamma':[.001,.002,.003]}
+clf=svm.SVC(kernel='poly')
+f1_scorer=make_scorer(f1_score,pos_label='yes')
+grid_obj=GridSearchCV(estimator=clf,param_grid=parameters,scoring=f1_scorer)
+grid_fit=grid_obj.fit(X_train,y_train)
+best_clf=grid_fit.best_estimator_
+print ("Tuned model has a training F1 score of {:.4f}."\
+       .format(predict_labels(best_clf,t_pred,X_train,y_train)))
+print ("Tuned model has a testing F1 score of {:.4f}."\
+       .format(predict_labels(best_clf,t_pred,X_test,y_test)))
+print ("Tuned model has the parameters: \n"); best_clf.get_params()
+</script></div><br/>
+    <h3>Question 5 - Final F1 Score</h3>
+<i>What is the final model's F1 score for training and testing? How does that score compare to the untuned model?</i>
+    <h3>Answer 5</h3>
+The final model's F-score was improved significantly for the test data.
+<div class="linked"><script type="text/x-sage">
+table([['Model','F1 Score (train)','F1 Score (test)'],
+       ['Untuned',f1_scores[10],f1_scores[11]],
+       ['Tuned',predict_labels(best_clf,t_pred,X_train,y_train),
+        predict_labels(best_clf,t_pred,X_test,y_test)]])
+</script></div><br/>
+It means we escape the overfitting problem. This result confirms the effectiveness of the algorithm GridSearchCV for tuning.
+    <h2>Conclusion</h2>
+In this project, some classifiers and their application to predict categorical variables were discussed in detail.<br/> 
+We studied the methods of data preparing and model optimizing as well.<br/> 
+The final model has an enough high result for such a small data set.
+    <h3>Additional Code Cell</h3>
+<div class="linked"><script type="text/x-sage">
+
+</script></div><br/>
+  </body>
+</html>
