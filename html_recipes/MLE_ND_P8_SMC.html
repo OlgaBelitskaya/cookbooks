@@ -1,0 +1,443 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>MLE_ND_P8_SMC</title>
+    <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
+    <script>$(function () {
+    sagecell.makeSagecell({inputLocation:'div.linked',linked:true,evalButtonText:'Run Linked Cells'});  
+    sagecell.makeSagecell({inputLocation:'div.sage',evalButtonText:'Run'});});
+    </script>
+  </head>
+  <style>
+  @import url('https://fonts.googleapis.com/css?family=Orbitron|Roboto');
+  body {margin:5px 5px 5px 15px; background-color:aliceblue;}
+  a, p {color:darkblue; font-family:'Roboto';} 
+  h1 {color:#4169E1; font-family:'Orbitron'; text-shadow:4px 4px 4px #ccc;} 
+  h2, h3 {color:slategray; font-family:'Orbitron'; text-shadow:4px 4px 4px #ccc;}
+  h4 {color:#4169E1; font-family:'Roboto';}
+  .sagecell .CodeMirror-scroll {min-height:3em; max-height:70em;}
+  .sagecell table.table_form tr.row-a {background-color:lightgray;} 
+  .sagecell table.table_form tr.row-b {background-color:aliceblue;}
+  .sagecell table.table_form td {padding:5px 15px; color:darkblue; font-family:'Roboto';}
+  .sagecell_sessionOutput, .sagecell_sessionOutput pre {color:darkblue; font-family:'Roboto';}
+  </style>  
+  <body>
+    <h1>Machine Learning Engineer Nanodegree</h1>
+    <h2>Additional Project</h2>
+    <h1>&#x1F4D1; &nbsp;P8: Analyzing the NYC Subway Dataset</h1>
+    <h2>Links and Code Library</h2>     
+    <h3>Resources</h3>
+<a href="https://scikit-learn.org/stable/index.html">&#x1F578;scikit-learn. Machine Learning in Python&nbsp;</a>
+<a href="http://scipy-lectures.org/">&#x1F578;Scipy Lecture Notes&nbsp;</a><br/>
+<a href=" https://ocw.mit.edu/resources/res-6-009-how-to-process-analyze-and-visualize-data-january-iap-2012/lectures-and-labs/MITRES_6_009IAP12_lab3a.pdf">&#x1F578;Hypothesis Testing - MIT OpenCourseWare&nbsp;</a>
+<a href="https://statistics.laerd.com/premium-sample/mwut/mann-whitney-test-in-spss-2.php">&#x1F578;Assumptions of the Mann-Whitney U test&nbsp;</a><br/>     
+    <h3>Code Library</h3> 
+<div class="linked"><script type="text/x-sage">
+import warnings; warnings.filterwarnings("ignore")
+import numpy,pandas,pylab,seaborn,sympy,time
+pylab.style.use('seaborn-whitegrid')
+from sklearn.exceptions import DataConversionWarning
+warnings.filterwarnings("ignore",category=DataConversionWarning)
+import statsmodels.api as sm
+from scipy.stats import mannwhitneyu,linregress
+from sklearn import linear_model
+from sklearn.metrics import r2_score
+from sklearn.preprocessing import normalize
+</script></div><br/>
+    <h3>Set of Functions</h3>
+<div class="linked"><script type="text/x-sage">
+def normalize_features(data):
+    mu,sigma=data.mean(),data.std()    
+    if (sigma==0).any():
+        st=["One of the features had the same value ",
+            "for all samples and could not be normalized. ", 
+            "Do not include features with ",
+            "only a single value in the model."]       
+        raise Exception("".join(st))        
+    return (data-mu)/sigma,mu,sigma
+def compute_cost(features,values,theta):    
+    sum_of_square_errors=\
+    numpy.square(numpy.dot(features,theta)-values).sum()
+    return sum_of_square_errors/(2*len(values))
+def gradient_descent(features,values,theta,alpha,num_iterations):
+    cost_history=[]
+    for i in range(num_iterations):
+        delta=(numpy.dot((values-numpy.dot(features,theta)),
+                         features))/len(values)
+        theta=theta+alpha*delta
+        cost_history.append(compute_cost(features,values,theta))
+    return theta,pandas.Series(cost_history)
+def predictions(dataframe,numeric,target,alpha=.1,num_iterations=50):
+    features=dataframe[numeric]; values=dataframe[target]
+    dummy_units=pandas.get_dummies(dataframe['UNIT'],prefix='unit')
+    features=features.join(dummy_units)
+    features,mu,sigma=normalize_features(features)
+    features['ones']=numpy.ones(len(values))
+    features_array=numpy.array(features)
+    values_array=numpy.array(values)
+    theta_gradient_descent=numpy.zeros(len(features.columns))
+    theta_gradient_descent,cost_history=\
+    gradient_descent(features_array,values_array,
+                     theta_gradient_descent,alpha,num_iterations)    
+    predictions=numpy.dot(features_array,theta_gradient_descent)
+    return predictions,theta_gradient_descent
+def ols_predictions(data,feature_list):
+    y=data['ENTRIESn_hourly']
+    dummy_units=pandas.get_dummies(data['UNIT'],prefix='unit')
+    X=data[feature_list].join(dummy_units)
+    X,mu,sigma=normalize_features(X); Xsm=sm.add_constant(X)
+    model=sm.OLS(y,Xsm); results=model.fit()
+    return results.predict(Xsm),results.params,results.rsquared
+def sgd_predictions(data,feature_list):
+    y=data['ENTRIESn_hourly']
+    dummy_units=pandas.get_dummies(data['UNIT'],prefix='unit')
+    X=data[feature_list].join(dummy_units)
+    X,mu,sigma=normalize_features(X)
+    reg=linear_model.SGDRegressor(); reg.fit(X,y)
+    return reg.predict(X),reg.coef_,reg.score(X,y)
+</script></div><br/>
+    <h2>Statistical Test</h2> 
+    <h3>Data Extraction and Description</h3>
+<div class="linked"><script type="text/x-sage">
+path='https://raw.githubusercontent.com/OlgaBelitskaya/'+\
+     'machine_learning_engineer_nd009/'+\
+     'master/Machine_Learning_Engineer_ND_P8/'
+data=pandas.read_csv(path+'turnstile_data_master_with_weather.csv')\
+.drop('index',int(1))
+data.describe().T
+</script></div><br/>  
+<div class="linked"><script type="text/x-sage">
+pretty_print('Data Medians')
+pandas.DataFrame(data.median(),columns=['median'])
+</script></div><br/>
+    <h3>Test Selection</h3>
+    <h4>Question 1.1</h4>
+<i>Which statistical test did you use to analyze the NYC subway data? Did you use a one-tail or a two-tail P value?<br/>
+What is the null hypothesis? What is your p-critical value?</i>
+    <h4>Answer 1.1</h4>
+The Mann-Whitney U Test to compare the ridership of NYC subway in rainy and non-rainy days is a good choice.<br/>
+The column <i>ENTRIESn_hourly</i> will be a target and the column <i>rain</i> - a feature.<br/>
+I will test the <b>null hypothesis</b>: distributions of ridership in NYC subway are the same for rainy and non-rainy days.<br/>Another variant of this hypothesis could be: the difference between ridership medians / means for rainy and non-rainy days is equal to zero.<br/>
+I will use a two-tailed test to find the statistical significance in both possible directions of interest.<br/>
+Let's setup the p-critical value is equal to 0.05: we will reject the null hypothesis at the confidence level of 95%.  
+    <h4>Question 1.2</h4> 
+<i>Why is this statistical test applicable to the dataset?<br/>
+In particular, consider the assumptions that the test is making about the distribution of ridership in the two samples.</i>
+    <h4>Answer 1.2</h4>
+The Mann-Whitney U Test is a non-parametric alternative test for comparing two sample medians / means (or two distributions) that come from the same population.<br/>
+I have noted that the distribution of <i>ENTRIESn_hourly</i> is not normal so I cannot use the t-test in this case.<br/>
+The features' specifics for the Mann-Whitney U test:<br/>
+1) one dependent variable is measured at the continuous or ordinal level (<i>ENTRIESn_hourly</i>),<br/>
+2) one independent variable consists of two categorical, independent groups (<i>rain</i>),<br/>
+3) independence of observations (true for this data, the samples do not affect each other),<br/>
+4) if two distributions have the same shapes, the test determines differences in the medians / means of two groups, if they have different shapes - <br/>
+differences in the distributions of two groups (distributions in our case, the shapes are similar but with different levels),<br/>
+5) two samples under consideration could not have the same number of observations (true for this data).
+    <h3>Test Execution</h3>   
+At first, I will describe two samples, then I will run the test and display the results.
+<div class="linked"><script type="text/x-sage">
+pretty_print("ENTRIESn_hourly in rainy days")
+rainy_entries_hourly=data['ENTRIESn_hourly'][data['rain']==1]
+pandas.DataFrame(rainy_entries_hourly.describe())
+</script></div><br/>
+<div class="linked"><script type="text/x-sage">
+pretty_print("ENTRIESn_hourly in non-rainy days")
+non_rainy_entries_hourly=data['ENTRIESn_hourly'][data['rain']==0]
+pandas.DataFrame(non_rainy_entries_hourly.describe())
+</script></div><br/>
+<div class="linked"><script type="text/x-sage">
+with_rain_median=numpy.median(rainy_entries_hourly)
+without_rain_median=numpy.median(non_rainy_entries_hourly)
+with_rain_mean=numpy.mean(rainy_entries_hourly)
+without_rain_mean=numpy.mean(non_rainy_entries_hourly)
+U,p=mannwhitneyu(rainy_entries_hourly,
+                 non_rainy_entries_hourly,alternative='two-sided')
+print ("Mean for rainy days: {:.0f}".format(with_rain_mean))
+print ("Mean for non-rainy days: {:.0f}".format(without_rain_mean))
+print ("Median for rainy days: {:.0f}".format(with_rain_median))
+print ("Median for non-rainy days: {:.0f}".format(without_rain_median))
+print ("Number of rainy days: {:.0f}".format(len(rainy_entries_hourly)))
+print ("Number for non-rainy days: {:.0f}".format(len(non_rainy_entries_hourly)))
+print ("Mann-Whitney U test: U = {:.0f}, p = {:.5f}".format(U,p))
+</script></div><br/>
+    <h4>Question 1.3</h4>
+<i>What results did you get from this statistical test?<br/> 
+These should include the following numerical values: p-values, as well as the medians / means for each of the two samples under test.</i>
+    <h4>Answer 1.3</h4>
+<div class="linked"><script type="text/x-sage">
+table([['Mean for rainy days','Mean for non-rainy days',
+        'Median for rainy days','Median for non-rainy days',
+        'Number of rainy days','Number for non-rainy days',
+        'p-value of Mann-Whitney U-Test'],
+       [with_rain_mean,without_rain_mean,
+        with_rain_median,without_rain_median,
+        len(rainy_entries_hourly),
+        len(non_rainy_entries_hourly),p]])
+</script></div><br/>
+    <h4>Question 1.4</h4>
+<i>What is the significance and interpretation of these results?</i>
+    <h4>Answer 1.4</h4>
+The median / mean values of ENTRIESn_hourly in rainy days is only a little bit larger than in non-rainy days.<br/>
+I cannot determine whether the null hypothesis is rejected or not based on the difference between each pair of values.<br/>
+The Mann-Whitney U-Test detects more informative results on whether the null hypothesis is true or not.<br/>
+The p-value of this test is less than the p-critical value.<br/>
+Therefore, I can confirm that the null hypothesis is rejected with 95% of confidence level.
+    <h2>Linear Regression</h2> 
+In this section, I will use the improved dataset <i>turnstile_weather_v2.csv</i>. Let's load and describe it.      
+<div class="linked"><script type="text/x-sage">
+data2=pandas.read_csv(path+'turnstile_weather_v2.csv')
+data2.head().T
+</script></div><br/>
+    <h4>Question 2.1</h4> 
+<i>What approach did you use to compute the coefficients theta and produce prediction for ENTRIESn_hourly in your regression model:<br/>
+- ols using statsmodels or sklearn<br/>
+- gradient descent using sklearn<br/>
+- or something different?</i>
+    <h4>Answer 2.1</h4>
+To produce predictions I would like to try<br/> 
+- a simple ordinary least squares model (ols statsmodels), <br/>
+- stochastic gradient descent regression (SGDRegressor sklearn) and <br/>
+- the set of built functions (<i>normalize_features(), compute_cost(), gradient_descent(), predictions()</i>). <br/>
+It will be interesting to compare the results.
+    <h4>Predictions by the Set of Built Functions</h4>
+<div class="linked"><script type="text/x-sage">
+numeric2=['rain','hour','weekday','meantempi']
+predictions2=predictions(data2,numeric2,'ENTRIESn_hourly')
+pretty_print ("Predictions for 'ENTRIESn_hourly'")
+pandas.DataFrame(predictions2[0],columns=['predictions']).head()
+</script></div><br/>
+The code cell below produce predictions and display the histogram of residuals (the differences between the observed values and the estimated values).
+<div class="linked"><script type="text/x-sage">
+pylab.figure(figsize=(11,5))
+ti="Histogram of Residuals 'ENTRIESn_hourly', Theta Gradient Descent"
+pylab.title(ti,fontsize=15)
+(data2['ENTRIESn_hourly']-predictions2[0])\
+.hist(bins=200,color='#4169E1',edgecolor='black',alpha=.5)
+pylab.show()
+</script></div><br/>
+    <h4>Predictions by the OLS Model</h4>
+<div class="linked"><script type="text/x-sage">
+predictions2_ols,coefficients2_ols,r2_ols2=\
+ols_predictions(data2,numeric2)
+pretty_print ("Predictions for 'ENTRIESn_hourly'")
+pandas.DataFrame(predictions2_ols,columns=['predictions']).head()
+</script></div><br/>
+    <h4>Predictions by the SGDRegressor</h4>
+<div class="linked"><script type="text/x-sage">
+predictions2_reg,coefficients2_reg,r2_reg2=\
+sgd_predictions(data2,numeric2)
+pretty_print ("Predictions for 'ENTRIESn_hourly'")
+pandas.DataFrame(predictions2_reg,columns=['predictions']).head()
+</script></div><br/>
+    <h4>Question 2.2</h4>
+<i>What features (input variables) did you use in your model? Did you use any dummy variables as part of your features?</i>
+    <h4>Answer 2.2</h4>
+I have included the feature spectrum in the model: 'rain', 'hour', 'weekday', 'Unit', 'meantempi'.<br/>
+Dummy features that take the values 0 or 1 to indicate absence or presence of some categorical values (for the feature 'Unit') were used.
+    <h4>Question 2.3</h4>
+<i>Why did you select these features in your model?<br/> 
+We are looking for specific reasons that lead you to believe that the selected features will contribute to the predictive power of your model. Your reasons might be based on intuition.<br/>  
+For example, response for fog might be: “I decided to use fog because I thought that when it is very foggy outside people might decide to use the subway more often.” <br/> 
+Your reasons might also be based on data exploration and experimentation, for example: “I used feature X because as soon as I included it in my model, it drastically improved my R2 value.”</i>
+    <h4>Answer 2.3</h4>
+Based on intuitive assumptions, uncomfortable weather conditions increase the ridership, so I added the variables 'rain' and 'meantempi'.<br/> 
+The ridership also depends on the time of day and stations, then the variables 'Unit', 'weekday', and 'hour' should be added to the feature list also.
+    <h4>Question 2.4</h4>
+<i>What are the parameters (also known as "coefficients" or "weights") of the non-dummy features in your linear regression model?</i>
+    <h4>Answer 2.4</h4>
+Coefficients by the Set of Built Functions
+<div class="linked"><script type="text/x-sage">
+pandas.DataFrame(predictions2[1][:int(4)],
+                 columns=['coefficients'],index=numeric2)
+</script></div><br/>
+Coefficients by the OLS Model
+<div class="linked"><script type="text/x-sage">
+pandas.DataFrame(coefficients2_ols[int(1):int(5)],
+                 columns=['coefficients'])
+</script></div><br/>
+Coefficients by the SGDRegressor
+<div class="linked"><script type="text/x-sage">
+pandas.DataFrame(coefficients2_reg[:int(4)],
+                 columns=['coefficients'])
+</script></div><br/>
+    <h4>Question 2.5</h4> 
+<i>What is your model’s R2 (coefficients of determination) value?</i>
+    <h4>Answer 2.5</h4>
+There are lots of statistic code libraries for the coefficient of determination R2. Let's try some of them in this project.
+<div class="linked"><script type="text/x-sage">
+print ("Set of Built Functions (sklearn.metrics): {}"\
+.format(r2_score(data2['ENTRIESn_hourly'],predictions2[0])))
+slope2,intercept2,r_value2,p_value2,std_err2=\
+linregress(data2['ENTRIESn_hourly'],predictions2[0])
+print ("Set of Built Functions (scipy.stats): {}".format(r_value2**2))
+print ("OLS model: {}".format(r2_ols2))
+print ("SGDRegressor: {}".format(r2_reg2))
+</script></div><br/>
+    <h4>Question 2.6</h4> 
+<i>What does this R2 value mean for the goodness of fit for your regression model?<br/>
+Do you think this linear model to predict ridership is appropriate for this dataset, given this R2 value?</i>
+    <h4>Answer 2.6</h4> 
+R2 measures how close the data are to the fitted regression line and represents the percentage of the response variable variation that is explained by the linear model.<br/>
+For simplicity, R-squared = Explained variation / Total variation.<br/>
+In my experiments, 45-48% of variations of the dependent variable <i>ENTRIESn_hourly</i> are explained by the models. <br/>
+It's a reasonable and statistically significant result. <br/>
+I suppose including the weather and the place features is not enough to predict the subway ridership. <br/>
+So it's a good reason for the next experiments.
+    <h2>Visualization</h2>
+Please include two visualizations that show the relationships between two or more variables in the NYC subway data.<br/> 
+Remember to add appropriate titles and axes labels to your plots.<br/> 
+Also, please add a short description below each figure commenting on the key insights depicted in the figure.
+    <h4>Question 3.1</h4> 
+One visualization should contain two histograms: one of <i>ENTRIESn_hourly</i> for rainy days and one of <i>ENTRIESn_hourly</i> for non-rainy days.<br/>
+You can combine the two histograms in a single plot or you can use two separate plots.<br/> 
+If you decide to use to two separate plots for the two histograms, please ensure that the x-axis limits for both of the plots are identical. <br/>
+It is much easier to compare the two in that case. <br/>
+For the histograms, you should have intervals representing the volume of ridership (value of <i>ENTRIESn_hourly</i>) on the x-axis and the frequency of occurrence on the y-axis. <br/>
+For example, each interval (along the x-axis), the height of the bar for this interval will represent the number of records (rows in our data) <br/>that have <i>ENTRIESn_hourly</i> that falls in this interval.<br/>
+Remember to increase the number of bins in the histogram (by having larger number of bars). 
+The default bin width is not sufficient to capture the variability in the two samples.<br/>
+    <h4>Answer 3.1</h4> 
+Let's plot the distribution of <i>ENTRIESn_hourly</i>. The x-axis and y-axis ranges are limited for better visualization.
+<div class="linked"><script type="text/x-sage">
+pylab.figure(figsize=(11,5))
+ti="Histogram of 'ENTRIESn_hourly': Rainy vs Non-Rainy"
+pylab.title(ti,fontsize=15)
+non_rainy_entries_hourly\
+.hist(bins=300,color='steelblue',edgecolor='slategray',alpha=.7)
+rainy_entries_hourly\
+.hist(bins=300,color='#4169E1',edgecolor='black',alpha=.5)
+pylab.xlabel("ENTRIESn_hourly",fontsize=12)
+pylab.ylabel("Frequency",fontsize=12)
+pylab.tick_params(axis='both',labelsize=12)
+pylab.axis((-100,6100,0,36000))
+pylab.legend(['Non-Rainy','Rainy'],fontsize=15); pylab.show()
+</script></div><br/>
+As readers can see, two distributions have the very similar shapes but with different levels of <i>ENTRIESn_hourly</i> and the data is not normally distributed.<br/>
+I should note that the mean and the median vary significantly (indicating a large skew).<br/> 
+Also, it's easy to see that the sample sizes has a huge difference.<br/>
+If I apply a non-linear logarithmic scaling to the normalized histogram we can observe very similar shapes, and it looks closer to the normal distributions.
+<div class="linked"><script type="text/x-sage">
+pylab.figure(figsize=(11,5))
+ti="Histogram of 'ENTRIESn_hourly': Rainy vs Non-Rainy. Logarithmic Scale"
+pylab.title(ti,fontsize=15)
+numpy.log(non_rainy_entries_hourly+1)\
+.hist(bins=200,color='steelblue',edgecolor='slategray',alpha=.7,normed=1)
+numpy.log(rainy_entries_hourly+1)\
+.hist(bins=200,color='#4169E1',edgecolor='black',alpha=.5,normed=1)
+pylab.xlabel("ENTRIESn_hourly",fontsize=12)
+pylab.ylabel("Frequency",fontsize=12)
+pylab.tick_params(axis='both',labelsize=12)
+pylab.axis((.5,11.5,0,.21))
+pylab.legend(['Non-Rainy','Rainy'],fontsize=15); pylab.show()
+</script></div><br/>
+    <h4>Question 3.2</h4>
+One visualization can be more freeform. <br/>
+You should feel free to implement something that we discussed in class (e.g., scatter plots, line plots) or attempt to implement something more advanced if you'd like. <br/>
+Some suggestions are:<br/>
+- Ridership by time-of-day<br/>
+- Ridership by day-of-week
+    <h4>Answer 3.2</h4>
+<div class="linked"><script type="text/x-sage">
+data['ENTRIES_EXITS']=data['ENTRIESn_hourly']-data['EXITSn_hourly']
+data_ee=data[['Hour','ENTRIES_EXITS']].groupby('Hour',as_index=False).sum()
+pylab.figure(figsize=(11,7)); pylab.title('Entries - Exits By Hour',fontsize=15)
+pylab.plot(data_ee['Hour'],data_ee['ENTRIES_EXITS'],'--',lw=2,color='#4169E1')
+psize=list(700*data_ee['ENTRIES_EXITS'].abs()/data_ee['ENTRIES_EXITS'].abs().mean())
+pylab.scatter(data_ee['Hour'],data_ee['ENTRIES_EXITS'],s=psize,marker='8',
+              facecolors='none',edgecolors='steelblue',linewidth=2)
+pylab.xlabel('Hour',fontsize=12)
+pylab.ylabel('Entries - Exits',fontsize=12); pylab.show()
+</script></div><br/>
+This graph shows the difference between the number of passengers' enters and exits for each hour and <br/>
+therefore helps to determine the number of passengers in the underground at certain hours.
+    <h2>Conclusion</h2>
+Please address the following questions in detail. Your answers should be 1-2 paragraphs long.
+    <h4>Question 4.1</h4> 
+<i>From your analysis and interpretation of the data, do more people ride the NYC subway when it is raining or when it is not raining?</i>
+    <h4>Answer 4.1</h4>
+The Mann-Whitney U-Test detects statistical significance of the difference in the NYC subway ridership in rainy and non-rainy days. <br/>
+But I cannot confirm the steady trend that more people use the NYC subway in rainy days. <br/>
+In the next answer I will explain my doubts.
+    <h4>Question 4.2</h4> 
+<i>What analyses lead you to this conclusion? You should use results from both your statistical tests and your linear regression to support your analysis.</i>
+    <h4>Answer 4.2</h4>
+There are some reasons why it needs to detect more clear tendencies in the ridership measuring.<br/>
+1) The result of the Mann-Whitney U-Test is very close to the borders of the confidence interval so the next samples could not repeat it.<br/>
+2) The influence of the variable 'rain' is possible combined with other weather conditions.<br/>
+3) The mean and the median for two samples do not have a statistically significant difference (about 1% in both cases).<br/>
+4) The normalized distributions have very similar shapes.<br/>
+5) All linear models in the projects with the variable 'rain' in the feature set do not demonstrate so good fitting and have less R2 scores than I expected.<br/>
+6) As we can see below, excluding the variable 'rain' does not affect the models' R2 scores significantly.
+<div class="linked"><script type="text/x-sage">
+# Means' Difference
+100.0*(with_rain_mean-without_rain_mean)/with_rain_mean
+</script></div><br/>
+<div class="linked"><script type="text/x-sage">
+# Medians' Difference
+100.0*(with_rain_median-without_rain_median)/with_rain_median
+</script></div><br/>
+<div class="linked"><script type="text/x-sage">
+numeric=['hour','weekday','meantempi']
+predictions=predictions(data2,numeric,'ENTRIESn_hourly')
+slope,intercept,r_value,p_value,std_err=\
+linregress(data2['ENTRIESn_hourly'],predictions[0])
+predictions_ols,coefficients_ols,r2_ols=ols_predictions(data2,numeric)
+predictions_reg,coefficients_reg,r2_reg=sgd_predictions(data2,numeric)
+</script></div><br/>
+<div class="linked"><script type="text/x-sage">
+table([['Features','R2 Built Functions','R2 OLS Model','R2 SGDRegressor'],
+       ["with 'rain'",r_value2**2,r2_ols2,r2_reg2],
+       ["without 'rain'",r_value**2,r2_ols,r2_reg]])
+</script></div><br/>    
+    <h2>Reflections</h2>
+Please address the following questions in detail. Your answers should be 1-2 paragraphs long.
+    <h4>Question 5.1</h4> 
+<i>Please discuss potential shortcomings of the methods of your analysis, including:<br/>
+- dataset,<br/>
+- analysis, such as the linear regression model or statistical tests.</i>
+    <h4>Answer 5.1</h4>
+The dataset and analysis have potential shortcomings.
+<b>Dataset.</b><br/>
+1) The dataset only consists of information for a single month. It can be a too short period for exact analysis: short-term or random events can affect the subway ridership.<br/>
+2) The result of the Mann-Whitney test can be biased because of events in the short period and it is too close to the borders of the confidence interval.<br/>
+3) I think some influential features for the ridership does not present in the dataset.<br/>
+<b>Models.</b><br/>
+1) Some features can be dependent and highly correlated, it reduces the models' accuracies.<br/>
+2) Linear regressions could be not so good model in ridership predictions with this dataset features: <i>ENTRIESn_hourly</i> could have a non-linear dependence from other variables.<br/>
+3) Linear model could not have enough accuracy in predictions of huge values when the important features are not presented.<br/>
+I can confirm my doubts by creating one additional visualization.<br/>
+It displays very clearly how close predictions of different models to each other and how they far away from the real data.
+<div class="linked"><script type="text/x-sage">
+pylab.figure(figsize=(11,7)); n1,n2=int(10000),int(10050)
+pylab.title("Predicitons vs Real Data for 'ENTRIESn_hourly'",fontsize=15)
+pylab.plot(range(n1,n2),predictions2_ols[n1:n2],'-o',color='#4169E1',markersize=10,
+           markeredgecolor='#4169E1',markerfacecolor="None",markeredgewidth=2)
+pylab.plot(range(n1,n2),predictions2_reg[n1:n2],'-o',color='steelblue',markersize=10,
+           markeredgecolor='steelblue',markerfacecolor="None",markeredgewidth=2)
+pylab.plot(range(n1,n2),data2['ENTRIESn_hourly'][n1:n2],'-o',color='black',markersize=10,
+           markeredgecolor='black',markerfacecolor="None",markeredgewidth=2)
+pylab.xlabel('Serial Number of Observations',fontsize=12)
+pylab.ylabel('ENTRIESn_hourly',fontsize=12)
+pylab.legend(['OLS Model','SGDRegressor','Real Data'],fontsize=12); pylab.show()
+</script></div><br/>
+    <h4>Question 5.2 (Optional)</h4>
+<i>Do you have any other insight about the dataset that you would like to share with us?</i>
+    <h4>Answer 5.2</h4>
+I would like to display information about enough high correlation indicators for the variable 'rain'. <br/>
+It reduced accuracy for many prediction models.
+<div class="linked"><script type="text/x-sage">
+features=['maxdewpti','minpressurei','mindewpti',
+          'maxpressurei','meandewpti','meanpressurei',
+          'fog','meanwindspdi','mintempi','meantempi',
+          'maxtempi','precipi','rain']
+pearson=data[features].corr(method='pearson')['rain']
+pandas.DataFrame(pearson[abs(pearson).argsort()[::-int(1)]][int(1):])
+</script></div><br/>
+    <h3>Additional Code Cell</h3>
+<div class="linked"><script type="text/x-sage">
+
+</script></div><br/>
+  </body>
+</html>
