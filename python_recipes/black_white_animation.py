@@ -2,7 +2,9 @@ import warnings; warnings.filterwarnings('ignore')
 import imageio,numpy as np,pandas as pd
 import os,h5py,seaborn as sn,pylab as pl
 from skimage.transform import resize
+from skimage import io
 from IPython.display import display,HTML
+
 def randcoord(img_size_out,img_size=1024):
     a=(.5+.1**6*np.random.randint(1,999999))*\
       np.random.choice([-1,1],1)[0]
@@ -18,6 +20,7 @@ def randcoord(img_size_out,img_size=1024):
     fy=.951*(fy-1.051*fy.min())/(fy.max()-fy.min())
     f=np.array([[fx[i],fy[i]] for i in range(len(t))])
     return f,np.around(a,6),b,np.around(c,3)
+
 def interpolate_hypersphere(v1,v2,steps):
     v1norm=np.linalg.norm(v1)
     v2norm=np.linalg.norm(v2)
@@ -30,6 +33,7 @@ def interpolate_hypersphere(v1,v2,steps):
         interpolated*(v1norm/interpolated_norm)
         vectors.append(interpolated_normalized)
     return np.array(vectors)
+
 def create_images(coords_int,img_size_out,img_size=1024):
     imgs=[]
     for i in range(coords_int.shape[0]):
@@ -42,7 +46,26 @@ def create_images(coords_int,img_size_out,img_size=1024):
         img=resize(img,(img_size_out,img_size_out))
         imgs.append(img)
     return np.array(imgs)
-def create_display_gif(img_size_out=256,steps=30):
+
+def preprocess_img(
+    file1,file2,
+    file_path='../input/image-examples-for-mixed-styles/'):
+    img1=io.imread(file_path+file1)
+    img2=io.imread(file_path+file2)
+    imgbw1=np.ones(img1.shape[:2])
+    imgbw1[img1[:,:,1]<int(200)]=0
+    imgbw2=np.ones(img2.shape[:2])
+    imgbw2[img2[:,:,1]<int(200)]=0
+    coords1=np.array(np.where(imgbw1<1)).T
+    coords2=np.array(np.where(imgbw2<1)).T
+    while not coords2.shape==coords1.shape:
+        randi=np.random.randint(
+            0,coords2.shape[0]-1,
+            coords2.shape[0]-coords1.shape[0])
+        coords2=np.delete(coords2,list(randi),axis=0)
+    return coords1,coords2
+
+def create_display_gif(img_size_out=256,steps=60):
     sh=randcoord(img_size_out)[0].shape
     coords=np.zeros((2,sh[0],sh[1]),dtype=np.float32)
     labels=np.zeros((2,),dtype=np.int32)
