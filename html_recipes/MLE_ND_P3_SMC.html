@@ -214,10 +214,11 @@ Highcharts.chart('test_highcharts',{
             {name:'C1',color:'#5a8bbd',data:[16165,4230,7595,201,4003,57]},
             {name:'C2',color:'#008b8b',data:[14276,803,3045,485,100,518]},
             {name:'Mean',color:'#ff5a8b',data:[18938,13819,10886,1947,2813,5699]}] },
-    function(chart){var point=chart.series.data,
-                    text=chart.renderer.text(point.plotX+chart.plotLeft+10,
-                                             point.plotY+chart.plotTop-10).add(),
-                    box=text.getBBox();});
+    function(chart){
+        var point=chart.series.data,
+        text=chart.renderer.text(point.plotX+chart.plotLeft+10,
+        point.plotY+chart.plotTop-10).add(),
+        box=text.getBBox();});
 </script></div><br/>
 <div class='linked'><script type='text/x-sage'>
 pylab.figure(figsize=(10,5))
@@ -323,7 +324,7 @@ pandas.DataFrame(
     .argsort()[::-int(1)]]);
 </script></div><br/>
 <div class='linked'><script type='text/x-sage'>
-pylab.figure(figsize=(11,5))
+pylab.figure(figsize=(10,5))
 seaborn.distplot(target,color='#1b2c45',bins=200,
                  hist_kws={'color':'SlateGrey'})
 pylab.xlabel('Grocery',fontsize=15)
@@ -382,9 +383,9 @@ x=numpy.linspace(min(bins),max(bins),2000)
 pdf=(2000*numpy.exp(-(numpy.log(x)-mu)**2/(2*sigma**2))\
      /(x*sigma*numpy.sqrt(2*numpy.pi)))
 pylab.plot(x,pdf,linewidth=2,color='#1b2c45')
-pylab.axis('tight'); pylab.grid()
 pylab.title('Example of a Random Log-Normal Distribution',
-            fontsize=15); pylab.show()
+            fontsize=15,color='#5a8bbd')
+pylab.tight_layout(); pylab.grid(); pylab.show()
 </script></div><br/>
     <h2>Data Preprocessing</h2>
 In this section, we will preprocessing the data to create a better representation of customers by performing a scaling on the data and detecting (and optionally removing) outliers.<br/>
@@ -495,20 +496,21 @@ We noted in the previous section that these three features are highly correlated
 <b>Dimension 4</b>: features <i>Fresh, Frozen, Delicatessen</i> are the most important again but <i>Frozen</i> has the highest influence,<br/>
 so it can be a spending for restaurants and cafes with a special spectrum of the menu (fast food, for example).<br/>
 The first four dimensions represent enough well in terms of customer spending because they have explained the main part of the spending variance.
-<div class="linked"><script type="text/x-sage">
-print ("The first and second principal components explained {}%"\
-.format(sum(pca_result['Explained Variance'][:int(2)])*100.0))
-print ("The first four principal components explained {}%"\
-.format(sum(pca_result['Explained Variance'][:int(4)])*100.0))
+<div class='linked'><script type='text/x-sage'>
+print ('The first and second principal components explained {}%'\
+.format(sum(pca_result['Explained Variance'][:int(2)])*100.))
+print ('The first four principal components explained {}%'\
+.format(sum(pca_result['Explained Variance'][:int(4)])*100.))
 </script></div><br/>
     <h3>PCA Observation</h3>
 Let us have a look how the log-transformed sample data has changed after having a PCA transformation applied to it in six dimensions.<br/>
 Observe the numerical value for the first four dimensions of the sample points.<br/>
 Consider if this is consistent with our initial interpretation of the sample points.
-<div class="linked"><script type="text/x-sage">
-pandas.DataFrame(numpy.round(pca_samples,4),
-                 columns=pca_result.index.values,
-                 index=['C0','C1','C2','Mean'])
+<div class='linked'><script type='text/x-sage'>
+pandas.DataFrame(
+    numpy.round(pca_samples,4),
+    columns=pca_result.index.values,
+    index=['C0','C1','C2','Mean'])
 </script></div><br/> 
     <h3>Implementation: Dimensionality Reduction</h3>
 When using principal component analysis, one of the main goals is to reduce the dimensionality of the data — in effect, reducing the complexity of the problem.<br/> 
@@ -519,26 +521,28 @@ The next steps are the following:<br/>
 Assign the results of fitting PCA in two dimensions with <i>good_data</i> to pca.<br/>
 Apply a PCA transformation of <i>good_data</i> using <i>pca.transform</i>, and assign the results to <i>reduced_data</i>.<br/>
 Apply a PCA transformation of <i>log_samples</i> using <i>pca.transform</i>, and assign the results to <i>pca_samples</i>.
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 pca=PCA(n_components=2).fit(good_data)
 pca_samples=pca.transform(log_samples)
-reduced_data=pandas.DataFrame(pca.transform(good_data),
-                              columns=['Dimension 1','Dimension 2'])
+reduced_data=pandas.DataFrame(
+    pca.transform(good_data),
+    columns=['Dimension 1','Dimension 2'])
 </script></div><br/> 
     <h3>Dimensionality Reduction Observation</h3>
 Let's see how the log-transformed sample data has changed after having a PCA transformation applied to it using only two dimensions.<br/>
 Observe how the values for the first two dimensions remains unchanged when compared to a PCA transformation in six dimensions. 
-<div class="linked"><script type="text/x-sage">
-pandas.DataFrame(numpy.round(pca_samples,4),
-                 columns=['Dimension 1','Dimension 2'],
-                 index=['C0','C1','C2','Mean'])
+<div class='linked'><script type='text/x-sage'>
+pandas.DataFrame(
+    numpy.round(pca_samples,4),
+    columns=['Dimension 1','Dimension 2'],
+    index=['C0','C1','C2','Mean'])
 </script></div><br/>
     <h3>Visualizing a Biplot</h3>
 A biplot is a scatterplot where each data point is represented by its scores along the principal components.<br/>
 The axes are the principal components (in this case <i>Dimension 1</i> and  <i>Dimension 2</i>).<br/>
 In addition, the biplot shows the projection of the original features along the components.<br/>
 A biplot can help us interpret the reduced dimensions of the data, and discover relationships between the principal components and original features.
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 biplot(good_data,reduced_data,pca)
 </script></div><br/>
     <h3>Biplot Observation</h3>
@@ -584,28 +588,28 @@ Import <i>sklearn.metrics.silhouette_score</i> and calculate the <i>silhouette s
       <h3>Answer 7</h3>
 I have printed scores for the K-Means clustering and the Gaussian Mixture Model.<br/>
 We can see the highest scores in case of 2 clusters for both algorithms. So it should be our choice.
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 for n in list(range(2,12)):
     clusterer=KMeans(n_clusters=n).fit(reduced_data)
     preds=clusterer.predict(reduced_data)
     centers=clusterer.cluster_centers_
     sample_preds=clusterer.predict(pca_samples)
     score=silhouette_score(reduced_data,preds)
-    st="For number of clusters = {}, the silhouette_score is : {}"
+    st='For number of clusters = {}, the silhouette_score is : {}'
     print(st.format(n,score))
 </script></div><br/> 
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 for n in list(range(2,12)):
     clusterer2=GaussianMixture(n_components=n,
                                covariance_type='full').fit(reduced_data)
     preds2=clusterer2.predict(reduced_data); centers2=clusterer2.means_
     sample_preds2=clusterer2.predict(pca_samples)
     score2=silhouette_score(reduced_data,preds2,metric='mahalanobis')
-    print("For number of clusters = {}, the silhouette_score is : {}"\
+    print('For number of clusters = {}, the silhouette_score is : {}'\
           .format(n,score2))
 </script></div><br/>
 We also can run the speed comparison for the K-Means clustering and the Gaussian Mixture Model.
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 n,k=300,6; kmeans_train_times=[]; gmm_train_times=[]
 for k in range(2,k+1):
     cum_time=0.
@@ -614,8 +618,8 @@ for k in range(2,k+1):
         KMeans(n_clusters=k).fit(reduced_data)
         cum_time+=(time.time()-start)
     kmeans_train_times.append([k,cum_time/n])
-km_df=pandas.DataFrame(kmeans_train_times,
-                       columns=['KM_Clusters','KM_Time'])
+km_df=pandas.DataFrame(
+    kmeans_train_times,columns=['KM_Clusters','KM_Time'])
 for k in range(2,k+1):
     cum_time=0.
     for i in range(n):
@@ -623,10 +627,10 @@ for k in range(2,k+1):
         GaussianMixture(n_components=k).fit(reduced_data)
         cum_time+=(time.time()-start)
     gmm_train_times.append([k,cum_time/n])
-gmm_df=pandas.DataFrame(gmm_train_times,
-                        columns=['GMM_Components','GMM_Time'])
+gmm_df=pandas.DataFrame(
+    gmm_train_times,columns=['GMM_Components','GMM_Time'])
 times_df=km_df.join(gmm_df)
-pylab.figure(figsize=(11,4))
+pylab.figure(figsize=(10,4))
 pylab.plot(times_df.GMM_Components,times_df.GMM_Time*1000.,
            '-o',c='#5a8bbd',label='GMM Train Time')
 pylab.plot(times_df.GMM_Components,times_df.KM_Time*1000.,
@@ -635,14 +639,15 @@ pylab.ylabel('Train time (in millisec.)',fontsize=10)
 pylab.xlabel('Cluster/Components Used in Training',fontsize=10)
 st='Training Time for Different Cluster/Component Sizes\n'+\
    'Averaged Over {} Runs Per Size'
-pylab.title(st.format(n),fontsize=15)
-pylab.legend(loc='best'); pylab.grid(); pylab.show()
+pylab.title(st.format(n),fontsize=15,color='#5a8bbd')
+pylab.legend(loc='best'); pylab.grid()
+pylab.tight_layout(); pylab.show()
 </script></div><br/> 
     <h3>Cluster Visualization</h3>
 Once we've chosen the optimal number of clusters for the clustering algorithm using the scoring metric above, we can now visualize the results.<br/>
 Note that, for experimentation purposes, it's useful to adjust the number of clusters for the clustering algorithm to see various visualizations.<br/> 
 The final visualization provided should, however, correspond with the optimal number of clusters.
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 clusterer=KMeans(n_clusters=2).fit(reduced_data)
 sample_preds=clusterer.predict(pca_samples)
 preds=clusterer.predict(reduced_data)
@@ -650,9 +655,9 @@ centers=clusterer.cluster_centers_
 score=silhouette_score(reduced_data,preds)
 cluster_results(reduced_data,preds,centers,pca_samples,'K-Means')
 </script></div><br/>
-<div class="linked"><script type="text/x-sage">
-clusterer2=GaussianMixture(n_components=2,
-                           covariance_type='full').fit(reduced_data)
+<div class='linked'><script type='text/x-sage'>
+clusterer2=GaussianMixture(
+    n_components=2,covariance_type='full').fit(reduced_data)
 sample_preds2=clusterer2.predict(pca_samples)
 preds2=clusterer2.predict(reduced_data)
 centers2=clusterer2.means_; score2=silhouette_score(reduced_data,preds2)
@@ -667,7 +672,8 @@ Since the data is currently reduced in dimension and scaled by a logarithm,<br/>
 we can recover the representative customer spending from these data points by applying the inverse transformations.<br/>
 It's time for the next steps:<br/>
 Apply the inverse transform to <i>centers</i> using <i>pca.inverse_transform</i> and assign the new centers to <i>log_centers</i>.<br/>
-Apply the inverse function of <i>numpy.log</i> to <i>log_centers</i> using <i>numpy.exp</i> and assign the true centers to <i>true_centers</i>.
+Apply the inverse function of <i>numpy.log</i> to <i>log_centers</i> using <i>numpy.exp</i> 
+and assign the true centers to <i>true_centers</i>.
 <div class="linked"><script type="text/x-sage">
 print ("Data Means")
 pandas.DataFrame(numpy.mean(data)).T
@@ -710,10 +716,10 @@ The values in categories are perfect indicators:<br/>
 <i>Detergents_Paper, Grocery, Milk, Delicatessen</i> are higher than the mean for <b>Retail</b> and less than the mean for <b>HoReCa</b> (Hotel/Restaurant/Cafe).<br/>
 <i>Fresh</i> has the highest level among others for <b>HoReCa</b> than for <b>Retail</b>.<br/>
 <i>Detergents_Paper</i> has an extremely small level for <b>HoReCa</b>.
-<div class="linked"><script type="text/x-sage">
-clusters=pandas.DataFrame(2*[['','']],
-                          columns=['K-Means','Gaussian Mixture'],
-                          index=['Segment 0','Segment 1'])
+<div class='linked'><script type='text/x-sage'>
+clusters=pandas.DataFrame(
+    2*[['','']],columns=['K-Means','Gaussian Mixture'],
+    index=['Segment 0','Segment 1'])
 if true_centers['Fresh']['Segment 0']>true_centers['Fresh']['Segment 1']:
     clusters['K-Means']['Segment 0']='HoReCa'
     clusters['K-Means']['Segment 1']='Retail'
@@ -732,10 +738,10 @@ clusters
 <i>For each sample point, which customer segment from Question 8 best represents it?<br/> 
 Are the predictions for each sample point consistent with this?</i>
     <h3>Answer 9</h3>
-<div class="linked"><script type="text/x-sage">
-clusters2=pandas.DataFrame(3*[['','']],
-                           columns=['K-Means','Gaussian Mixture'],
-                           index=['C0','C1','C2'])
+<div class='linked'><script type='text/x-sage'>
+clusters2=pandas.DataFrame(
+    3*[['','']],columns=['K-Means','Gaussian Mixture'],
+    index=['C0','C1','C2'])
 clusters2['Cluster']=['Retail','Retail','HoReCa']
 for el in ['K-Means','Gaussian Mixture']:
     if clusters[el].values[0]=='Retail': 
@@ -744,15 +750,15 @@ for el in ['K-Means','Gaussian Mixture']:
         clusters2[el]=['Segment 1','Segment 1','Segment 0']
 clusters2
 </script></div><br/>
-<div class="linked"><script type="text/x-sage">
-st1="Sample point {} predicted to be in Cluster {}"
-st2="The distance between sample point {} and center of Cluster {}:"
-print ("K-Means")
+<div class='linked'><script type='text/x-sage'>
+st1='Sample point {} predicted to be in Cluster {}'
+st2='The distance between sample point {} and center of Cluster {}:'
+print ('K-Means')
 for i,pred in enumerate(sample_preds):
     print (st1.format(i,pred))
     print (st2.format(i,pred))
     print (samples.iloc[i]-true_centers.iloc[pred])
-print ("\n\nGaussian Mixture Model")
+print ('\n\nGaussian Mixture Model')
 for i,pred in enumerate(sample_preds2):
     print (st1.format(i,pred))
     print (st2.format(i,pred))
@@ -796,7 +802,7 @@ At the beginning of this project, it was discussed that the <i>Channel</i> and '
 By reintroducing the <i>Channel</i> feature to the dataset, an interesting structure emerges when considering<br/>the same PCA dimensionality reduction applied earlier to the original dataset.<br/>
 Let's see how each data point is labeled either <i>HoReCa</i> (Hotel/Restaurant/Cafe) or <i>Retail</i> the reduced space.<br/>
 In addition, we will find the sample points are circled in the plot, which will identify their labeling.
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 channel_results(reduced_data,outliers,pca_samples[:3])
 </script></div><br/>
     <h3>Question 12</h3>
@@ -810,7 +816,7 @@ The customer segments classified as purely <i>Retailers</i> or <i>Hotels/Restaur
 The algorithmic classification in the majority of cases is in line with the real results.<br/>
 We should note that for both algorithms borders of clusters are more clearly detectable.<br/>
 Differences between actual and algorithmic classification may indicate a lack of the number of clusters for this market.<br/> Perhaps it needs a greater number to detect spending habits.
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 channel_data=pandas.read_csv(path+'customers.csv')
 channel_data=channel_data.drop(channel_data.index[outliers])\
                          .reset_index(drop=True)
@@ -819,20 +825,21 @@ channel_data=channel_data.drop(channel_data.index[outliers])\
            numpy.where(channel_data['Channel']==2,1,0)]
 percentage_kmeans=max(sum(df1==preds)/float(len(preds)),
                       sum(df2==preds)/float(len(preds)))
-percentage_gaussian_mixture=max(sum(df1==preds)/float(len(preds2)),
-                                sum(df2==preds2)/float(len(preds2)))
-print ("K-Means")
-print ("Percentage of correctly classified customers: {:.2%}"\
+percentage_gaussian_mixture=max(
+    sum(df1==preds)/float(len(preds2)),
+    sum(df2==preds2)/float(len(preds2)))
+print ('K-Means')
+print ('Percentage of correctly classified customers: {:.2%}'\
 .format(percentage_kmeans))
-print ("\nGaussian Mixture Model")
-print ("Percentage of correctly classified customers: {:.2%}"\
+print ('\nGaussian Mixture Model')
+print ('Percentage of correctly classified customers: {:.2%}'\
 .format(percentage_gaussian_mixture))
 </script></div><br/>
     <h3>Reflections</h3>
 It would be interesting to repeat the steps of this project in R and compare the results.<br/>
 Or try animation for clustering algorithms to compare the borders of clusters with real data labels during the learning process.
     <h3>Additional Code Cell</h3>
-<div class="linked"><script type="text/x-sage">
+<div class='linked'><script type='text/x-sage'>
 
 </script></div><br/>
   </body>
