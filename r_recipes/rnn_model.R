@@ -1,12 +1,15 @@
 
+library(magrittr); library(keras)
 rnn_model<-keras_model_sequential()
 rnn_model %>% 
-layer_lstm(196,return_sequences=TRUE,
-           input_shape=c(1,128*128*3)) %>%  
+layer_batch_normalization(input_shape=c(1,128*128*3)) %>% 
+layer_lstm(196,return_sequences=TRUE) %>%  
 layer_lstm(196,return_sequences=TRUE) %>%
 layer_lstm(196) %>%
-layer_dense(512) %>%
+layer_batch_normalization() %>% 
+layer_dense(1024) %>%
 layer_activation('relu') %>%
+layer_dropout(.5) %>% 
 layer_dense(10) %>%    
 layer_activation('softmax')
 rnn_model %>%
