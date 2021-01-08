@@ -13,7 +13,8 @@ def decor_header(params):
         cmap='Sinebow'
     else: 
         font_size=params[1]; font_family=params[2]; cmap=params[3]
-    height=int(font_size)*3; randi=str(random.uniform(0,9999999))
+    height=max([int(font_size)*2.5,60]) 
+    randi=str(random.uniform(0,9999999))
     html_str="""
 <script src='https://d3js.org/d3.v6.min.js'></script>
 <style>
@@ -27,18 +28,19 @@ font-family:"""+font_family+"""; font-size:"""+font_size+""";}
 <canvas id='canvas002'></canvas></text><br/>
 <script>
 var tc=setInterval(function() {
-    var now=new Date().getTime();
+    var now=(new Date().getTime()%5000)/5000;
+    var now_slow=(new Date().getTime()%100000)/100000;
     var iddoc=document.getElementById('colorized001');
-    iddoc.style.color=d3.interpolate"""+cmap+"""(now/6000);
+    iddoc.style.color=d3.interpolate"""+cmap+"""(now);
     var r=10,n=7;
     var c1=document.getElementById('canvas001'); 
     var context1=c1.getContext('2d');
     var c2=document.getElementById('canvas002'); 
     var context2=c2.getContext('2d');
-    c1.style.background=d3.interpolate"""+cmap+"""(now/60000); 
-    c2.style.background=d3.interpolate"""+cmap+"""(now/60000);
-    context1.strokeStyle=d3.interpolate"""+cmap+"""(now/6000);    
-    context2.strokeStyle=d3.interpolate"""+cmap+"""(now/6000);
+    c1.style.background=d3.interpolate"""+cmap+"""(now_slow); 
+    c2.style.background=d3.interpolate"""+cmap+"""(now_slow);
+    context1.strokeStyle=d3.interpolate"""+cmap+"""(now);    
+    context2.strokeStyle=d3.interpolate"""+cmap+"""(now);
     for (var i=1; i<n; i++) {
         context1.beginPath(); context2.beginPath();
         for (var j=0; j<6; j++) {
